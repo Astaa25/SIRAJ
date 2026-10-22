@@ -1,57 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { playSuccessChime } from "../utils/audio";
 
 /**
  * SIRAJ Cinematic Splash Screen
- * Adjusted per user request:
- * - Faster initial brand entrance
- * - Generous reading time for full title ("Smart Islamic Routine & Attendance Journey")
- *   and Pesantren name ("Pondok Pesantren Darussalam Rajapolah Tasikmalaya")
- * - Includes a clean "Lewati ➔" skip button
+ * Fast, reliable, and gracefully dismissible.
  */
 export default function SplashScreen({ onFinish, pesantrenName = "Ekosistem Digital & Presensi Terpadu Pondok Pesantren" }) {
-  const [stage, setStage] = useState(0); // 0: radial, 1: logo, 2: letters, 3: tagline, 4: transition out
-  const [lettersVisible, setLettersVisible] = useState(0);
-  const brandLetters = ["S", "I", "R", "A", "J"];
+  const [stage, setStage] = useState(1); // Start immediately at 1 so content is ALWAYS visible (never blank!)
+  const [lettersVisible, setLettersVisible] = useState(5);
+  const onFinishRef = useRef(onFinish);
 
   useEffect(() => {
-    // 0.2s: Radial glow & logo
-    const t1 = setTimeout(() => setStage(1), 200);
+    onFinishRef.current = onFinish;
+  });
 
-    // 0.7s: Quick letters reveal
-    const t2 = setTimeout(() => {
-      setStage(2);
-      brandLetters.forEach((_, idx) => {
-        setTimeout(() => {
-          setLettersVisible((prev) => Math.max(prev, idx + 1));
-        }, idx * 80);
-      });
-    }, 700);
-
-    // 1.2s: Tagline & Pesantren Name appears early
-    const t3 = setTimeout(() => {
+  useEffect(() => {
+    // 0.5s: Tagline & Pesantren Name appears
+    const t1 = setTimeout(() => {
       setStage(3);
-    }, 1200);
+    }, 500);
 
-    // 4.8s: Chime & exit transition (gives 3.6s generous reading time!)
-    const t4 = setTimeout(() => {
+    // 2.2s: Chime & exit transition
+    const t2 = setTimeout(() => {
       setStage(4);
       playSuccessChime();
-    }, 4800);
+    }, 2200);
 
-    // 5.4s: Complete
-    const t5 = setTimeout(() => {
-      if (onFinish) onFinish();
-    }, 5400);
+    // 2.7s: Complete
+    const t3 = setTimeout(() => {
+      if (onFinishRef.current) onFinishRef.current();
+    }, 2700);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
-      clearTimeout(t4);
-      clearTimeout(t5);
     };
-  }, [onFinish]);
+  }, []);
 
   return (
     <div
