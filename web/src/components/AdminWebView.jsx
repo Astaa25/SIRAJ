@@ -362,17 +362,52 @@ export default function AdminWebView({
           color: "#FFFFFF",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <img
-            src="/logo_tile_1024.png"
-            alt="SIRAJ"
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {/* Animated Rotating Islamic Star Mandala */}
+          <div
             style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "8px",
-              border: "1.5px solid #FFE49A",
+              position: "relative",
+              width: "52px",
+              height: "52px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
             }}
-          />
+          >
+            <div
+              className="rotate-medium"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "52px",
+                height: "52px",
+                pointerEvents: "none",
+              }}
+            >
+              <svg viewBox="0 0 100 100" width="52" height="52" fill="none">
+                <circle cx="50" cy="50" r="47" stroke="rgba(232, 182, 90, 0.6)" strokeWidth="1.8" strokeDasharray="4 4" />
+                <path
+                  d="M50 3 L63 37 L97 50 L63 63 L50 97 L37 63 L3 50 L37 37 Z"
+                  stroke="#FFE49A"
+                  strokeWidth="2.5"
+                  style={{ filter: "drop-shadow(0 0 6px rgba(232, 182, 90, 0.7))" }}
+                />
+              </svg>
+            </div>
+            <img
+              src="/logo_tile_1024.png"
+              alt="SIRAJ"
+              style={{
+                width: "30px",
+                height: "30px",
+                borderRadius: "8px",
+                border: "1.5px solid #FFE49A",
+                zIndex: 2,
+                position: "relative",
+              }}
+            />
+          </div>
           <div>
             <div style={{ fontSize: "14px", fontWeight: 800, color: "#FFFFFF" }}>
               SIRAJ ADMIN PONPES

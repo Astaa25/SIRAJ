@@ -120,57 +120,77 @@ export default function IslamicLoadingModal({ isOpen, message, onComplete }) {
             </svg>
           </div>
 
-          {/* Central Rotating Sacred Mandala with Lantern Icon */}
+          {/* Central Rotating Sacred Mandala with Lantern Icon (Lebih Gede & Megah 150px) */}
           <div
             style={{
               position: "relative",
-              width: "100px",
-              height: "100px",
-              marginBottom: "24px",
+              width: "150px",
+              height: "150px",
+              marginBottom: "28px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            {/* Outer Rotating 8-Point Star Ring */}
+            {/* Layer 1: Outer Rotating 8-Point Rub el Hizb Gold Star Ring (150px) */}
             <div
               className="rotate-fast"
               style={{
                 position: "absolute",
                 inset: 0,
-                width: "100%",
-                height: "100%",
+                width: "150px",
+                height: "150px",
               }}
             >
-              <svg viewBox="0 0 100 100" width="100" height="100" fill="none">
-                <circle cx="50" cy="50" r="46" stroke="rgba(232, 182, 90, 0.55)" strokeWidth="1.8" strokeDasharray="4 4" />
+              <svg viewBox="0 0 100 100" width="150" height="150" fill="none">
+                <circle cx="50" cy="50" r="47" stroke="rgba(232, 182, 90, 0.65)" strokeWidth="1.6" strokeDasharray="4 4" />
                 <path
-                  d="M50 4 L63 37 L96 50 L63 63 L50 96 L37 63 L4 50 L37 37 Z"
+                  d="M50 3 L63 37 L97 50 L63 63 L50 97 L37 63 L3 50 L37 37 Z"
                   stroke="#FFE49A"
-                  strokeWidth="2.2"
-                  style={{ filter: "drop-shadow(0 0 8px rgba(232, 182, 90, 0.6))" }}
+                  strokeWidth="2.5"
+                  style={{ filter: "drop-shadow(0 0 12px rgba(232, 182, 90, 0.85))" }}
                 />
               </svg>
             </div>
 
-            {/* Inner Counter-Rotating Ring */}
+            {/* Layer 2: Middle Counter-Rotating Emerald Geometric Star (120px) */}
             <div
               className="rotate-reverse-fast"
               style={{
                 position: "absolute",
-                inset: "10px",
-                width: "80px",
-                height: "80px",
+                inset: "15px",
+                width: "120px",
+                height: "120px",
               }}
             >
-              <svg viewBox="0 0 100 100" width="80" height="80" fill="none">
+              <svg viewBox="0 0 100 100" width="120" height="120" fill="none">
                 <path
-                  d="M50 5 L85 50 L50 95 L15 50 Z"
+                  d="M50 4 L86 50 L50 96 L14 50 Z"
                   stroke="#34D399"
-                  strokeWidth="2.2"
-                  style={{ filter: "drop-shadow(0 0 6px rgba(16, 185, 129, 0.6))" }}
+                  strokeWidth="2.4"
+                  style={{ filter: "drop-shadow(0 0 10px rgba(16, 185, 129, 0.8))" }}
                 />
-                <circle cx="50" cy="50" r="32" stroke="rgba(16, 185, 129, 0.5)" strokeWidth="1.2" strokeDasharray="3 3" />
+                <circle cx="50" cy="50" r="34" stroke="rgba(16, 185, 129, 0.65)" strokeWidth="1.5" strokeDasharray="3 3" />
+              </svg>
+            </div>
+
+            {/* Layer 3: Inner Rotating Celestial Star Ring (96px) */}
+            <div
+              className="rotate-medium"
+              style={{
+                position: "absolute",
+                inset: "27px",
+                width: "96px",
+                height: "96px",
+              }}
+            >
+              <svg viewBox="0 0 100 100" width="96" height="96" fill="none">
+                <path
+                  d="M50 10 L60 40 L90 50 L60 60 L50 90 L40 60 L10 50 L40 40 Z"
+                  stroke="#E8B65A"
+                  strokeWidth="1.8"
+                  opacity="0.75"
+                />
               </svg>
             </div>
 
@@ -178,22 +198,22 @@ export default function IslamicLoadingModal({ isOpen, message, onComplete }) {
             <div
               className="lantern-glow-anim"
               style={{
-                width: "52px",
-                height: "52px",
+                width: "60px",
+                height: "60px",
                 borderRadius: "50%",
                 background: "linear-gradient(135deg, #065F46 0%, #06271E 100%)",
-                border: "1.5px solid #FFE49A",
+                border: "2px solid #FFE49A",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 zIndex: 2,
-                boxShadow: "0 0 20px rgba(232, 182, 90, 0.4)",
+                boxShadow: "0 0 25px rgba(232, 182, 90, 0.55)",
               }}
             >
               <img
                 src="/logo_tile_1024.png"
                 alt="SIRAJ"
-                style={{ width: "36px", height: "36px", borderRadius: "8px" }}
+                style={{ width: "42px", height: "42px", borderRadius: "10px" }}
               />
             </div>
           </div>

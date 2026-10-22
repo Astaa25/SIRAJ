@@ -85,12 +85,12 @@ export default function ShowcaseHeader({
       >
         {/* Left: Branding & Current Pesantren with Permanent Rotating Sacred Mandala */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          {/* Permanent Rotating Sacred Islamic Mandala Ring */}
+          {/* Permanent Rotating Sacred Islamic Mandala Ring (Lebih Gede & Jelas) */}
           <div
             style={{
               position: "relative",
-              width: "48px",
-              height: "48px",
+              width: "66px",
+              height: "66px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -104,17 +104,18 @@ export default function ShowcaseHeader({
               style={{
                 position: "absolute",
                 inset: 0,
-                width: "48px",
-                height: "48px",
+                width: "66px",
+                height: "66px",
                 pointerEvents: "none",
               }}
             >
-              <svg viewBox="0 0 100 100" width="48" height="48" fill="none">
-                <circle cx="50" cy="50" r="47" stroke={theme === "dark" ? "rgba(232, 182, 90, 0.55)" : "rgba(217, 119, 6, 0.45)"} strokeWidth="2" strokeDasharray="5 5" />
+              <svg viewBox="0 0 100 100" width="66" height="66" fill="none">
+                <circle cx="50" cy="50" r="47" stroke={theme === "dark" ? "rgba(232, 182, 90, 0.65)" : "rgba(217, 119, 6, 0.55)"} strokeWidth="1.8" strokeDasharray="4 4" />
                 <path
                   d="M50 3 L63 37 L97 50 L63 63 L50 97 L37 63 L3 50 L37 37 Z"
                   stroke={theme === "dark" ? "#FFE49A" : "#D97706"}
-                  strokeWidth="2.2"
+                  strokeWidth="2.5"
+                  style={{ filter: theme === "dark" ? "drop-shadow(0 0 8px rgba(232, 182, 90, 0.75))" : "drop-shadow(0 0 6px rgba(217, 119, 6, 0.5))" }}
                 />
               </svg>
             </div>
@@ -124,20 +125,21 @@ export default function ShowcaseHeader({
               className="rotate-reverse-medium"
               style={{
                 position: "absolute",
-                inset: "4px",
-                width: "40px",
-                height: "40px",
+                inset: "6px",
+                width: "54px",
+                height: "54px",
                 pointerEvents: "none",
               }}
             >
-              <svg viewBox="0 0 100 100" width="40" height="40" fill="none">
+              <svg viewBox="0 0 100 100" width="54" height="54" fill="none">
                 <path
                   d="M50 5 L85 50 L50 95 L15 50 Z"
                   stroke="#10B981"
                   strokeWidth="2.4"
-                  opacity="0.85"
+                  opacity="0.9"
+                  style={{ filter: "drop-shadow(0 0 6px rgba(16, 185, 129, 0.65))" }}
                 />
-                <circle cx="50" cy="50" r="32" stroke="rgba(16, 185, 129, 0.6)" strokeWidth="1.5" strokeDasharray="3 3" />
+                <circle cx="50" cy="50" r="32" stroke="rgba(16, 185, 129, 0.65)" strokeWidth="1.5" strokeDasharray="3 3" />
               </svg>
             </div>
 
@@ -414,27 +416,30 @@ export default function ShowcaseHeader({
             }}
             title="Animasi Putar Rub el Hizb 2 Detik saat Transisi & Aksi Dashboard"
           >
-            {/* Spinning Islamic 8-Point Star Icon */}
+            {/* Spinning Islamic 8-Point Star Icon (Lebih Gede & Jelas) */}
             <span
               className={is2sLoaderEnabled ? "rotate-fast" : ""}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "15px",
-                height: "15px",
+                width: "22px",
+                height: "22px",
+                flexShrink: 0,
               }}
             >
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none">
+              <svg viewBox="0 0 100 100" width="22" height="22" fill="none">
+                <circle cx="50" cy="50" r="46" stroke={is2sLoaderEnabled ? (theme === "dark" ? "rgba(232, 182, 90, 0.6)" : "rgba(217, 119, 6, 0.5)") : "#94A3B8"} strokeWidth="5" strokeDasharray="8 8" />
                 <path
-                  d="M12 2 L14.8 8.2 L21.6 9.2 L16.7 14 L17.8 20.8 L12 17.7 L6.2 20.8 L7.3 14 L2.4 9.2 L9.2 8.2 Z"
+                  d="M50 4 L63 37 L96 50 L63 63 L50 96 L37 63 L4 50 L37 37 Z"
                   stroke={is2sLoaderEnabled ? (theme === "dark" ? "#FFE49A" : "#D97706") : "#94A3B8"}
-                  strokeWidth="2"
-                  fill={is2sLoaderEnabled ? "rgba(232, 182, 90, 0.25)" : "none"}
+                  strokeWidth="6"
+                  fill={is2sLoaderEnabled ? (theme === "dark" ? "rgba(232, 182, 90, 0.35)" : "rgba(217, 119, 6, 0.25)") : "none"}
+                  style={{ filter: is2sLoaderEnabled ? "drop-shadow(0 0 4px rgba(232, 182, 90, 0.8))" : "none" }}
                 />
               </svg>
             </span>
-            <span>Animasi Putar: {is2sLoaderEnabled ? "AKTIF (2s)" : "CEPAT"}</span>
+            <span style={{ fontSize: "11.5px" }}>Animasi Putar: {is2sLoaderEnabled ? "AKTIF (2s)" : "CEPAT"}</span>
           </button>
 
           {/* Audio Mute Toggle */}

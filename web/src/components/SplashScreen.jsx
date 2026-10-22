@@ -108,12 +108,12 @@ export default function SplashScreen({ onFinish, pesantrenName = "Ekosistem Digi
           maxWidth: "480px",
         }}
       >
-        {/* Logo Tile Framed by Rotating Sacred Islamic Mandala */}
+        {/* Logo Tile Framed by Rotating Sacred Islamic Mandala (Lebih Gede & Megah 210px) */}
         <div
           style={{
             position: "relative",
-            width: "150px",
-            height: "150px",
+            width: "210px",
+            height: "210px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -122,48 +122,69 @@ export default function SplashScreen({ onFinish, pesantrenName = "Ekosistem Digi
             transition: "all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
           }}
         >
-          {/* Outer Rotating 8-Point Rub el Hizb Gold Star */}
+          {/* Layer 1: Outer Rotating 8-Point Rub el Hizb Gold Star (210px) */}
           <div
             className="rotate-slow"
             style={{
               position: "absolute",
               inset: 0,
-              width: "150px",
-              height: "150px",
+              width: "210px",
+              height: "210px",
               pointerEvents: "none",
             }}
           >
-            <svg viewBox="0 0 100 100" width="150" height="150" fill="none">
-              <circle cx="50" cy="50" r="47" stroke="rgba(232, 182, 90, 0.45)" strokeWidth="1.5" strokeDasharray="4 4" />
+            <svg viewBox="0 0 100 100" width="210" height="210" fill="none">
+              <circle cx="50" cy="50" r="47" stroke="rgba(232, 182, 90, 0.6)" strokeWidth="1.6" strokeDasharray="4 4" />
               <path
                 d="M50 3 L63 37 L97 50 L63 63 L50 97 L37 63 L3 50 L37 37 Z"
                 stroke="#FFE49A"
-                strokeWidth="2"
-                style={{ filter: "drop-shadow(0 0 8px rgba(232, 182, 90, 0.5))" }}
+                strokeWidth="2.5"
+                style={{ filter: "drop-shadow(0 0 14px rgba(232, 182, 90, 0.85))" }}
               />
             </svg>
           </div>
 
-          {/* Inner Counter-Rotating Emerald Geometric Star */}
+          {/* Layer 2: Middle Counter-Rotating Emerald Geometric Star (165px) */}
           <div
             className="rotate-reverse-medium"
             style={{
               position: "absolute",
-              inset: "14px",
-              width: "122px",
-              height: "122px",
+              inset: "22px",
+              width: "166px",
+              height: "166px",
               pointerEvents: "none",
             }}
           >
-            <svg viewBox="0 0 100 100" width="122" height="122" fill="none">
+            <svg viewBox="0 0 100 100" width="166" height="166" fill="none">
               <path
-                d="M50 5 L85 50 L50 95 L15 50 Z"
+                d="M50 4 L86 50 L50 96 L14 50 Z"
                 stroke="#34D399"
-                strokeWidth="2.2"
-                opacity="0.85"
-                style={{ filter: "drop-shadow(0 0 6px rgba(16, 185, 129, 0.6))" }}
+                strokeWidth="2.4"
+                opacity="0.9"
+                style={{ filter: "drop-shadow(0 0 10px rgba(16, 185, 129, 0.8))" }}
               />
-              <circle cx="50" cy="50" r="32" stroke="rgba(52, 211, 153, 0.5)" strokeWidth="1.2" strokeDasharray="3 3" />
+              <circle cx="50" cy="50" r="34" stroke="rgba(52, 211, 153, 0.6)" strokeWidth="1.5" strokeDasharray="3 3" />
+            </svg>
+          </div>
+
+          {/* Layer 3: Inner Rotating Celestial Star Ring (130px) */}
+          <div
+            className="rotate-medium"
+            style={{
+              position: "absolute",
+              inset: "40px",
+              width: "130px",
+              height: "130px",
+              pointerEvents: "none",
+            }}
+          >
+            <svg viewBox="0 0 100 100" width="130" height="130" fill="none">
+              <path
+                d="M50 10 L60 40 L90 50 L60 60 L50 90 L40 60 L10 50 L40 40 Z"
+                stroke="#E8B65A"
+                strokeWidth="2"
+                opacity="0.8"
+              />
             </svg>
           </div>
 
@@ -172,11 +193,11 @@ export default function SplashScreen({ onFinish, pesantrenName = "Ekosistem Digi
             src="/logo_tile_1024.png"
             alt="SIRAJ"
             style={{
-              width: "100px",
-              height: "100px",
-              borderRadius: "24px",
+              width: "90px",
+              height: "90px",
+              borderRadius: "22px",
               objectFit: "cover",
-              boxShadow: "0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(232, 182, 90, 0.45)",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(232, 182, 90, 0.5)",
               border: "2px solid #FFE49A",
               zIndex: 3,
               position: "relative",

@@ -218,52 +218,75 @@ export default function PortalBendaharaView({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          {/* Animated Rotating Islamic Star Mandala around Rp Badge */}
+          {/* Animated Rotating Islamic Star Mandala around Rp Badge (Lebih Gede & Jelas) */}
           <div
             style={{
               position: "relative",
-              width: "52px",
-              height: "52px",
+              width: "66px",
+              height: "66px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               flexShrink: 0,
             }}
           >
+            {/* Outer Rotating Rub el Hizb Gold Star */}
             <div
               className="rotate-medium"
               style={{
                 position: "absolute",
                 inset: 0,
-                width: "52px",
-                height: "52px",
+                width: "66px",
+                height: "66px",
                 pointerEvents: "none",
               }}
             >
-              <svg viewBox="0 0 100 100" width="52" height="52" fill="none">
-                <circle cx="50" cy="50" r="47" stroke="rgba(232, 182, 90, 0.45)" strokeWidth="2" strokeDasharray="5 5" />
+              <svg viewBox="0 0 100 100" width="66" height="66" fill="none">
+                <circle cx="50" cy="50" r="47" stroke="rgba(232, 182, 90, 0.65)" strokeWidth="1.8" strokeDasharray="4 4" />
                 <path
                   d="M50 3 L63 37 L97 50 L63 63 L50 97 L37 63 L3 50 L37 37 Z"
                   stroke="#FFE49A"
-                  strokeWidth="2.2"
+                  strokeWidth="2.5"
+                  style={{ filter: "drop-shadow(0 0 8px rgba(232, 182, 90, 0.75))" }}
+                />
+              </svg>
+            </div>
+            {/* Inner Counter-Rotating Emerald Star */}
+            <div
+              className="rotate-reverse-medium"
+              style={{
+                position: "absolute",
+                inset: "6px",
+                width: "54px",
+                height: "54px",
+                pointerEvents: "none",
+              }}
+            >
+              <svg viewBox="0 0 100 100" width="54" height="54" fill="none">
+                <path
+                  d="M50 5 L85 50 L50 95 L15 50 Z"
+                  stroke="#34D399"
+                  strokeWidth="2.4"
+                  style={{ filter: "drop-shadow(0 0 6px rgba(16, 185, 129, 0.65))" }}
                 />
               </svg>
             </div>
             <div
               style={{
-                width: "38px",
-                height: "38px",
+                width: "36px",
+                height: "36px",
                 borderRadius: "11px",
                 background: "rgba(232, 182, 90, 0.25)",
                 border: "1.5px solid #FFE49A",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "16px",
+                fontSize: "15px",
                 fontWeight: 900,
                 color: "#FFE49A",
-                boxShadow: "0 0 16px rgba(232, 182, 90, 0.35)",
+                boxShadow: "0 0 16px rgba(232, 182, 90, 0.4)",
                 zIndex: 2,
+                position: "relative",
               }}
             >
               Rp
