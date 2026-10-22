@@ -167,6 +167,17 @@ export const INITIAL_STUDENTS = [
     syahriyyahStatus: "Lunas",
     syahriyyahMonth: "Oktober 2026",
     syahriyyahAmount: 1250000,
+    tahfidzProgress: {
+      totalJuz: 5.0,
+      targetWisuda: 6.0,
+      ziyadah: [
+        { date: "22 Okt 2026", surah: "Surah Al-Insan", verses: "Ayat 1-15 (Juz 29)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+        { date: "20 Okt 2026", surah: "Surah Al-Qiyamah", verses: "Ayat 1-20 (Juz 29)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+      ],
+      murajaah: [
+        { date: "21 Okt 2026", surah: "Surah An-Naba'", verses: "Ayat 1-40 (Juz 30)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+      ],
+    },
   },
   {
     id: "santri-003",
@@ -196,6 +207,16 @@ export const INITIAL_STUDENTS = [
     syahriyyahStatus: "Belum Lunas",
     syahriyyahMonth: "Oktober 2026",
     syahriyyahAmount: 1250000,
+    tahfidzProgress: {
+      totalJuz: 2.0,
+      targetWisuda: 6.0,
+      ziyadah: [
+        { date: "21 Okt 2026", surah: "Surah Al-A'la", verses: "Ayat 1-19 (Juz 30)", grade: "Jayyid Jiddan (Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+      ],
+      murajaah: [
+        { date: "19 Okt 2026", surah: "Surah Ad-Dhuha", verses: "Ayat 1-11 (Juz 30)", grade: "Jayyid (Cukup Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+      ],
+    },
     adabTrendHistory: [
       { month: "Juli", good: 15, violation: 10 },
       { month: "Agustus", good: 12, violation: 25 },
@@ -243,6 +264,16 @@ export const INITIAL_STUDENTS = [
     syahriyyahStatus: "Lunas",
     syahriyyahMonth: "Oktober 2026",
     syahriyyahAmount: 1250000,
+    tahfidzProgress: {
+      totalJuz: 1.5,
+      targetWisuda: 6.0,
+      ziyadah: [
+        { date: "18 Okt 2026", surah: "Surah Al-Balad", verses: "Ayat 1-20 (Juz 30)", grade: "Jayyid (Cukup Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+      ],
+      murajaah: [
+        { date: "16 Okt 2026", surah: "Surah Asy-Syams", verses: "Ayat 1-15 (Juz 30)", grade: "Jayyid (Cukup Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+      ],
+    },
     adabTrendHistory: [
       { month: "Juli", good: 8, violation: 20 },
       { month: "Agustus", good: 6, violation: 55 },
@@ -290,6 +321,16 @@ export const INITIAL_STUDENTS = [
     syahriyyahStatus: "Belum Lunas",
     syahriyyahMonth: "Oktober 2026",
     syahriyyahAmount: 1250000,
+    tahfidzProgress: {
+      totalJuz: 1.0,
+      targetWisuda: 6.0,
+      ziyadah: [
+        { date: "15 Okt 2026", surah: "Surah At-Tin", verses: "Ayat 1-8 (Juz 30)", grade: "Maqbul (Perlu Pengulangan)", ustadz: "Ust. Maimun, Al-Hafidz" },
+      ],
+      murajaah: [
+        { date: "14 Okt 2026", surah: "Surah Al-Qadr", verses: "Ayat 1-5 (Juz 30)", grade: "Jayyid (Cukup Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+      ],
+    },
     adabTrendHistory: [
       { month: "Juli", good: 5, violation: 35 },
       { month: "Agustus", good: 4, violation: 75 },

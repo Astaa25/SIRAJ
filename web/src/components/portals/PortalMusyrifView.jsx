@@ -64,6 +64,19 @@ export default function PortalMusyrifView({
   const [gatePassPicker, setGatePassPicker] = useState("Ir. H. Abdullah (Ayah Kandung)");
   const [gatePassNik, setGatePassNik] = useState("3206012809780003");
 
+  // Modul Tahfidz (Ziyadah & Muraja'ah) State
+  const [activeDormStudents, setActiveDormStudents] = useState(dormStudents);
+  const [selectedTahfidzStudentId, setSelectedTahfidzStudentId] = useState(
+    dormStudents[0]?.id || "santri-001"
+  );
+  const [tahfidzType, setTahfidzType] = useState("ziyadah"); // "ziyadah" | "murajaah"
+  const [tahfidzSurah, setTahfidzSurah] = useState("Surah An-Naba'");
+  const [tahfidzVerses, setTahfidzVerses] = useState("Ayat 1 - 25");
+  const [tahfidzJuz, setTahfidzJuz] = useState("Juz 30");
+  const [tahfidzGrade, setTahfidzGrade] = useState("Mutqin (Sangat Lancar)");
+  const [tahfidzAddedJuz, setTahfidzAddedJuz] = useState("0.2");
+  const [tahfidzNotes, setTahfidzNotes] = useState("Makharijul huruf & mad thabi'i sangat fasih");
+
   // Handler Buka Cetak Rapor Bulanan
   const handleOpenReportModal = (student) => {
     playSoftClick();
@@ -120,6 +133,91 @@ export default function PortalMusyrifView({
         }
         return r;
       })
+    );
+  };
+
+  // Handler Simpan Setoran Hafalan Baru (Ziyadah) / Pengulangan (Muraja'ah)
+  const handleSaveTahfidzRecord = (e) => {
+    e.preventDefault();
+    playSoftClick();
+    triggerHaptic([60]);
+
+    const targetStudent =
+      activeDormStudents.find((s) => s.id === selectedTahfidzStudentId) ||
+      activeDormStudents[0];
+
+    onTriggerLoader(
+      `Mencatat Setoran ${
+        tahfidzType === "ziyadah" ? "Hafalan Baru (Ziyadah)" : "Pengulangan (Muraja'ah)"
+      } untuk ${targetStudent?.name}...`,
+      () => {
+        playSuccessChime();
+        const newRecord = {
+          date: "Hari Ini (22 Okt)",
+          surah: tahfidzSurah,
+          verses: `${tahfidzVerses} (${tahfidzJuz})`,
+          grade: tahfidzGrade,
+          ustadz: `${musyrifName} (Musyrif)`,
+          notes: tahfidzNotes,
+        };
+
+        const addedJuzVal = tahfidzType === "ziyadah" ? parseFloat(tahfidzAddedJuz || 0) : 0;
+        const currentJuz = targetStudent?.tahfidzProgress?.totalJuz || 4.5;
+        const targetWisuda = targetStudent?.tahfidzProgress?.targetWisuda || 6.0;
+        const updatedTotalJuz = Math.min(
+          targetWisuda,
+          parseFloat((currentJuz + addedJuzVal).toFixed(2))
+        );
+
+        setActiveDormStudents((prev) =>
+          prev.map((s) => {
+            if (s.id === selectedTahfidzStudentId) {
+              const currentProgress = s.tahfidzProgress || {
+                totalJuz: 4.5,
+                targetWisuda: 6.0,
+                ziyadah: [],
+                murajaah: [],
+              };
+              if (tahfidzType === "ziyadah") {
+                return {
+                  ...s,
+                  tahfidzProgress: {
+                    ...currentProgress,
+                    totalJuz: updatedTotalJuz,
+                    ziyadah: [newRecord, ...(currentProgress.ziyadah || [])],
+                  },
+                };
+              } else {
+                return {
+                  ...s,
+                  tahfidzProgress: {
+                    ...currentProgress,
+                    murajaah: [newRecord, ...(currentProgress.murajaah || [])],
+                  },
+                };
+              }
+            }
+            return s;
+          })
+        );
+
+        onAuditLogAdd({
+          user: `${musyrifName} (Musyrif)`,
+          role: "Musyrif",
+          action: `SETORAN TAHFIDZ (${tahfidzType.toUpperCase()})`,
+          object: `Santri: ${targetStudent?.name} (${tahfidzSurah} ${tahfidzVerses})`,
+          status: tahfidzGrade.split(" ")[0].toUpperCase(),
+          details: `Setoran ${
+            tahfidzType === "ziyadah" ? "Ziyadah" : "Muraja'ah"
+          } ${tahfidzSurah} (${tahfidzVerses}, ${tahfidzJuz}) predikat ${tahfidzGrade}. Total capaian: ${updatedTotalJuz}/${targetWisuda} Juz menuju Wisuda Tahfidz.`,
+        });
+
+        alert(
+          `✅ Setoran ${
+            tahfidzType === "ziyadah" ? "Ziyadah" : "Muraja'ah"
+          } ananda ${targetStudent?.name} berhasil dicatat dengan predikat ${tahfidzGrade}!`
+        );
+      }
     );
   };
 
@@ -236,6 +334,7 @@ export default function PortalMusyrifView({
   };
 
   const isNightRondaEnabled = currentTenant?.enableNightRonda ?? true;
+  const isTahfidzEnabled = currentTenant?.enableTahfidzModule ?? true;
 
   return (
     <div
@@ -359,6 +458,9 @@ export default function PortalMusyrifView({
           { id: "gatepass", label: "Gate Pass & Slip Fisik", icon: "🎫" },
           ...(isNightRondaEnabled
             ? [{ id: "ronda", label: "Ronda Malam (22:00) & Kebersihan", icon: "🌙" }]
+            : []),
+          ...(isTahfidzEnabled
+            ? [{ id: "tahfidz", label: "Setoran Tahfidz (Ziyadah & Muraja'ah)", icon: "📖" }]
             : []),
         ].map((tab) => (
           <button
@@ -875,6 +977,458 @@ export default function PortalMusyrifView({
               );
             })}
           </div>
+        </div>
+      )}
+
+      {/* -------------------------------------------------------------
+          TAB 5: MUTABA'AH TAHFIDZ (INPUT ZIYADAH, MURAJA'AH & TARGET WISUDA)
+          (Fitur Opsional Ponpes - Diaktifkan oleh Admin Ponpes)
+         ------------------------------------------------------------- */}
+      {musyrifTab === "tahfidz" && isTahfidzEnabled && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          {/* Header & Target Wisuda Tahfidz Card */}
+          <div
+            style={{
+              background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+              borderRadius: "20px",
+              padding: "20px 24px",
+              border: "1px solid rgba(232, 182, 90, 0.35)",
+              color: "#FFFFFF",
+              boxShadow: "0 8px 24px rgba(6, 39, 30, 0.25)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "14px" }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ fontSize: "20px" }}>📖</span>
+                  <h3 style={{ fontSize: "16px", fontWeight: 800, color: "#FFFFFF" }}>
+                    Mutaba'ah Setoran Tahfidz (Ziyadah & Muraja'ah)
+                  </h3>
+                </div>
+                <p style={{ fontSize: "12px", color: "#FFE49A", marginTop: "3px" }}>
+                  Pencatatan setoran santri binaan {assignedDorm} per surat, ayat, juz & penilaian kelancaran (Mutqin/Jayyid).
+                </p>
+              </div>
+
+              {/* Santri Selector Dropdown */}
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ fontSize: "11px", color: "#A7F3D0" }}>Santri Binaan:</span>
+                <select
+                  value={selectedTahfidzStudentId}
+                  onChange={(e) => {
+                    playSoftClick();
+                    setSelectedTahfidzStudentId(e.target.value);
+                  }}
+                  style={{
+                    background: "rgba(255,255,255,0.15)",
+                    border: "1px solid rgba(232, 182, 90, 0.4)",
+                    color: "#FFFFFF",
+                    padding: "6px 12px",
+                    borderRadius: "10px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    outline: "none",
+                  }}
+                >
+                  {activeDormStudents.map((st) => (
+                    <option key={st.id} value={st.id} style={{ background: "#06271E", color: "#FFFFFF" }}>
+                      {st.name} ({st.roomNumber})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Target Wisuda Progress Bar Santri Terpilih */}
+            {(() => {
+              const activeSt = activeDormStudents.find((s) => s.id === selectedTahfidzStudentId) || activeDormStudents[0];
+              const totalJuz = activeSt?.tahfidzProgress?.totalJuz || 4.5;
+              const targetWisuda = activeSt?.tahfidzProgress?.targetWisuda || 6.0;
+              const percent = Math.min(100, Math.round((totalJuz / targetWisuda) * 100));
+
+              return (
+                <div style={{ background: "rgba(255,255,255,0.08)", borderRadius: "14px", padding: "14px 18px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                    <div style={{ fontSize: "12px", color: "#A7F3D0" }}>
+                      🎓 Target Kelulusan Wisuda Tahfidz Ananda <strong>{activeSt?.name}</strong>
+                    </div>
+                    <div style={{ fontSize: "13px", fontWeight: 900, color: "#FFE49A" }}>
+                      {totalJuz} <span style={{ fontSize: "11px", fontWeight: 600 }}>/ {targetWisuda} Juz ({percent}%)</span>
+                    </div>
+                  </div>
+
+                  <div style={{ width: "100%", height: "10px", background: "rgba(255,255,255,0.15)", borderRadius: "10px", overflow: "hidden", marginBottom: "6px" }}>
+                    <div
+                      style={{
+                        width: `${percent}%`,
+                        height: "100%",
+                        background: "linear-gradient(90deg, #10B981 0%, #F59E0B 100%)",
+                        borderRadius: "10px",
+                        transition: "width 0.5s ease",
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10.5px", color: "#8AA49B" }}>
+                    <span>Syarat Minimal Wisuda Tahfidz: {targetWisuda} Juz Mutqin</span>
+                    <span style={{ color: percent >= 100 ? "#10B981" : "#FFE49A", fontWeight: 700 }}>
+                      {percent >= 100 ? "🎉 Syarat Wisuda Terpenuhi!" : `Sisa ${parseFloat((targetWisuda - totalJuz).toFixed(2))} Juz Menuju Wisuda`}
+                    </span>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* Form Input Setoran Baru (Ziyadah) / Pengulangan (Muraja'ah) */}
+          <div
+            style={{
+              background: "#FFFFFF",
+              borderRadius: "18px",
+              padding: "20px 22px",
+              border: "1px solid #E2EFE9",
+              boxShadow: "0 2px 10px rgba(6,39,30,0.03)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingBottom: "10px", borderBottom: "1px solid #E2EFE9" }}>
+              <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", display: "flex", alignItems: "center", gap: "6px" }}>
+                <span>✍️</span>
+                <span>Form Input Setoran Hafalan Santri</span>
+              </div>
+              <span style={{ fontSize: "11px", color: "#5B7A70" }}>
+                Disinkronkan langsung ke Wali Santri & Rapor Asrama
+              </span>
+            </div>
+
+            <form onSubmit={handleSaveTahfidzRecord} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+              {/* Jenis Setoran Toggle */}
+              <div>
+                <label style={{ fontSize: "11.5px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "6px" }}>
+                  Jenis Program Setoran:
+                </label>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSoftClick();
+                      setTahfidzType("ziyadah");
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: "10px 14px",
+                      borderRadius: "12px",
+                      border: tahfidzType === "ziyadah" ? "2px solid #059669" : "1px solid #E2EFE9",
+                      background: tahfidzType === "ziyadah" ? "#ECFDF5" : "#F9FAFB",
+                      color: tahfidzType === "ziyadah" ? "#065F46" : "#4B5563",
+                      fontSize: "12px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    <span>🟢</span>
+                    <span>Ziyadah (Hafalan Baru)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSoftClick();
+                      setTahfidzType("murajaah");
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: "10px 14px",
+                      borderRadius: "12px",
+                      border: tahfidzType === "murajaah" ? "2px solid #D97706" : "1px solid #E2EFE9",
+                      background: tahfidzType === "murajaah" ? "#FFFBEB" : "#F9FAFB",
+                      color: tahfidzType === "murajaah" ? "#92400E" : "#4B5563",
+                      fontSize: "12px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    <span>🔄</span>
+                    <span>Muraja'ah (Pengulangan)</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Baris 1: Nama Surah & Rentang Ayat & Juz */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "12px" }}>
+                <div>
+                  <label style={{ fontSize: "11px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "4px" }}>
+                    Surah Al-Qur'an:
+                  </label>
+                  <input
+                    type="text"
+                    value={tahfidzSurah}
+                    onChange={(e) => setTahfidzSurah(e.target.value)}
+                    placeholder="Contoh: Surah An-Naba', Al-Mulk, Al-Baqarah"
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      borderRadius: "10px",
+                      border: "1px solid #CBD5E1",
+                      fontSize: "12px",
+                      color: "#06271E",
+                      outline: "none",
+                    }}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: "11px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "4px" }}>
+                    Rentang Ayat:
+                  </label>
+                  <input
+                    type="text"
+                    value={tahfidzVerses}
+                    onChange={(e) => setTahfidzVerses(e.target.value)}
+                    placeholder="Contoh: Ayat 1 - 25"
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      borderRadius: "10px",
+                      border: "1px solid #CBD5E1",
+                      fontSize: "12px",
+                      color: "#06271E",
+                      outline: "none",
+                    }}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: "11px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "4px" }}>
+                    Juz:
+                  </label>
+                  <select
+                    value={tahfidzJuz}
+                    onChange={(e) => setTahfidzJuz(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      borderRadius: "10px",
+                      border: "1px solid #CBD5E1",
+                      fontSize: "12px",
+                      color: "#06271E",
+                      outline: "none",
+                      background: "#FFFFFF",
+                    }}
+                  >
+                    {[...Array(30)].map((_, i) => (
+                      <option key={i + 1} value={`Juz ${i + 1}`}>
+                        Juz {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Baris 2: Penilaian Kelancaran (Mutqin/Jayyid/Maqbul) */}
+              <div>
+                <label style={{ fontSize: "11px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "4px" }}>
+                  Penilaian Kelancaran (Fashahah & Tajwid):
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "8px" }}>
+                  {[
+                    { label: "Mutqin (Sangat Lancar)", desc: "Tajwid sempurna, tanpa salah", color: "#065F46", bg: "#D1FAE5" },
+                    { label: "Jayyid Jiddan (Lancar)", desc: "1-2 koreksi kecil", color: "#1E40AF", bg: "#DBEAFE" },
+                    { label: "Jayyid (Cukup)", desc: "Masih ada keraguan", color: "#92400E", bg: "#FEF3C7" },
+                    { label: "Maqbul (Ulang)", desc: "Wajib setoran ulang", color: "#991B1B", bg: "#FEE2E2" },
+                  ].map((gradeOpt) => (
+                    <button
+                      key={gradeOpt.label}
+                      type="button"
+                      onClick={() => {
+                        playSoftClick();
+                        setTahfidzGrade(gradeOpt.label);
+                      }}
+                      style={{
+                        padding: "8px 10px",
+                        borderRadius: "10px",
+                        border: tahfidzGrade === gradeOpt.label ? `2px solid ${gradeOpt.color}` : "1px solid #E2EFE9",
+                        background: tahfidzGrade === gradeOpt.label ? gradeOpt.bg : "#F9FAFB",
+                        color: tahfidzGrade === gradeOpt.label ? gradeOpt.color : "#6B7280",
+                        fontSize: "11px",
+                        fontWeight: tahfidzGrade === gradeOpt.label ? 800 : 600,
+                        cursor: "pointer",
+                        textAlign: "left",
+                      }}
+                    >
+                      <div>{gradeOpt.label.split(" ")[0]}</div>
+                      <div style={{ fontSize: "9px", opacity: 0.8 }}>{gradeOpt.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Baris 3: Tambahan Capaian Juz & Catatan */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "12px" }}>
+                {tahfidzType === "ziyadah" && (
+                  <div>
+                    <label style={{ fontSize: "11px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "4px" }}>
+                      Tambah Progres Capaian Juz (+):
+                    </label>
+                    <select
+                      value={tahfidzAddedJuz}
+                      onChange={(e) => setTahfidzAddedJuz(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "8px 12px",
+                        borderRadius: "10px",
+                        border: "1px solid #CBD5E1",
+                        fontSize: "12px",
+                        color: "#06271E",
+                        outline: "none",
+                        background: "#FFFFFF",
+                      }}
+                    >
+                      <option value="0.05">+0.05 Juz (1/2 Lembar)</option>
+                      <option value="0.1">+0.10 Juz (1 Lembar / 2 Halaman)</option>
+                      <option value="0.2">+0.20 Juz (1 Maqra / 1/4 Juz)</option>
+                      <option value="0.5">+0.50 Juz (1/2 Juz)</option>
+                      <option value="1.0">+1.00 Juz (1 Juz Penuh)</option>
+                    </select>
+                  </div>
+                )}
+
+                <div style={{ gridColumn: tahfidzType === "ziyadah" ? "auto" : "1 / -1" }}>
+                  <label style={{ fontSize: "11px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "4px" }}>
+                    Catatan Pembimbing / Musyrif:
+                  </label>
+                  <input
+                    type="text"
+                    value={tahfidzNotes}
+                    onChange={(e) => setTahfidzNotes(e.target.value)}
+                    placeholder="Contoh: Makharijul huruf rapi, perhatikan ghunnah nun bertasydid"
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      borderRadius: "10px",
+                      border: "1px solid #CBD5E1",
+                      fontSize: "12px",
+                      color: "#06271E",
+                      outline: "none",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "6px" }}>
+                <button
+                  type="submit"
+                  style={{
+                    background: "var(--gradient-emerald)",
+                    color: "#FFFFFF",
+                    padding: "10px 20px",
+                    borderRadius: "12px",
+                    fontSize: "12px",
+                    fontWeight: 800,
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    boxShadow: "0 4px 12px rgba(6, 95, 70, 0.3)",
+                  }}
+                >
+                  <span>💾</span>
+                  <span>Simpan Setoran Hafalan Santri</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* Riwayat Setoran Terkini Santri Terpilih */}
+          {(() => {
+            const activeSt = activeDormStudents.find((s) => s.id === selectedTahfidzStudentId) || activeDormStudents[0];
+            const ziyadahList = activeSt?.tahfidzProgress?.ziyadah || [];
+            const murajaahList = activeSt?.tahfidzProgress?.murajaah || [];
+
+            return (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "12px" }}>
+                {/* Kolom Riwayat Ziyadah */}
+                <div style={{ background: "#FFFFFF", borderRadius: "16px", padding: "16px", border: "1px solid #D1FAE5" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                    <span style={{ fontSize: "13px", fontWeight: 800, color: "#065F46" }}>
+                      🟢 Riwayat Ziyadah ({activeSt?.name})
+                    </span>
+                    <span style={{ fontSize: "10px", color: "#5B7A70" }}>{ziyadahList.length} Setoran</span>
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    {ziyadahList.map((item, idx) => (
+                      <div key={idx} style={{ background: "#F4FBF7", borderRadius: "10px", padding: "8px 10px", border: "1px solid #E2EFE9" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontSize: "12px", fontWeight: 800, color: "#06271E" }}>{item.surah}</span>
+                          <span style={{ background: "#D1FAE5", color: "#065F46", padding: "1px 6px", borderRadius: "4px", fontSize: "9px", fontWeight: 800 }}>
+                            {item.grade}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: "11px", color: "#047857", fontWeight: 600, marginTop: "2px" }}>
+                          {item.verses}
+                        </div>
+                        <div style={{ fontSize: "9.5px", color: "#8AA49B", marginTop: "2px" }}>
+                          {item.date} · Oleh {item.ustadz}
+                        </div>
+                        {item.notes && (
+                          <div style={{ fontSize: "9.5px", color: "#065F46", fontStyle: "italic", marginTop: "2px" }}>
+                            "{item.notes}"
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Kolom Riwayat Muraja'ah */}
+                <div style={{ background: "#FFFFFF", borderRadius: "16px", padding: "16px", border: "1px solid #FEF3C7" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                    <span style={{ fontSize: "13px", fontWeight: 800, color: "#92400E" }}>
+                      🔄 Riwayat Muraja'ah ({activeSt?.name})
+                    </span>
+                    <span style={{ fontSize: "10px", color: "#5B7A70" }}>{murajaahList.length} Pengulangan</span>
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    {murajaahList.map((item, idx) => (
+                      <div key={idx} style={{ background: "#FFFBEB", borderRadius: "10px", padding: "8px 10px", border: "1px solid #FEF3C7" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontSize: "12px", fontWeight: 800, color: "#06271E" }}>{item.surah}</span>
+                          <span style={{ background: "#FEF3C7", color: "#92400E", padding: "1px 6px", borderRadius: "4px", fontSize: "9px", fontWeight: 800 }}>
+                            {item.grade}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: "11px", color: "#92400E", fontWeight: 600, marginTop: "2px" }}>
+                          {item.verses}
+                        </div>
+                        <div style={{ fontSize: "9.5px", color: "#8AA49B", marginTop: "2px" }}>
+                          {item.date} · Oleh {item.ustadz}
+                        </div>
+                        {item.notes && (
+                          <div style={{ fontSize: "9.5px", color: "#92400E", fontStyle: "italic", marginTop: "2px" }}>
+                            "{item.notes}"
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       )}
 

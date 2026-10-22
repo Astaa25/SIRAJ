@@ -1332,11 +1332,14 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {[
-                  { date: "22 Okt 2026", surah: "Surah An-Naba'", verses: "Ayat 1 - 20 (Juz 30)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
-                  { date: "20 Okt 2026", surah: "Surah An-Nazi'at", verses: "Ayat 1 - 15 (Juz 30)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
-                  { date: "18 Okt 2026", surah: "'Abasa", verses: "Ayat 1 - 25 (Juz 30)", grade: "Jayyid Jiddan (Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
-                ].map((item, idx) => (
+                {(currentStudent.tahfidzProgress?.ziyadah?.length
+                  ? currentStudent.tahfidzProgress.ziyadah
+                  : [
+                      { date: "22 Okt 2026", surah: "Surah An-Naba'", verses: "Ayat 1 - 20 (Juz 30)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                      { date: "20 Okt 2026", surah: "Surah An-Nazi'at", verses: "Ayat 1 - 15 (Juz 30)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                      { date: "18 Okt 2026", surah: "'Abasa", verses: "Ayat 1 - 25 (Juz 30)", grade: "Jayyid Jiddan (Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                    ]
+                ).map((item, idx) => (
                   <div
                     key={idx}
                     style={{
@@ -1387,11 +1390,14 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {[
-                  { date: "21 Okt 2026", surah: "Surah Al-Mulk", verses: "Ayat 1 - 30 (Juz 29 Penuh)", grade: "Jayyid Jiddan (Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
-                  { date: "19 Okt 2026", surah: "Surah Al-Qalam", verses: "Ayat 1 - 25 (Juz 29)", grade: "Jayyid (Cukup Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
-                  { date: "17 Okt 2026", surah: "Surah Al-Haqqah", verses: "Ayat 1 - 20 (Juz 29)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
-                ].map((item, idx) => (
+                {(currentStudent.tahfidzProgress?.murajaah?.length
+                  ? currentStudent.tahfidzProgress.murajaah
+                  : [
+                      { date: "21 Okt 2026", surah: "Surah Al-Mulk", verses: "Ayat 1 - 30 (Juz 29 Penuh)", grade: "Jayyid Jiddan (Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                      { date: "19 Okt 2026", surah: "Surah Al-Qalam", verses: "Ayat 1 - 25 (Juz 29)", grade: "Jayyid (Cukup Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                      { date: "17 Okt 2026", surah: "Surah Al-Haqqah", verses: "Ayat 1 - 20 (Juz 29)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                    ]
+                ).map((item, idx) => (
                   <div
                     key={idx}
                     style={{
