@@ -894,6 +894,16 @@ export const SYSTEM_USERS = [
     desc: "Admin Utama Pondok Pesantren Darussalam Rajapolah",
   },
   {
+    email: "bendahara@darussalam.ac.id",
+    password: "123",
+    name: "Ustadz H. Mansyur, S.E.",
+    role: "bendahara",
+    roleLabel: "Bendahara Ponpes",
+    assignedTenantId: "ponpes-01",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=80",
+    desc: "Pengelola Pembayaran Syahriyyah/SPP & Keuangan Pesantren",
+  },
+  {
     email: "pengasuhan@darussalam.ac.id",
     password: "123",
     name: "K.H. Asep Ridwan, Lc.",
@@ -979,10 +989,65 @@ export const SYSTEM_USERS = [
   },
 ];
 
+// =====================================================================
+// DATA TRANSAKSI PENERIMAAN SYAHRIYYAH (BENDAHARA)
+// =====================================================================
+export const INITIAL_SYAHRIYYAH_TRANSACTIONS = [
+  {
+    id: "TRX-202610-001",
+    receiptNo: "KW-202610-SAN001",
+    studentId: "santri-001",
+    studentName: "Ahmad Fauzan",
+    nis: "2026070114",
+    class: "Kelas 7-A (Tahfidz Intensif)",
+    dormBuilding: "Asrama Abu Bakar Ash-Shiddiq",
+    guardianName: "Ir. H. Abdullah",
+    amount: 1250000,
+    month: "Oktober 2026",
+    paymentDate: "20 Okt 2026 · 09:30 WIB",
+    method: "Transfer Bank BSI",
+    receiver: "Ustadz H. Mansyur, S.E. (Bendahara)",
+    status: "Lunas",
+  },
+  {
+    id: "TRX-202610-002",
+    receiptNo: "KW-202610-SAN002",
+    studentId: "santri-002",
+    studentName: "Siti Nur Aisyah",
+    nis: "2024090082",
+    class: "Kelas 9-B (Kulliyatul Mu'allimat)",
+    dormBuilding: "Asrama Fatimah Az-Zahra",
+    guardianName: "Ir. H. Abdullah",
+    amount: 1250000,
+    month: "Oktober 2026",
+    paymentDate: "19 Okt 2026 · 14:15 WIB",
+    method: "Tunai di Loket Kantor",
+    receiver: "Ustadz H. Mansyur, S.E. (Bendahara)",
+    status: "Lunas",
+  },
+  {
+    id: "TRX-202610-003",
+    receiptNo: "KW-202610-SAN004",
+    studentId: "santri-004",
+    studentName: "Fathir Ar-Rahman",
+    nis: "2026070155",
+    class: "Kelas 7-B",
+    dormBuilding: "Asrama Ali bin Abi Thalib",
+    guardianName: "Hj. Ratna Sari",
+    amount: 1250000,
+    month: "Oktober 2026",
+    paymentDate: "18 Okt 2026 · 10:45 WIB",
+    method: "Transfer Bank Mandiri",
+    receiver: "Ustadz H. Mansyur, S.E. (Bendahara)",
+    status: "Lunas",
+  },
+];
+
 // List of roles for navigation reference
 export const ROLES_LIST = [
   { id: "superadmin", label: "Super Admin", icon: "🌐", desc: "Multi-Ponpes, Lisensi & Database" },
   { id: "admin", label: "Admin Ponpes", icon: "💻", desc: "KPI, Master Santri, Ambang SP" },
+  { id: "bendahara", label: "Bendahara Ponpes", icon: "💰", desc: "Pencatatan Syahriyyah/SPP & Kuitansi" },
   { id: "pengasuhan", label: "Kepala Pengasuhan", icon: "👳", desc: "Pimpinan Musyrif & Per Asrama" },
   { id: "bk", label: "Guru BK", icon: "📋", desc: "Konseling & Kategori SP I-III" },
   { id: "guru", label: "Guru KBM", icon: "👨‍🏫", desc: "Presensi Mapel Guru Tertentu" },

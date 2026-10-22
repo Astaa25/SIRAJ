@@ -17,12 +17,12 @@ export default function ShowcaseHeader({
   onReplaySplash,
   onTriggerLoader,
 }) {
-  const isLaptopAllowed = activeRole === "admin" || activeRole === "superadmin";
+  const isLaptopAllowed = activeRole === "admin" || activeRole === "superadmin" || activeRole === "bendahara";
 
   const handleRoleChange = (roleId) => {
     playSoftClick();
     const roleObj = ROLES_LIST.find((r) => r.id === roleId);
-    const willBeLaptopAllowed = roleId === "admin" || roleId === "superadmin";
+    const willBeLaptopAllowed = roleId === "admin" || roleId === "superadmin" || roleId === "bendahara";
 
     const applyChange = () => {
       setActiveRole(roleId);

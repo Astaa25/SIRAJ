@@ -13,6 +13,7 @@ import PortalMusyrifView from "./components/portals/PortalMusyrifView";
 import PortalSatpamView from "./components/portals/PortalSatpamView";
 import PortalBKView from "./components/portals/PortalBKView";
 import PortalPengasuhanView from "./components/portals/PortalPengasuhanView";
+import PortalBendaharaView from "./components/portals/PortalBendaharaView";
 import AdminWebView from "./components/AdminWebView";
 
 import { INITIAL_AUDIT_LOGS, INITIAL_TENANTS } from "./data/mockData";
@@ -46,10 +47,10 @@ export default function App() {
   // Device Mode: 'hp' | 'tablet' | 'laptop'
   // Rule: Non-admin roles (wali, guru, ubudiyyah, musyrif, satpam, bk, pengasuhan) strictly restricted to HP & Tablet.
   // Super Admin & Admin Ponpes can access HP, Tablet, and Laptop.
-  const isLaptopRole = activeRole === "admin" || activeRole === "superadmin";
+  const isLaptopRole = activeRole === "admin" || activeRole === "superadmin" || activeRole === "bendahara";
 
   const [deviceMode, setDeviceMode] = useState(() => {
-    return (currentUser?.role === "admin" || currentUser?.role === "superadmin") ? "laptop" : "hp";
+    return (currentUser?.role === "admin" || currentUser?.role === "superadmin" || currentUser?.role === "bendahara") ? "laptop" : "hp";
   });
 
   // Guard: If switching to a non-admin role, never allow 'laptop'
@@ -93,7 +94,7 @@ export default function App() {
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);
     setActiveRole(user.role);
-    if (user.role === "admin" || user.role === "superadmin") {
+    if (user.role === "admin" || user.role === "superadmin" || user.role === "bendahara") {
       setDeviceMode("laptop");
     } else {
       setDeviceMode("hp");
@@ -209,6 +210,22 @@ export default function App() {
           <PortalPengasuhanView
             onTriggerLoader={handleTriggerLoader}
             onAuditLogAdd={handleAuditLogAdd}
+          />
+        );
+      case "bendahara":
+        return (
+          <PortalBendaharaView
+            currentUser={currentUser}
+            currentTenant={currentTenant}
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+            onUpdateTenant={(updated) => {
+              setCurrentTenant((prev) => {
+                const next = { ...prev, ...updated };
+                localStorage.setItem("siraj_active_tenant", JSON.stringify(next));
+                return next;
+              });
+            }}
           />
         );
       case "admin":

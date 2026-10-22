@@ -32,6 +32,7 @@ export default function LoginView({ onLoginSuccess, currentTenant = INITIAL_TENA
       const satpamMatch = (query === "satpam" || query === "gerbang" || query === "security") && u.role === "satpam";
       const bkMatch = (query === "bk" || query === "guru bk" || query === "konseling") && u.role === "bk";
       const pengasuhanMatch = (query === "pengasuhan" || query === "kepala pengasuhan") && u.role === "pengasuhan";
+      const bendaharaMatch = (query === "bendahara" || query === "keuangan" || query === "spp" || query === "syahriyyah" || query === "kas" || query === "kasir") && u.role === "bendahara";
 
       return (
         emailMatch ||
@@ -46,7 +47,8 @@ export default function LoginView({ onLoginSuccess, currentTenant = INITIAL_TENA
         musyrifMatch ||
         satpamMatch ||
         bkMatch ||
-        pengasuhanMatch
+        pengasuhanMatch ||
+        bendaharaMatch
       );
     });
 
