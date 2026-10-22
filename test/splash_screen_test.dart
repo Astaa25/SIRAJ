@@ -19,7 +19,7 @@ void main() {
       // Advance animation partially
       await tester.pump(const Duration(milliseconds: 1500));
       expect(find.text('SIRAJ'), findsOneWidget);
-      expect(find.text('PP. Darussalam Rajapolah Tasikmalaya'), findsNothing); // In tagline container
+      expect(find.text('PP. Presensi Terpadu'), findsNothing); // In tagline container
 
       // Advance to full duration
       await tester.pump(const Duration(milliseconds: 2000));
@@ -39,7 +39,7 @@ void main() {
 
       // In accessible mode, texts and static layout render immediately without pulsing loop
       expect(find.text('SIRAJ'), findsOneWidget);
-      expect(find.text('PP. Darussalam Rajapolah Tasikmalaya'), findsOneWidget);
+      expect(find.text('PP. Presensi Terpadu'), findsOneWidget);
     });
 
     testWidgets('SplashScreen memicu callback onFinished setelah 3.5 detik',

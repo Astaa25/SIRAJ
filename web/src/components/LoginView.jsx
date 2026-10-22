@@ -127,7 +127,7 @@ export default function LoginView({ onLoginSuccess, currentTenant = INITIAL_TENA
               fontWeight: 500,
             }}
           >
-            {currentTenant.name}
+            Ekosistem Presensi & Mutaba'ah Santri Terpadu
           </div>
         </div>
 

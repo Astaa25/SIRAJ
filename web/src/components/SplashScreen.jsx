@@ -9,7 +9,7 @@ import { playSuccessChime } from "../utils/audio";
  *   and Pesantren name ("Pondok Pesantren Darussalam Rajapolah Tasikmalaya")
  * - Includes a clean "Lewati ➔" skip button
  */
-export default function SplashScreen({ onFinish, pesantrenName = "Pondok Pesantren Darussalam Rajapolah Tasikmalaya" }) {
+export default function SplashScreen({ onFinish, pesantrenName = "Ekosistem Digital & Presensi Terpadu Pondok Pesantren" }) {
   const [stage, setStage] = useState(0); // 0: radial, 1: logo, 2: letters, 3: tagline, 4: transition out
   const [lettersVisible, setLettersVisible] = useState(0);
   const brandLetters = ["S", "I", "R", "A", "J"];

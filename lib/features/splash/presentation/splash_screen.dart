@@ -128,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen>
               ),
               const SizedBox(height: 8),
               const Text(
-                'PP. Darussalam Rajapolah Tasikmalaya',
+                'PP. Presensi Terpadu',
                 style: TextStyle(fontSize: 13, color: Colors.white70),
               ),
             ],
@@ -245,7 +245,7 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ),
                         child: const Text(
-                          'Pondok Pesantren Darussalam Rajapolah',
+                          'Ekosistem Digital & Presensi Terpadu Pondok Pesantren',
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
