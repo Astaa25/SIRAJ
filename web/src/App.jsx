@@ -403,7 +403,7 @@ export default function App() {
               >
                 <div style={{ fontSize: "11px", color: "var(--theme-mode-label)", display: "flex", alignItems: "center", gap: "6px" }}>
                   <span>Mode Layar HP (Smartphone · 425px):</span>
-                  <span style={{ fontWeight: 800, color: "#FFE49A" }}>
+                  <span style={{ fontWeight: 800, color: theme === "dark" ? "#FFE49A" : "#047857" }}>
                     {activeRole.toUpperCase()}
                   </span>
                 </div>
@@ -440,7 +440,7 @@ export default function App() {
               >
                 <div style={{ fontSize: "11px", color: "var(--theme-mode-label)", display: "flex", alignItems: "center", gap: "6px" }}>
                   <span>Mode Layar Tablet (768px Responsive):</span>
-                  <span style={{ fontWeight: 800, color: "#FFE49A" }}>
+                  <span style={{ fontWeight: 800, color: theme === "dark" ? "#FFE49A" : "#047857" }}>
                     {activeRole.toUpperCase()}
                   </span>
                 </div>
@@ -471,7 +471,7 @@ export default function App() {
               >
                 <div style={{ fontSize: "11px", color: "var(--theme-mode-label)", display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
                   <span>Mode Layar Laptop / Komputer Desktop (1420px):</span>
-                  <span style={{ fontWeight: 800, color: "#FFE49A" }}>
+                  <span style={{ fontWeight: 800, color: theme === "dark" ? "#FFE49A" : "#047857" }}>
                     {activeRole === "superadmin" ? "SUPER ADMIN PUSAT" : activeRole === "bendahara" ? "BENDAHARA PONPES" : "ADMIN PONPES"}
                   </span>
                 </div>

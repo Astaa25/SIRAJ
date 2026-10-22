@@ -115,27 +115,28 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
     >
       {/* Header Guru BK */}
       <div
+        className="portal-header-card"
         style={{
-          background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+          background: "var(--theme-portal-header-bg)",
           borderRadius: "20px",
           padding: "18px 22px",
-          border: "1px solid rgba(232, 182, 90, 0.3)",
-          color: "#FFFFFF",
+          border: "var(--theme-portal-header-border)",
+          color: "var(--theme-portal-header-title)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
           gap: "12px",
-          boxShadow: "0 8px 24px rgba(6, 39, 30, 0.3)",
+          boxShadow: "var(--theme-card-shadow)",
         }}
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
+            <h2 style={{ fontSize: "17px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
               Biro Bimbingan Konseling (BK) & Pembinaan Adab
             </h2>
           </div>
-          <p style={{ fontSize: "12px", color: "#FFE49A", marginTop: "3px" }}>
+          <p style={{ fontSize: "12px", color: "var(--theme-portal-header-sub)", marginTop: "3px" }}>
             Pencatatan Poin Adab, Lembar Konseling Pribadi Rahasia, dan Grafik Tren Perkembangan Santri
           </p>
         </div>
@@ -264,17 +265,18 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
 
       {/* Detail Santri Terpilih */}
       <div
+        className="portal-header-card"
         style={{
-          background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+          background: "var(--theme-portal-header-bg)",
           borderRadius: "18px",
           padding: "16px 20px",
-          color: "#FFFFFF",
+          color: "var(--theme-portal-header-title)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
           gap: "12px",
-          border: "1px solid rgba(232, 182, 90, 0.35)",
+          border: "var(--theme-portal-header-border)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -285,7 +287,7 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
           />
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <div style={{ fontSize: "16px", fontWeight: 800, color: "#FFFFFF" }}>
+              <div style={{ fontSize: "16px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
                 {selectedStudent.name}
               </div>
               <span
@@ -302,10 +304,10 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
                 {selectedStudent.spStatus || "Aman"}
               </span>
             </div>
-            <div style={{ fontSize: "11px", color: "#FFE49A", marginTop: "2px" }}>
+            <div style={{ fontSize: "11px", color: "var(--theme-portal-header-sub)", marginTop: "2px" }}>
               NIS: {selectedStudent.nis} · {selectedStudent.class} · {selectedStudent.dormBuilding} ({selectedStudent.roomNumber})
             </div>
-            <div style={{ fontSize: "10.5px", color: "#A7F3D0" }}>
+            <div style={{ fontSize: "10.5px", color: "var(--theme-portal-header-sub)" }}>
               Wali: {selectedStudent.guardianName} ({selectedStudent.guardianPhone})
             </div>
           </div>

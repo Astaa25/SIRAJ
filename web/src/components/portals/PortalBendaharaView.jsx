@@ -203,18 +203,19 @@ export default function PortalBendaharaView({
           HEADER BENDAHARA / BAGIAN KEUANGAN
          ------------------------------------------------------------- */}
       <div
+        className="portal-header-card"
         style={{
-          background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+          background: "var(--theme-portal-header-bg)",
           borderRadius: "20px",
           padding: "20px 24px",
-          border: "1px solid rgba(232, 182, 90, 0.35)",
-          color: "#FFFFFF",
+          border: "var(--theme-portal-header-border)",
+          color: "var(--theme-portal-header-title)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
           gap: "14px",
-          boxShadow: "0 8px 24px rgba(6, 39, 30, 0.3)",
+          boxShadow: "var(--theme-card-shadow)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
@@ -276,14 +277,14 @@ export default function PortalBendaharaView({
                 width: "36px",
                 height: "36px",
                 borderRadius: "11px",
-                background: "rgba(232, 182, 90, 0.25)",
-                border: "1.5px solid #FFE49A",
+                background: "var(--theme-portal-badge-bg)",
+                border: "var(--theme-portal-badge-border)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: "15px",
                 fontWeight: 900,
-                color: "#FFE49A",
+                color: "var(--theme-portal-badge-color)",
                 boxShadow: "0 0 16px rgba(232, 182, 90, 0.4)",
                 zIndex: 2,
                 position: "relative",
@@ -295,7 +296,7 @@ export default function PortalBendaharaView({
 
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <h1 style={{ fontSize: "18px", fontWeight: 800, color: "#FFFFFF" }}>
+              <h1 style={{ fontSize: "18px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
                 Portal Bendahara & Administrasi Keuangan
               </h1>
               <span
@@ -319,10 +320,10 @@ export default function PortalBendaharaView({
                 Pencatatan Manual Bebas Repot
               </span>
             </div>
-            <div style={{ fontSize: "12px", color: "#FFE49A", marginTop: "2px" }}>
+            <div style={{ fontSize: "12px", color: "var(--theme-portal-header-sub)", marginTop: "2px" }}>
               Petugas: <strong>{bendaharaName}</strong> · Lembaga: {ponpesName}
             </div>
-            <div style={{ fontSize: "11px", color: "#A7F3D0", marginTop: "1px" }}>
+            <div style={{ fontSize: "11px", color: "var(--theme-portal-header-sub)", marginTop: "1px" }}>
               Tarif SPP Aktif: <strong>Rp {currentFee.toLocaleString("id-ID")}</strong> / Santri · Periode: <strong>{sppMonthInput}</strong>
             </div>
           </div>

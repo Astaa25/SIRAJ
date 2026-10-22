@@ -353,13 +353,13 @@ export default function AdminWebView({
       {/* Mobile / Tablet Responsive Bar */}
       <div
         style={{
-          background: "#06271E",
+          background: "var(--theme-header-bg)",
           padding: "12px 18px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          borderBottom: "1px solid rgba(232, 182, 90, 0.25)",
-          color: "#FFFFFF",
+          borderBottom: "1px solid var(--theme-header-border)",
+          color: "var(--theme-text-title)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -409,10 +409,10 @@ export default function AdminWebView({
             />
           </div>
           <div>
-            <div style={{ fontSize: "14px", fontWeight: 800, color: "#FFFFFF" }}>
+            <div style={{ fontSize: "14px", fontWeight: 800, color: "var(--theme-text-title)" }}>
               SIRAJ ADMIN PONPES
             </div>
-            <div style={{ fontSize: "10px", color: "#FFE49A" }}>
+            <div style={{ fontSize: "10px", color: "var(--theme-text-muted)" }}>
               {pesantrenNameInput}
             </div>
           </div>
@@ -421,9 +421,9 @@ export default function AdminWebView({
         <button
           onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
           style={{
-            background: isMobileSidebarOpen ? "#10B981" : "rgba(255, 255, 255, 0.12)",
-            color: "#FFFFFF",
-            border: "1px solid rgba(255, 255, 255, 0.25)",
+            background: isMobileSidebarOpen ? "var(--gradient-emerald)" : "var(--theme-pill-bg)",
+            color: isMobileSidebarOpen ? "#FFFFFF" : "var(--theme-text-title)",
+            border: "1px solid var(--theme-pill-border)",
             borderRadius: "10px",
             padding: "6px 12px",
             fontSize: "12px",
@@ -448,13 +448,13 @@ export default function AdminWebView({
           style={{
             width: isMobileSidebarOpen ? "100%" : "250px",
             maxWidth: isMobileSidebarOpen ? "100%" : "250px",
-            background: "#06271E",
+            background: "var(--theme-sidebar-bg)",
             padding: "20px 14px",
             display: "flex",
             flexDirection: "column",
-            color: "#FFFFFF",
+            color: "var(--theme-sidebar-color)",
             flexShrink: 0,
-            borderRight: "1px solid rgba(232, 182, 90, 0.2)",
+            borderRight: "1px solid var(--theme-sidebar-border)",
             position: isMobileSidebarOpen ? "absolute" : "relative",
             top: 0,
             left: 0,
@@ -488,9 +488,9 @@ export default function AdminWebView({
                     padding: "10px 14px",
                     borderRadius: "12px",
                     fontSize: "12.5px",
-                    fontWeight: isActive ? 800 : 500,
+                    fontWeight: isActive ? 800 : 600,
                     background: isActive ? "var(--gradient-emerald)" : "transparent",
-                    color: isActive ? "#FFFFFF" : "rgba(255, 255, 255, 0.75)",
+                    color: isActive ? "#FFFFFF" : "var(--theme-text-muted)",
                     border: "none",
                     cursor: "pointer",
                     textAlign: "left",
@@ -522,17 +522,17 @@ export default function AdminWebView({
           {/* Footer Sidebar */}
           <div
             style={{
-              background: "#0D4332",
-              border: "1px solid rgba(16, 185, 129, 0.3)",
+              background: "var(--theme-sidebar-footer-bg)",
+              border: "1px solid var(--theme-sidebar-border)",
               borderRadius: "12px",
               padding: "12px",
               fontSize: "11px",
-              color: "#A7F3D0",
+              color: "var(--theme-sidebar-footer-text)",
               marginTop: "14px",
             }}
           >
-            <div style={{ fontWeight: 700, color: "#FFE49A" }}>{pesantrenNameInput}</div>
-            <div style={{ fontSize: "10px", color: "#8AA49B", marginTop: "2px" }}>
+            <div style={{ fontWeight: 700, color: "var(--theme-text-title)" }}>{pesantrenNameInput}</div>
+            <div style={{ fontSize: "10px", color: "var(--theme-text-muted)", marginTop: "2px" }}>
               Audit Forensik Append-Only Aktif
             </div>
           </div>

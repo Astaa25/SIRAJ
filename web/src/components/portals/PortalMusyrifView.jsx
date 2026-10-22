@@ -349,30 +349,31 @@ export default function PortalMusyrifView({
     >
       {/* Header Musyrif Asrama */}
       <div
+        className="portal-header-card"
         style={{
-          background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+          background: "var(--theme-portal-header-bg)",
           borderRadius: "20px",
           padding: "18px 22px",
-          border: "1px solid rgba(232, 182, 90, 0.3)",
-          color: "#FFFFFF",
+          border: "var(--theme-portal-header-border)",
+          color: "var(--theme-portal-header-title)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
           gap: "12px",
-          boxShadow: "0 8px 24px rgba(6, 39, 30, 0.3)",
+          boxShadow: "var(--theme-card-shadow)",
         }}
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
+            <h2 style={{ fontSize: "17px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
               Portal {musyrifName}
             </h2>
             <span
               style={{
-                background: "rgba(16, 185, 129, 0.2)",
-                color: "#34D399",
-                border: "1px solid #10B981",
+                background: "var(--theme-portal-badge-bg)",
+                color: "var(--theme-portal-badge-color)",
+                border: "var(--theme-portal-badge-border)",
                 fontSize: "10px",
                 fontWeight: 700,
                 padding: "2px 8px",
@@ -382,7 +383,7 @@ export default function PortalMusyrifView({
               Pembina {assignedDorm}
             </span>
           </div>
-          <div style={{ fontSize: "12px", color: "#FFE49A", marginTop: "3px" }}>
+          <div style={{ fontSize: "12px", color: "var(--theme-portal-header-sub)", marginTop: "3px" }}>
             Istilah Hunian Aktif: <strong>{tenantDormTerm}</strong> · Wilayah: {assignedDorm}
           </div>
         </div>
@@ -981,30 +982,31 @@ export default function PortalMusyrifView({
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {/* Header & Target Wisuda Tahfidz Card */}
           <div
+            className="portal-header-card"
             style={{
-              background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+              background: "var(--theme-portal-header-bg)",
               borderRadius: "20px",
               padding: "20px 24px",
-              border: "1px solid rgba(232, 182, 90, 0.35)",
-              color: "#FFFFFF",
-              boxShadow: "0 8px 24px rgba(6, 39, 30, 0.25)",
+              border: "var(--theme-portal-header-border)",
+              color: "var(--theme-portal-header-title)",
+              boxShadow: "var(--theme-card-shadow)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "14px" }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <h3 style={{ fontSize: "16px", fontWeight: 800, color: "#FFFFFF" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
                     Mutaba'ah Setoran Tahfidz (Ziyadah & Muraja'ah)
                   </h3>
                 </div>
-                <p style={{ fontSize: "12px", color: "#FFE49A", marginTop: "3px" }}>
+                <p style={{ fontSize: "12px", color: "var(--theme-portal-header-sub)", marginTop: "3px" }}>
                   Pencatatan setoran santri binaan {assignedDorm} per surat, ayat, juz & penilaian kelancaran (Mutqin/Jayyid).
                 </p>
               </div>
 
               {/* Santri Selector Dropdown */}
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{ fontSize: "11px", color: "#A7F3D0" }}>Santri Binaan:</span>
+                <span style={{ fontSize: "11px", color: "var(--theme-portal-header-sub)" }}>Santri Binaan:</span>
                 <select
                   value={selectedTahfidzStudentId}
                   onChange={(e) => {
@@ -1012,9 +1014,9 @@ export default function PortalMusyrifView({
                     setSelectedTahfidzStudentId(e.target.value);
                   }}
                   style={{
-                    background: "rgba(255,255,255,0.15)",
-                    border: "1px solid rgba(232, 182, 90, 0.4)",
-                    color: "#FFFFFF",
+                    background: "var(--theme-input-bg)",
+                    border: "1px solid var(--theme-input-border)",
+                    color: "var(--theme-input-text)",
                     padding: "6px 12px",
                     borderRadius: "10px",
                     fontSize: "12px",
@@ -1024,7 +1026,7 @@ export default function PortalMusyrifView({
                   }}
                 >
                   {activeDormStudents.map((st) => (
-                    <option key={st.id} value={st.id} style={{ background: "#06271E", color: "#FFFFFF" }}>
+                    <option key={st.id} value={st.id} style={{ background: "var(--theme-card-bg)", color: "var(--theme-text-title)" }}>
                       {st.name} ({st.roomNumber})
                     </option>
                   ))}

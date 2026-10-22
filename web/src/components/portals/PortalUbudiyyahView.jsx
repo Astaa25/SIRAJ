@@ -103,30 +103,31 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
     >
       {/* Header Ubudiyyah */}
       <div
+        className="portal-header-card"
         style={{
-          background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+          background: "var(--theme-portal-header-bg)",
           borderRadius: "20px",
           padding: "18px 22px",
-          border: "1px solid rgba(232, 182, 90, 0.3)",
-          color: "#FFFFFF",
+          border: "var(--theme-portal-header-border)",
+          color: "var(--theme-portal-header-title)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
           gap: "12px",
-          boxShadow: "0 8px 24px rgba(6, 39, 30, 0.3)",
+          boxShadow: "var(--theme-card-shadow)",
         }}
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
+            <h2 style={{ fontSize: "17px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
               Biro Ubudiyyah · Presensi Salat Berjamaah
             </h2>
             <span
               style={{
-                background: "rgba(232, 182, 90, 0.2)",
-                color: "#FFE49A",
-                border: "1px solid #FFE49A",
+                background: "var(--theme-portal-badge-bg)",
+                color: "var(--theme-portal-badge-color)",
+                border: "var(--theme-portal-badge-border)",
                 fontSize: "10px",
                 fontWeight: 700,
                 padding: "2px 8px",
@@ -136,14 +137,14 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
               Deteksi Otomatis Jam Sholat
             </span>
           </div>
-          <div style={{ fontSize: "12px", color: "#A7F3D0", marginTop: "3px" }}>
+          <div style={{ fontSize: "12px", color: "var(--theme-portal-header-sub)", marginTop: "3px" }}>
             Petugas: Ustaz Zaid · Lokasi: Masjid Jami' Raudhatul Hasanah
           </div>
         </div>
 
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: "11px", color: "#A7F3D0" }}>Sesi Aktif Saat Ini:</div>
-          <div style={{ fontSize: "16px", fontWeight: 800, color: "#34D399" }}>
+          <div style={{ fontSize: "11px", color: "var(--theme-portal-header-sub)" }}>Sesi Aktif Saat Ini:</div>
+          <div style={{ fontSize: "16px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
             {activePrayer.name} ({activePrayer.start} – {activePrayer.end} WIB)
           </div>
         </div>

@@ -258,10 +258,10 @@ export default function ShowcaseHeader({
             style={{
               display: "flex",
               alignItems: "center",
-              background: "rgba(0, 0, 0, 0.45)",
+              background: theme === "dark" ? "rgba(0, 0, 0, 0.45)" : "rgba(6, 95, 70, 0.08)",
               borderRadius: "12px",
               padding: "3px",
-              border: "1px solid rgba(232, 182, 90, 0.3)",
+              border: theme === "dark" ? "1px solid rgba(232, 182, 90, 0.3)" : "1px solid #D1FAE5",
               gap: "3px",
             }}
           >
@@ -273,7 +273,7 @@ export default function ShowcaseHeader({
               }}
               style={{
                 background: deviceMode === "hp" ? "var(--gradient-emerald)" : "transparent",
-                color: deviceMode === "hp" ? "#FFFFFF" : "#A7F3D0",
+                color: deviceMode === "hp" ? "#FFFFFF" : (theme === "dark" ? "#A7F3D0" : "#065F46"),
                 border: deviceMode === "hp" ? "1px solid #FFE49A" : "1px solid transparent",
                 borderRadius: "9px",
                 padding: "5px 10px",
@@ -298,7 +298,7 @@ export default function ShowcaseHeader({
               }}
               style={{
                 background: deviceMode === "tablet" ? "var(--gradient-emerald)" : "transparent",
-                color: deviceMode === "tablet" ? "#FFFFFF" : "#A7F3D0",
+                color: deviceMode === "tablet" ? "#FFFFFF" : (theme === "dark" ? "#A7F3D0" : "#065F46"),
                 border: deviceMode === "tablet" ? "1px solid #FFE49A" : "1px solid transparent",
                 borderRadius: "9px",
                 padding: "5px 10px",
@@ -324,7 +324,7 @@ export default function ShowcaseHeader({
                 }}
                 style={{
                   background: deviceMode === "laptop" ? "var(--gradient-emerald)" : "transparent",
-                  color: deviceMode === "laptop" ? "#FFFFFF" : "#FFE49A",
+                  color: deviceMode === "laptop" ? "#FFFFFF" : (theme === "dark" ? "#FFE49A" : "#065F46"),
                   border: deviceMode === "laptop" ? "1px solid #FFE49A" : "1px solid transparent",
                   borderRadius: "9px",
                   padding: "5px 10px",
@@ -348,7 +348,7 @@ export default function ShowcaseHeader({
                   cursor: "not-allowed",
                   padding: "5px 8px",
                   fontSize: "10.5px",
-                  color: "#8AA49B",
+                  color: theme === "dark" ? "#8AA49B" : "#94A3B8",
                   display: "flex",
                   alignItems: "center",
                   gap: "3px",
@@ -449,9 +449,9 @@ export default function ShowcaseHeader({
               playSoftClick();
             }}
             style={{
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "1px solid rgba(255, 255, 255, 0.15)",
-              color: "#A7F3D0",
+              background: theme === "dark" ? "rgba(255, 255, 255, 0.08)" : "#F1F5F9",
+              border: theme === "dark" ? "1px solid rgba(255, 255, 255, 0.15)" : "1px solid #CBD5E1",
+              color: theme === "dark" ? "#A7F3D0" : "#065F46",
               borderRadius: "10px",
               padding: "7px 10px",
               fontSize: "11px",
@@ -470,9 +470,9 @@ export default function ShowcaseHeader({
               onReplaySplash();
             }}
             style={{
-              background: "rgba(232, 182, 90, 0.12)",
-              border: "1px solid rgba(232, 182, 90, 0.35)",
-              color: "#FFE49A",
+              background: theme === "dark" ? "rgba(232, 182, 90, 0.12)" : "#FEF3C7",
+              border: theme === "dark" ? "1px solid rgba(232, 182, 90, 0.35)" : "1px solid #FDE68A",
+              color: theme === "dark" ? "#FFE49A" : "#92400E",
               borderRadius: "10px",
               padding: "7px 12px",
               fontSize: "11px",

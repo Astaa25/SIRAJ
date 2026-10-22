@@ -121,30 +121,31 @@ export default function SuperAdminView({ onTriggerLoader, onAuditLogAdd, current
     >
       {/* Header Super Admin */}
       <div
+        className="portal-header-card"
         style={{
-          background: "linear-gradient(135deg, #03140F 0%, #06271E 100%)",
+          background: "var(--theme-portal-header-bg)",
           borderRadius: "20px",
           padding: "20px 24px",
-          border: "1.5px solid #FFE49A",
-          color: "#FFFFFF",
+          border: "var(--theme-portal-header-border)",
+          color: "var(--theme-portal-header-title)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
           gap: "14px",
-          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
+          boxShadow: "var(--theme-card-shadow)",
         }}
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <h2 style={{ fontSize: "19px", fontWeight: 800, color: "#FFFFFF" }}>
+            <h2 style={{ fontSize: "19px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
               Pusat Kendali Super Admin Multi-Pesantren
             </h2>
             <span
               style={{
-                background: "rgba(232, 182, 90, 0.2)",
-                color: "#FFE49A",
-                border: "1px solid #FFE49A",
+                background: "var(--theme-portal-badge-bg)",
+                color: "var(--theme-portal-badge-color)",
+                border: "var(--theme-portal-badge-border)",
                 fontSize: "10px",
                 fontWeight: 800,
                 padding: "2px 8px",
@@ -154,7 +155,7 @@ export default function SuperAdminView({ onTriggerLoader, onAuditLogAdd, current
               Multi-Tenancy Master
             </span>
           </div>
-          <div style={{ fontSize: "12px", color: "#A7F3D0", marginTop: "4px" }}>
+          <div style={{ fontSize: "12px", color: "var(--theme-portal-header-sub)", marginTop: "4px" }}>
             Manajemen Lisensi Database Terisolasi Antar-Pesantren · Bebas Konflik Data
           </div>
         </div>

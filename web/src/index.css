@@ -138,6 +138,19 @@
   --theme-device-outer: #000000;
   --theme-device-inner: #07251D;
   --theme-mode-label: #A7F3D0;
+
+  --theme-portal-header-bg: linear-gradient(135deg, #06271E 0%, #0D4332 100%);
+  --theme-portal-header-border: 1.5px solid #FFE49A;
+  --theme-portal-header-title: #FFFFFF;
+  --theme-portal-header-sub: #A7F3D0;
+  --theme-portal-badge-bg: rgba(232, 182, 90, 0.2);
+  --theme-portal-badge-color: #FFE49A;
+  --theme-portal-badge-border: 1px solid #FFE49A;
+  --theme-sidebar-bg: #06271E;
+  --theme-sidebar-border: rgba(232, 182, 90, 0.2);
+  --theme-sidebar-color: #FFFFFF;
+  --theme-sidebar-footer-bg: #0D4332;
+  --theme-sidebar-footer-text: #A7F3D0;
 }
 
 /* =====================================================================
@@ -191,9 +204,22 @@
   --theme-kpi-green-border: #D1FAE5;
   --theme-kpi-green-text: #059669;
 
-  --theme-device-outer: #063A2C;
+  --theme-device-outer: #FFFFFF;
   --theme-device-inner: #F4FBF7;
   --theme-mode-label: #065F46;
+
+  --theme-portal-header-bg: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 50%, #ECFDF5 100%);
+  --theme-portal-header-border: 1.5px solid #A7F3D0;
+  --theme-portal-header-title: #06271E;
+  --theme-portal-header-sub: #047857;
+  --theme-portal-badge-bg: rgba(6, 95, 70, 0.08);
+  --theme-portal-badge-color: #065F46;
+  --theme-portal-badge-border: 1px solid #059669;
+  --theme-sidebar-bg: #FFFFFF;
+  --theme-sidebar-border: #D1FAE5;
+  --theme-sidebar-color: #06271E;
+  --theme-sidebar-footer-bg: #F4FBF7;
+  --theme-sidebar-footer-text: #065F46;
 }
 
 [data-theme="dark"] {
@@ -209,6 +235,19 @@
   --theme-role-btn-bg: rgba(255, 255, 255, 0.06);
   --theme-role-btn-border: rgba(16, 185, 129, 0.25);
   --theme-role-btn-color: #C4D8D0;
+
+  --theme-portal-header-bg: linear-gradient(135deg, #06271E 0%, #0D4332 100%);
+  --theme-portal-header-border: 1.5px solid #FFE49A;
+  --theme-portal-header-title: #FFFFFF;
+  --theme-portal-header-sub: #A7F3D0;
+  --theme-portal-badge-bg: rgba(232, 182, 90, 0.2);
+  --theme-portal-badge-color: #FFE49A;
+  --theme-portal-badge-border: 1px solid #FFE49A;
+  --theme-sidebar-bg: #06271E;
+  --theme-sidebar-border: rgba(232, 182, 90, 0.2);
+  --theme-sidebar-color: #FFFFFF;
+  --theme-sidebar-footer-bg: #0D4332;
+  --theme-sidebar-footer-text: #A7F3D0;
 
   --theme-card-bg: #0C382C;
   --theme-card-bg-subtle: #082920;
@@ -607,19 +646,31 @@ button:active {
 }
 
 [data-theme="light"] .device-hp-frame {
-  background: #06382C;
+  background: linear-gradient(145deg, #FFFFFF 0%, #F1FDF6 100%);
+  border: 2px solid #A7F3D0;
   box-shadow: 
-    0 25px 60px -15px rgba(6, 95, 70, 0.25),
-    0 0 0 2px rgba(16, 185, 129, 0.35),
-    0 0 35px rgba(16, 185, 129, 0.15);
+    0 20px 45px -10px rgba(6, 95, 70, 0.12),
+    0 0 0 2px rgba(16, 185, 129, 0.2),
+    0 0 30px rgba(16, 185, 129, 0.1);
 }
 
 [data-theme="light"] .device-tablet-frame {
-  background: #064E3B;
+  background: linear-gradient(145deg, #FFFFFF 0%, #F1FDF6 100%);
+  border: 2px solid #A7F3D0;
   box-shadow: 
-    0 25px 65px -15px rgba(6, 95, 70, 0.25),
-    0 0 0 2px rgba(16, 185, 129, 0.35),
-    0 0 40px rgba(16, 185, 129, 0.15);
+    0 20px 50px -10px rgba(6, 95, 70, 0.12),
+    0 0 0 2px rgba(16, 185, 129, 0.2),
+    0 0 35px rgba(16, 185, 129, 0.1);
+}
+
+[data-theme="light"] .phone-island {
+  background: #065F46;
+  box-shadow: 0 2px 8px rgba(6, 95, 70, 0.25);
+}
+
+[data-theme="light"] .tablet-camera-dot {
+  background: #065F46;
+  border-color: #10B981;
 }
 
 .device-laptop-frame {
@@ -720,5 +771,43 @@ button:active {
   background: var(--theme-table-row-hover) !important;
 }
 
+/* =====================================================================
+   UNIVERSAL THEME COMPATIBILITY: NO CLASHING DARK BOXES IN LIGHT MODE
+   ===================================================================== */
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #06271E"],
+[data-theme="light"] div[style*="background:linear-gradient(135deg, #06271E"],
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #03140F"],
+[data-theme="light"] div[style*="background:linear-gradient(135deg, #03140F"],
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #0D4332"],
+[data-theme="light"] div[style*="background:linear-gradient(135deg, #0D4332"],
+[data-theme="light"] .portal-header-card {
+  background: var(--theme-portal-header-bg) !important;
+  border-color: #A7F3D0 !important;
+  box-shadow: 0 4px 16px rgba(6, 95, 70, 0.08) !important;
+}
 
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #06271E"] h1,
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #06271E"] h2,
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #06271E"] h3,
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #03140F"] h1,
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #03140F"] h2,
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #03140F"] h3,
+[data-theme="light"] div[style*="background: var(--theme-portal-header-bg)"] h1,
+[data-theme="light"] div[style*="background: var(--theme-portal-header-bg)"] h2,
+[data-theme="light"] div[style*="background: var(--theme-portal-header-bg)"] h3,
+[data-theme="light"] .portal-header-card h1,
+[data-theme="light"] .portal-header-card h2,
+[data-theme="light"] .portal-header-card h3 {
+  color: #06271E !important;
+}
 
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #06271E"] [style*="color: #FFE49A"],
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #06271E"] [style*="color: #A7F3D0"],
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #03140F"] [style*="color: #FFE49A"],
+[data-theme="light"] div[style*="background: linear-gradient(135deg, #03140F"] [style*="color: #A7F3D0"],
+[data-theme="light"] div[style*="background: var(--theme-portal-header-bg)"] [style*="color: #FFE49A"],
+[data-theme="light"] div[style*="background: var(--theme-portal-header-bg)"] [style*="color: #A7F3D0"],
+[data-theme="light"] .portal-header-card [style*="color: #FFE49A"],
+[data-theme="light"] .portal-header-card [style*="color: #A7F3D0"] {
+  color: #047857 !important;
+}

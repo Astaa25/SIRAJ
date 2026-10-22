@@ -65,13 +65,14 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
           (Hanya muncul jika terdaftar lebih dari 1 anak)
          ------------------------------------------------------------- */}
       <div
+        className="portal-header-card"
         style={{
-          background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+          background: "var(--theme-portal-header-bg)",
           borderRadius: "20px",
           padding: "16px 20px",
-          border: "1px solid rgba(232, 182, 90, 0.3)",
-          boxShadow: "0 8px 24px rgba(6, 39, 30, 0.3)",
-          color: "#FFFFFF",
+          border: "var(--theme-portal-header-border)",
+          boxShadow: "var(--theme-card-shadow)",
+          color: "var(--theme-portal-header-title)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -102,7 +103,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                 width: "14px",
                 height: "14px",
                 borderRadius: "50%",
-                border: "2px solid #06271E",
+                border: "2px solid var(--theme-card-border)",
               }}
               title="Status Aktif"
             />
@@ -110,14 +111,14 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
 
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <h2 style={{ fontSize: "18px", fontWeight: 800, color: "#FFFFFF" }}>
+              <h2 style={{ fontSize: "18px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
                 {currentStudent.name}
               </h2>
               <span
                 style={{
-                  background: "rgba(16, 185, 129, 0.2)",
-                  color: "#A7F3D0",
-                  border: "1px solid #10B981",
+                  background: "var(--theme-portal-badge-bg)",
+                  color: "var(--theme-portal-badge-color)",
+                  border: "var(--theme-portal-badge-border)",
                   fontSize: "10px",
                   fontWeight: 700,
                   padding: "2px 8px",
@@ -127,14 +128,14 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                 AKTIF
               </span>
             </div>
-            <div style={{ fontSize: "12px", color: "#FFE49A", fontWeight: 600 }}>
+            <div style={{ fontSize: "12px", color: "var(--theme-portal-header-sub)", fontWeight: 600 }}>
               NIS: {currentStudent.nis} · {currentStudent.class}
             </div>
             {/* Nama Asrama dan No Kamar Terpisah Sesuai Arahan */}
-            <div style={{ fontSize: "11px", color: "#A7F3D0", marginTop: "2px", display: "flex", alignItems: "center", gap: "6px" }}>
+            <div style={{ fontSize: "11px", color: "var(--theme-portal-header-sub)", marginTop: "2px", display: "flex", alignItems: "center", gap: "6px" }}>
               <span>{currentStudent.dormBuilding}</span>
               <span>·</span>
-              <span style={{ background: "rgba(255,255,255,0.1)", padding: "1px 6px", borderRadius: "6px" }}>
+              <span style={{ background: "var(--theme-subbar-bg)", padding: "1px 6px", borderRadius: "6px" }}>
                 Kamar {currentStudent.roomNumber}
               </span>
             </div>
@@ -939,13 +940,14 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
       {activeTab === "gatepass" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           <div
+            className="portal-header-card"
             style={{
-              background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
-              color: "#FFFFFF",
+              background: "var(--theme-portal-header-bg)",
+              color: "var(--theme-portal-header-title)",
               borderRadius: "20px",
               padding: "20px",
-              border: "1px solid rgba(232, 182, 90, 0.4)",
-              boxShadow: "0 10px 30px rgba(6, 39, 30, 0.35)",
+              border: "var(--theme-portal-header-border)",
+              boxShadow: "var(--theme-card-shadow)",
             }}
           >
             {/* Header Badge */}
@@ -1259,13 +1261,14 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {/* Target Kelulusan Wisuda Tahfidz Card */}
           <div
+            className="portal-header-card"
             style={{
-              background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+              background: "var(--theme-portal-header-bg)",
               borderRadius: "20px",
               padding: "20px 24px",
-              border: "1px solid rgba(232, 182, 90, 0.35)",
-              color: "#FFFFFF",
-              boxShadow: "0 8px 24px rgba(6, 39, 30, 0.25)",
+              border: "var(--theme-portal-header-border)",
+              color: "var(--theme-portal-header-title)",
+              boxShadow: "var(--theme-card-shadow)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "14px" }}>

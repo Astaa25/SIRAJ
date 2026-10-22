@@ -124,30 +124,31 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
     >
       {/* Header Satpam */}
       <div
+        className="portal-header-card"
         style={{
-          background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+          background: "var(--theme-portal-header-bg)",
           borderRadius: "20px",
           padding: "18px 22px",
-          border: "1px solid rgba(232, 182, 90, 0.3)",
-          color: "#FFFFFF",
+          border: "var(--theme-portal-header-border)",
+          color: "var(--theme-portal-header-title)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
           gap: "12px",
-          boxShadow: "0 8px 24px rgba(6, 39, 30, 0.3)",
+          boxShadow: "var(--theme-card-shadow)",
         }}
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
+            <h2 style={{ fontSize: "17px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
               Pos Keamanan Gerbang Utama (Satpam Ponpes)
             </h2>
             <span
               style={{
-                background: "rgba(16, 185, 129, 0.2)",
-                color: "#34D399",
-                border: "1px solid #10B981",
+                background: "var(--theme-portal-badge-bg)",
+                color: "var(--theme-portal-badge-color)",
+                border: "var(--theme-portal-badge-border)",
                 fontSize: "10px",
                 fontWeight: 700,
                 padding: "2px 8px",
@@ -157,14 +158,14 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
               Verifikasi Atomik Gate Pass
             </span>
           </div>
-          <div style={{ fontSize: "12px", color: "#FFE49A", marginTop: "3px" }}>
+          <div style={{ fontSize: "12px", color: "var(--theme-portal-header-sub)", marginTop: "3px" }}>
             Petugas Piket Gerbang: Pak Slamet & Pak Mulyadi · Pos Gerbang Depan
           </div>
         </div>
 
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: "11px", color: "#A7F3D0" }}>Sistem Keamanan:</div>
-          <div style={{ fontSize: "12px", fontWeight: 700, color: "#FFE49A" }}>
+          <div style={{ fontSize: "11px", color: "var(--theme-portal-header-sub)" }}>Sistem Keamanan:</div>
+          <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--theme-portal-header-title)" }}>
             Anti-Penculikan & Perlindungan Santri
           </div>
         </div>
@@ -348,15 +349,16 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
                 {scanResult.status === "approved" ? (
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     <div
+                      className="portal-header-card"
                       style={{
-                        background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+                        background: "var(--theme-portal-header-bg)",
                         borderRadius: "16px",
                         padding: "14px",
-                        color: "#FFFFFF",
+                        color: "var(--theme-portal-header-title)",
                         display: "flex",
                         alignItems: "center",
                         gap: "12px",
-                        border: "1px solid rgba(232, 182, 90, 0.35)",
+                        border: "var(--theme-portal-header-border)",
                       }}
                     >
                       <img
@@ -371,13 +373,13 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
                         }}
                       />
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: "15px", fontWeight: 800, color: "#FFFFFF" }}>
+                        <div style={{ fontSize: "15px", fontWeight: 800, color: "var(--theme-portal-header-title)" }}>
                           {scanResult.student.name}
                         </div>
-                        <div style={{ fontSize: "11px", color: "#FFE49A" }}>
+                        <div style={{ fontSize: "11px", color: "var(--theme-portal-header-sub)" }}>
                           NIS: {scanResult.student.nis} · {scanResult.student.class}
                         </div>
-                        <div style={{ fontSize: "10px", color: "#A7F3D0", marginTop: "2px" }}>
+                        <div style={{ fontSize: "10px", color: "var(--theme-portal-header-sub)", marginTop: "2px" }}>
                           {scanResult.student.dormBuilding} — Kamar {scanResult.student.roomNumber}
                         </div>
                       </div>
