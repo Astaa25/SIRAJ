@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ShowcaseHeader from "./components/ShowcaseHeader";
 import SplashScreen from "./components/SplashScreen";
 import IslamicLoadingModal from "./components/IslamicLoadingModal";
@@ -16,19 +16,20 @@ import PortalPengasuhanView from "./components/portals/PortalPengasuhanView";
 import PortalBendaharaView from "./components/portals/PortalBendaharaView";
 import AdminWebView from "./components/AdminWebView";
 
-import { INITIAL_AUDIT_LOGS, INITIAL_TENANTS } from "./data/mockData";
+import { INITIAL_AUDIT_LOGS, INITIAL_TENANTS, SYSTEM_USERS } from "./data/mockData";
 import { setAudioMuted, playSoftClick } from "./utils/audio";
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
 
-  // Authentication State (Persistent until logout or account deactivation)
+  // Authentication State: Default to Admin Ponpes so Admin Ponpes is NEVER missing on load/refresh!
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem("siraj_auth_user");
-      return saved ? JSON.parse(saved) : null;
+      if (saved) return JSON.parse(saved);
+      return SYSTEM_USERS.find((u) => u.role === "admin") || null;
     } catch (e) {
-      return null;
+      return SYSTEM_USERS.find((u) => u.role === "admin") || null;
     }
   });
 
@@ -42,7 +43,23 @@ export default function App() {
     }
   });
 
-  const [activeRole, setActiveRole] = useState(currentUser?.role || "wali");
+  // Active Role State: Default to 'admin' (Admin Ponpes)
+  const [activeRole, setActiveRole] = useState(() => {
+    try {
+      const savedRole = localStorage.getItem("siraj_active_role");
+      if (savedRole) return savedRole;
+      const savedUser = localStorage.getItem("siraj_auth_user");
+      return savedUser ? JSON.parse(savedUser).role : "admin";
+    } catch (e) {
+      return "admin";
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("siraj_active_role", activeRole);
+    } catch (e) {}
+  }, [activeRole]);
 
   // Device Mode: 'hp' | 'tablet' | 'laptop'
   // Rule: Non-admin roles (wali, guru, ubudiyyah, musyrif, satpam, bk, pengasuhan) strictly restricted to HP & Tablet.
@@ -50,7 +67,7 @@ export default function App() {
   const isLaptopRole = activeRole === "admin" || activeRole === "superadmin" || activeRole === "bendahara";
 
   const [deviceMode, setDeviceMode] = useState(() => {
-    return (currentUser?.role === "admin" || currentUser?.role === "superadmin" || currentUser?.role === "bendahara") ? "laptop" : "hp";
+    return (activeRole === "admin" || activeRole === "superadmin" || activeRole === "bendahara") ? "laptop" : "hp";
   });
 
   // Guard: If switching to a non-admin role, never allow 'laptop'
@@ -63,7 +80,7 @@ export default function App() {
   const [is2sLoaderEnabled, setIs2sLoaderEnabled] = useState(true);
   const [isLoaderOpen, setIsLoaderOpen] = useState(false);
   const [loaderMessage, setLoaderMessage] = useState("");
-  const [loaderCallback, setLoaderCallback] = useState(null);
+  const loaderCallbackRef = useRef(null);
   const [isMuted, setIsMuted] = useState(false);
 
   // Theme State: 'dark' (Base Hijau Gelap) | 'light' (Base Putih Gradien Ijo Muda)
@@ -90,11 +107,11 @@ export default function App() {
     setAudioMuted(isMuted);
   }, [isMuted]);
 
-  // Master Action Trigger (2-Second Islamic Loading Animation)
+  // Master Action Trigger (2-Second Islamic Loading Animation) with ref safety
   const handleTriggerLoader = (message, callback) => {
+    loaderCallbackRef.current = callback;
     if (is2sLoaderEnabled) {
       setLoaderMessage(message || "Memproses Permintaan...");
-      setLoaderCallback(() => callback);
       setIsLoaderOpen(true);
     } else {
       if (callback) callback();
@@ -103,9 +120,10 @@ export default function App() {
 
   const handleLoaderComplete = () => {
     setIsLoaderOpen(false);
-    if (loaderCallback) {
-      loaderCallback();
-      setLoaderCallback(null);
+    if (loaderCallbackRef.current) {
+      const cb = loaderCallbackRef.current;
+      loaderCallbackRef.current = null;
+      cb();
     }
   };
 
@@ -113,6 +131,10 @@ export default function App() {
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);
     setActiveRole(user.role);
+    try {
+      localStorage.setItem("siraj_auth_user", JSON.stringify(user));
+      localStorage.setItem("siraj_active_role", user.role);
+    } catch (e) {}
     if (user.role === "admin" || user.role === "superadmin" || user.role === "bendahara") {
       setDeviceMode("laptop");
     } else {
@@ -323,6 +345,7 @@ export default function App() {
           {/* Top Header & 9-Role Direct Navigation Bar */}
           <ShowcaseHeader
             currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
             onLogout={handleLogout}
             currentTenant={currentTenant}
             activeRole={activeRole}

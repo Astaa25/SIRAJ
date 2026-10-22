@@ -1,9 +1,10 @@
 import React from "react";
 import { playSoftClick } from "../utils/audio";
-import { ROLES_LIST } from "../data/mockData";
+import { ROLES_LIST, SYSTEM_USERS } from "../data/mockData";
 
 export default function ShowcaseHeader({
   currentUser,
+  setCurrentUser,
   onLogout,
   currentTenant,
   activeRole,
@@ -24,10 +25,24 @@ export default function ShowcaseHeader({
   const handleRoleChange = (roleId) => {
     playSoftClick();
     const roleObj = ROLES_LIST.find((r) => r.id === roleId);
+    const matchingUser = SYSTEM_USERS.find((u) => u.role === roleId) || {
+      name: roleObj?.label || roleId,
+      role: roleId,
+      roleLabel: roleObj?.label || roleId,
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&auto=format&fit=crop&q=80",
+    };
     const willBeLaptopAllowed = roleId === "admin" || roleId === "superadmin" || roleId === "bendahara";
 
     const applyChange = () => {
       setActiveRole(roleId);
+      if (setCurrentUser) {
+        setCurrentUser(matchingUser);
+      }
+      try {
+        localStorage.setItem("siraj_active_role", roleId);
+        localStorage.setItem("siraj_auth_user", JSON.stringify(matchingUser));
+      } catch (e) {}
+
       if (willBeLaptopAllowed) {
         setDeviceMode("laptop");
       } else {
