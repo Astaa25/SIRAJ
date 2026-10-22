@@ -183,7 +183,7 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
       >
         <div style={{ maxWidth: "560px", margin: "0 auto" }}>
           <h3 style={{ fontSize: "18px", fontWeight: 800, color: "#06271E", marginBottom: "6px" }}>
-            📷 Pindai QR Gate Pass Penjemputan Santri
+            Pindai QR Gate Pass Penjemputan Santri
           </h3>
           <p style={{ fontSize: "12px", color: "#5B7A70", marginBottom: "18px" }}>
             Cukup klik tombol di bawah untuk langsung memindai QR kartu / ponsel penjemput.
@@ -209,7 +209,6 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
                 boxShadow: "0 6px 20px rgba(6, 95, 70, 0.35)",
               }}
             >
-              <span style={{ fontSize: "18px" }}>📷</span>
               <span>Pindai QR Gate Pass (Tes Izin Sah)</span>
             </button>
 
@@ -230,7 +229,6 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
               }}
               title="Menguji deteksi penolakan jika penjemput tidak memiliki izin resmi"
             >
-              <span>❌</span>
               <span>Uji Scan Gagal (Izin Ditolak)</span>
             </button>
           </div>
@@ -453,7 +451,6 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
                         gap: "6px",
                       }}
                     >
-                      <span>🖨️</span>
                       <span>Cetak Slip Fisik</span>
                     </button>
                   )}

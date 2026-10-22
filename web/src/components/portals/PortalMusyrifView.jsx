@@ -365,7 +365,6 @@ export default function PortalMusyrifView({
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "20px" }}>🏠</span>
             <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
               Portal {musyrifName}
             </h2>
@@ -410,7 +409,6 @@ export default function PortalMusyrifView({
               boxShadow: "0 3px 10px rgba(6, 95, 70, 0.35)",
             }}
           >
-            <span>🎫</span>
             <span>Otorisasi Gate Pass Mandiri</span>
           </button>
 
@@ -434,7 +432,6 @@ export default function PortalMusyrifView({
               boxShadow: "0 3px 10px rgba(232, 182, 90, 0.35)",
             }}
           >
-            <span>➕</span>
             <span>Catat Sakit (Seksi 13)</span>
           </button>
         </div>
@@ -453,14 +450,14 @@ export default function PortalMusyrifView({
         }}
       >
         {[
-          { id: "binaan", label: "Santri Binaan & Rapor Bulanan", icon: "📄" },
-          { id: "ews", label: "EWS Sakit & Izin", icon: "🚨" },
-          { id: "gatepass", label: "Gate Pass & Slip Fisik", icon: "🎫" },
+          { id: "binaan", label: "Santri Binaan & Rapor Bulanan" },
+          { id: "ews", label: "EWS Sakit & Izin" },
+          { id: "gatepass", label: "Gate Pass & Slip Fisik" },
           ...(isNightRondaEnabled
-            ? [{ id: "ronda", label: "Ronda Malam (22:00) & Kebersihan", icon: "🌙" }]
+            ? [{ id: "ronda", label: "Ronda Malam (22:00) & Kebersihan" }]
             : []),
           ...(isTahfidzEnabled
-            ? [{ id: "tahfidz", label: "Setoran Tahfidz (Ziyadah & Muraja'ah)", icon: "📖" }]
+            ? [{ id: "tahfidz", label: "Setoran Tahfidz (Ziyadah & Muraja'ah)" }]
             : []),
         ].map((tab) => (
           <button
@@ -486,7 +483,6 @@ export default function PortalMusyrifView({
               whiteSpace: "nowrap",
             }}
           >
-            <span>{tab.icon}</span>
             <span>{tab.label}</span>
           </button>
         ))}
@@ -512,7 +508,7 @@ export default function PortalMusyrifView({
           >
             <div>
               <h3 style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
-                📄 Rapor Bulanan Santri Binaan ({assignedDorm})
+                Rapor Bulanan Santri Binaan ({assignedDorm})
               </h3>
               <p style={{ fontSize: "11.5px", color: "#5B7A70", marginTop: "2px" }}>
                 Format PDF rekap bulanan siap cetak/kirim ke wali santri: evaluasi 3 pilar (Disiplin, Adab & Ubudiyyah) khusus binaan asrama ini.
@@ -1680,7 +1676,7 @@ export default function PortalMusyrifView({
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px", paddingBottom: "8px", borderBottom: "1px solid #E2EFE9" }}>
               <div style={{ fontSize: "13px", fontWeight: 800, color: "#06271E" }}>
-                🖨️ Slip Fisik Gate Pass (1 Lembar Kecil)
+                Slip Fisik Gate Pass (1 Lembar Kecil)
               </div>
               <button
                 onClick={() => setIsPhysicalSlipModalOpen(false)}
@@ -1770,7 +1766,7 @@ export default function PortalMusyrifView({
                   cursor: "pointer",
                 }}
               >
-                🖨️ Cetak Slip Sekarang
+                Cetak Slip Sekarang
               </button>
             </div>
           </div>

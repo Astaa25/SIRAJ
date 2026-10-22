@@ -408,7 +408,7 @@ export default function App() {
                 <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
                   <span>💻 Mode Layar Laptop / Komputer Desktop (1420px):</span>
                   <span style={{ fontWeight: 800, color: "#FFE49A" }}>
-                    {activeRole === "superadmin" ? "SUPER ADMIN PUSAT" : "ADMIN PONPES"}
+                    {activeRole === "superadmin" ? "SUPER ADMIN PUSAT" : activeRole === "bendahara" ? "BENDAHARA PONPES" : "ADMIN PONPES"}
                   </span>
                 </div>
 

@@ -208,7 +208,6 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
               gap: "6px",
             }}
           >
-            <span>💳</span>
             <span>Kartu 3D Santri</span>
           </button>
         </div>
@@ -323,10 +322,12 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "20px",
+              fontSize: "14px",
+              fontWeight: 900,
+              color: currentStudent.syahriyyahStatus === "Lunas" ? "#065F46" : "#B42318",
             }}
           >
-            💳
+            Rp
           </div>
           <div>
             <div style={{ fontSize: "13px", fontWeight: 800, color: "#06271E" }}>

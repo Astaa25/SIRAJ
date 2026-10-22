@@ -548,7 +548,7 @@ export default function AdminWebView({
                 cursor: "pointer",
               }}
             >
-              ✏️ Koreksi Absensi Beralasan
+              Koreksi Absensi Beralasan
             </button>
           </div>
         </div>
@@ -702,7 +702,8 @@ export default function AdminWebView({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
-                  width: "320px",
+                  width: "100%",
+                  maxWidth: "340px",
                   padding: "10px 14px",
                   borderRadius: "12px",
                   border: "1px solid #D1FAE5",
@@ -730,8 +731,7 @@ export default function AdminWebView({
                   }}
                   title="Unduh berkas template CSV resmi untuk format impor"
                 >
-                  <span>📥</span>
-                  <span>Unduh Template CSV</span>
+                  Unduh Template CSV
                 </button>
 
                 {/* Tombol Impor CSV */}
@@ -751,8 +751,7 @@ export default function AdminWebView({
                     gap: "6px",
                   }}
                 >
-                  <span>📂</span>
-                  <span>Impor CSV Santri</span>
+                  Impor CSV Santri
                 </button>
 
                 {/* Tombol Ekspor CSV */}
@@ -772,8 +771,7 @@ export default function AdminWebView({
                     gap: "6px",
                   }}
                 >
-                  <span>📤</span>
-                  <span>Ekspor CSV</span>
+                  Ekspor CSV
                 </button>
               </div>
             </div>
@@ -1662,7 +1660,7 @@ export default function AdminWebView({
                   cursor: "pointer",
                 }}
               >
-                📥 Unduh Template CSV
+                Unduh Template CSV
               </button>
 
               <button
@@ -1714,7 +1712,7 @@ export default function AdminWebView({
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
               <div style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
-                ✏️ Koreksi Absensi Beralasan Resmi
+                Koreksi Absensi Beralasan Resmi
               </div>
               <button onClick={() => setIsCorrectionModalOpen(false)} style={{ background: "#F3F4F6", border: "none", borderRadius: "50%", width: "26px", height: "26px", cursor: "pointer" }}>
                 ✕
@@ -1873,7 +1871,6 @@ export default function AdminWebView({
                     gap: "6px",
                   }}
                 >
-                  <span>🖨️</span>
                   <span>Cetak / Print PDF</span>
                 </button>
                 <button

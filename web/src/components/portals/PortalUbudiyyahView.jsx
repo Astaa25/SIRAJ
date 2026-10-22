@@ -119,7 +119,6 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "20px" }}>🕌</span>
             <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
               Biro Ubudiyyah · Presensi Salat Berjamaah
             </h2>
@@ -145,7 +144,7 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: "11px", color: "#A7F3D0" }}>Sesi Aktif Saat Ini:</div>
           <div style={{ fontSize: "16px", fontWeight: 800, color: "#34D399" }}>
-            🕋 {activePrayer.name} ({activePrayer.start} – {activePrayer.end} WIB)
+            {activePrayer.name} ({activePrayer.start} – {activePrayer.end} WIB)
           </div>
         </div>
       </div>
@@ -186,7 +185,7 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
             fontWeight: 800,
           }}
         >
-          🟢 Sesi {activePrayer.name} Sedang Aktif
+          Sesi {activePrayer.name} Aktif
         </span>
       </div>
 

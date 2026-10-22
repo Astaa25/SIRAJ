@@ -110,7 +110,6 @@ export default function PortalPengasuhanView({ onTriggerLoader, onAuditLogAdd })
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "20px" }}>👳</span>
             <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
               Biro Pengasuhan Santri (Kepala Musyrif Asrama)
             </h2>
@@ -155,7 +154,7 @@ export default function PortalPengasuhanView({ onTriggerLoader, onAuditLogAdd })
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "6px" }}>
           <div style={{ fontSize: "13px", fontWeight: 800, color: "#06271E" }}>
-            🏢 Kategori Komplek / Asrama Santri:
+            Kategori Komplek / Asrama Santri:
           </div>
           <div style={{ fontSize: "11px", color: "#5B7A70" }}>
             Pilih komplek asrama untuk melihat data musyrif, santri sakit, dan perizinan per komplek

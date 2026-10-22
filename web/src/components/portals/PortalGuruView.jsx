@@ -118,7 +118,6 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "20px" }}>👨‍🏫</span>
             <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
               Portal Guru KBM · {teacherData.subject}
             </h2>
@@ -144,7 +143,7 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: "11px", color: "#A7F3D0" }}>Sesi Waktu Saat Ini:</div>
           <div style={{ fontSize: "12px", fontWeight: 700, color: "#FFFFFF" }}>
-            🕒 Otomatis Sesuai Jadwal Jam Pelajaran
+            Otomatis Sesuai Jadwal Jam Pelajaran
           </div>
         </div>
       </div>
@@ -159,7 +158,7 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
         }}
       >
         <div style={{ fontSize: "13px", fontWeight: 800, color: "#06271E", marginBottom: "10px" }}>
-          📚 Jadwal Mengajar Anda ({teacherData.subject}):
+          Jadwal Mengajar Anda ({teacherData.subject}):
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "10px" }}>
@@ -190,10 +189,10 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
                   </span>
                 </div>
                 <div style={{ fontSize: "11px", opacity: 0.9, marginTop: "2px" }}>
-                  📍 {cls.room}
+                  {cls.room}
                 </div>
                 <div style={{ fontSize: "10px", marginTop: "6px", fontWeight: 700, color: isSelected ? "#FFE49A" : "#059669" }}>
-                  🕒 {cls.timeDisplay}
+                  {cls.timeDisplay}
                 </div>
               </div>
             );
@@ -201,7 +200,6 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
         </div>
 
         <div style={{ fontSize: "11px", color: "#065F46", background: "#ECFDF5", padding: "8px 12px", borderRadius: "10px", marginTop: "12px", border: "1px solid #A7F3D0", display: "flex", alignItems: "center", gap: "6px" }}>
-          <span>🔒</span>
           <span>Mata pelajaran lain tidak ditampilkan. Portal ini dikhususkan hanya untuk mata pelajaran <strong>{teacherData.subject}</strong> yang Anda ampu.</span>
         </div>
       </div>
@@ -220,7 +218,7 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
             <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-              📷 Kamera Pemindai Presensi {activeClass.subject}
+              Kamera Pemindai Presensi {activeClass.subject}
             </div>
             <span
               style={{
@@ -232,7 +230,7 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
                 borderRadius: "10px",
               }}
             >
-              🟢 Viewfinder Langsung Aktif
+              Viewfinder Aktif
             </span>
           </div>
 

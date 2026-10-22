@@ -212,19 +212,21 @@ export default function PortalBendaharaView({
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <div
             style={{
-              width: "52px",
-              height: "52px",
-              borderRadius: "16px",
+              width: "48px",
+              height: "48px",
+              borderRadius: "14px",
               background: "rgba(232, 182, 90, 0.2)",
               border: "1.5px solid #FFE49A",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "26px",
+              fontSize: "18px",
+              fontWeight: 900,
+              color: "#FFE49A",
               boxShadow: "0 0 16px rgba(232, 182, 90, 0.3)",
             }}
           >
-            💰
+            Rp
           </div>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -273,8 +275,7 @@ export default function PortalBendaharaView({
               gap: "6px",
             }}
           >
-            <span>⚙️</span>
-            <span>Atur SPP & Rekening</span>
+            Atur SPP & Rekening
           </button>
         </div>
       </div>
@@ -300,7 +301,6 @@ export default function PortalBendaharaView({
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
             <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#5B7A70" }}>Total Target Kas SPP</span>
-            <span style={{ fontSize: "16px" }}>🎯</span>
           </div>
           <div style={{ fontSize: "20px", fontWeight: 900, color: "#06271E" }}>
             Rp {targetTotalKas.toLocaleString("id-ID")}
@@ -321,7 +321,6 @@ export default function PortalBendaharaView({
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
             <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#065F46" }}>Penerimaan Terkumpul</span>
-            <span style={{ fontSize: "16px" }}>🟢</span>
           </div>
           <div style={{ fontSize: "20px", fontWeight: 900, color: "#059669" }}>
             Rp {kasTerkumpul.toLocaleString("id-ID")}
@@ -342,7 +341,6 @@ export default function PortalBendaharaView({
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
             <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#991B1B" }}>Piutang / Belum Lunas</span>
-            <span style={{ fontSize: "16px" }}>🔴</span>
           </div>
           <div style={{ fontSize: "20px", fontWeight: 900, color: "#DC2626" }}>
             Rp {piutangTertunggak.toLocaleString("id-ID")}
@@ -363,7 +361,6 @@ export default function PortalBendaharaView({
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
             <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#5B7A70" }}>Periode Aktif</span>
-            <span style={{ fontSize: "16px" }}>📅</span>
           </div>
           <div style={{ fontSize: "18px", fontWeight: 900, color: "#D97706" }}>
             {sppMonthInput}
@@ -389,9 +386,9 @@ export default function PortalBendaharaView({
         }}
       >
         {[
-          { id: "tagihan", label: `Daftar Tagihan Santri (${filteredStudents.length})`, icon: "💳" },
-          { id: "transaksi", label: `Buku Kas Masuk (${transactions.length})`, icon: "🧾" },
-          { id: "pengaturan", label: "Pengaturan Tarif & Rekening", icon: "⚙️" },
+          { id: "tagihan", label: `Daftar Tagihan Santri (${filteredStudents.length})` },
+          { id: "transaksi", label: `Buku Kas Masuk (${transactions.length})` },
+          { id: "pengaturan", label: "Pengaturan Tarif & Rekening" },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -416,7 +413,6 @@ export default function PortalBendaharaView({
               whiteSpace: "nowrap",
             }}
           >
-            <span>{tab.icon}</span>
             <span>{tab.label}</span>
           </button>
         ))}
@@ -500,7 +496,7 @@ export default function PortalBendaharaView({
               boxShadow: "0 2px 10px rgba(6,39,30,0.03)",
             }}
           >
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px" }}>
+            <table style={{ width: "100%", minWidth: "720px", borderCollapse: "collapse", fontSize: "12px" }}>
               <thead>
                 <tr style={{ background: "#F4FBF7", borderBottom: "1.5px solid #D1FAE5", color: "#065F46", textAlign: "left" }}>
                   <th style={{ padding: "12px 14px" }}>Santri</th>
@@ -558,7 +554,7 @@ export default function PortalBendaharaView({
                           fontWeight: 800,
                         }}
                       >
-                        {st.syahriyyahStatus === "Lunas" ? "🟢 Lunas" : "🔴 Belum Lunas"}
+                        {st.syahriyyahStatus === "Lunas" ? "Lunas" : "Belum Lunas"}
                       </span>
                     </td>
                     <td style={{ padding: "12px 14px", textAlign: "center", whiteSpace: "nowrap" }}>
@@ -571,7 +567,7 @@ export default function PortalBendaharaView({
                             background: st.syahriyyahStatus === "Lunas" ? "#F3F4F6" : "#ECFDF5",
                             border: st.syahriyyahStatus === "Lunas" ? "1px solid #D1D5DB" : "1px solid #A7F3D0",
                             color: st.syahriyyahStatus === "Lunas" ? "#374151" : "#065F46",
-                            padding: "6px 10px",
+                            padding: "6px 12px",
                             borderRadius: "8px",
                             fontSize: "11px",
                             fontWeight: 800,
@@ -581,8 +577,7 @@ export default function PortalBendaharaView({
                             gap: "4px",
                           }}
                         >
-                          <span>🔄</span>
-                          <span>{st.syahriyyahStatus === "Lunas" ? "Tandai Belum Lunas" : "Tandai LUNAS"}</span>
+                          {st.syahriyyahStatus === "Lunas" ? "Tandai Belum Lunas" : "Tandai Lunas"}
                         </button>
 
                         {/* Cetak Kuitansi */}
@@ -594,7 +589,7 @@ export default function PortalBendaharaView({
                               background: "rgba(232, 182, 90, 0.2)",
                               border: "1px solid #FFE49A",
                               color: "#92400E",
-                              padding: "6px 10px",
+                              padding: "6px 12px",
                               borderRadius: "8px",
                               fontSize: "11px",
                               fontWeight: 800,
@@ -604,8 +599,7 @@ export default function PortalBendaharaView({
                               gap: "4px",
                             }}
                           >
-                            <span>🧾</span>
-                            <span>Kuitansi</span>
+                            Kuitansi
                           </button>
                         )}
                       </div>
@@ -638,7 +632,7 @@ export default function PortalBendaharaView({
           >
             <div>
               <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-                🧾 Buku Rekapitulasi Kas Pembayaran Masuk
+                Buku Rekapitulasi Kas Pembayaran Masuk
               </div>
               <div style={{ fontSize: "11px", color: "#5B7A70", marginTop: "2px" }}>
                 Arsip tanda bukti pembayaran resmi yang telah disahkan Bendahara Pondok Pesantren.
@@ -657,7 +651,7 @@ export default function PortalBendaharaView({
               overflowX: "auto",
             }}
           >
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px" }}>
+            <table style={{ width: "100%", minWidth: "700px", borderCollapse: "collapse", fontSize: "12px" }}>
               <thead>
                 <tr style={{ background: "#F4FBF7", borderBottom: "1.5px solid #D1FAE5", color: "#065F46", textAlign: "left" }}>
                   <th style={{ padding: "12px 14px" }}>No. Kuitansi</th>
@@ -704,14 +698,14 @@ export default function PortalBendaharaView({
                           background: "var(--gradient-emerald)",
                           color: "#FFFFFF",
                           border: "none",
-                          padding: "5px 12px",
+                          padding: "6px 14px",
                           borderRadius: "8px",
                           fontSize: "11px",
                           fontWeight: 700,
                           cursor: "pointer",
                         }}
                       >
-                        🖨️ Cetak Ulang
+                        Cetak Ulang
                       </button>
                     </td>
                   </tr>
@@ -739,7 +733,7 @@ export default function PortalBendaharaView({
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingBottom: "10px", borderBottom: "1px solid #E2EFE9" }}>
               <div>
                 <div style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
-                  ⚙️ Konfigurasi Tarif Syahriyyah / SPP & Periode Aktif
+                  Konfigurasi Tarif Syahriyyah / SPP & Periode Aktif
                 </div>
                 <div style={{ fontSize: "11px", color: "#5B7A70", marginTop: "2px" }}>
                   Perubahan di sini otomatis tampil di kartu status Wali Santri dan rekap tagihan Admin Ponpes.
@@ -839,7 +833,7 @@ export default function PortalBendaharaView({
                     boxShadow: "0 4px 12px rgba(6, 95, 70, 0.3)",
                   }}
                 >
-                  💾 Simpan Konfigurasi Syahriyyah
+                  Simpan Konfigurasi Syahriyyah
                 </button>
               </div>
             </form>
@@ -881,7 +875,7 @@ export default function PortalBendaharaView({
             {/* Header Modal & Print Action */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingBottom: "10px", borderBottom: "1px solid #E2EFE9" }}>
               <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-                🧾 Tanda Bukti Kuitansi Pembayaran Syahriyyah
+                Tanda Bukti Kuitansi Pembayaran Syahriyyah
               </div>
               <div style={{ display: "flex", gap: "8px" }}>
                 <button
@@ -897,7 +891,7 @@ export default function PortalBendaharaView({
                     cursor: "pointer",
                   }}
                 >
-                  🖨️ Cetak Kuitansi
+                  Cetak Kuitansi
                 </button>
                 <button
                   onClick={() => setIsReceiptModalOpen(false)}

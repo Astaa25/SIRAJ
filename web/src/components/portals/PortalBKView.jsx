@@ -335,7 +335,6 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", flexWrap: "wrap", gap: "8px" }}>
           <div>
             <div style={{ fontSize: "15px", fontWeight: 800, color: "#06271E", display: "flex", alignItems: "center", gap: "6px" }}>
-              <span>📈</span>
               <span>Grafik Tren Perkembangan Adab: {selectedStudent.name}</span>
             </div>
             <div style={{ fontSize: "11.5px", color: "#5B7A70", marginTop: "2px" }}>
@@ -436,7 +435,6 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "18px" }}>🔒</span>
             <div>
               <div style={{ fontSize: "12.5px", fontWeight: 800, color: "#92400E" }}>
                 LEMBAR CATATAN KONSELING PRIBADI (CONFIDENTIAL)
@@ -467,7 +465,7 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
             }}
           >
             <div style={{ fontSize: "13px", fontWeight: 800, color: "#065F46" }}>
-              📝 Tulis Catatan Konseling Pribadi Baru
+              Tulis Catatan Konseling Pribadi Baru
             </div>
 
             <div>
@@ -536,14 +534,14 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
                 cursor: "pointer",
               }}
             >
-              🔒 Simpan Catatan Rahasia (Confidential)
+              Simpan Catatan Rahasia (Confidential)
             </button>
           </form>
 
           {/* Daftar Riwayat Catatan Konseling Santri Ini */}
           <div>
             <div style={{ fontSize: "13px", fontWeight: 800, color: "#06271E", marginBottom: "8px" }}>
-              📁 Arsip Konseling Santri: {selectedStudent.name} ({confidentialNotesList.length} Catatan)
+              Arsip Konseling Santri: {selectedStudent.name} ({confidentialNotesList.length} Catatan)
             </div>
 
             {confidentialNotesList.length === 0 ? (
@@ -565,7 +563,7 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
                   >
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
                       <span style={{ fontWeight: 800, color: "#92400E" }}>
-                        🔒 {note.category}
+                        {note.category}
                       </span>
                       <span style={{ background: "#FEF3C7", color: "#92400E", padding: "2px 6px", borderRadius: "4px", fontSize: "10px", fontWeight: 700 }}>
                         {note.status}
@@ -594,14 +592,14 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
       {/* Katalog Input Poin Adab Santri (Merits & Violations) */}
       <div style={{ background: "#FFFFFF", borderRadius: "20px", padding: "20px", border: "1px solid #E2EFE9" }}>
         <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", marginBottom: "12px" }}>
-          ⭐ Input Poin Adab Cepat: {selectedStudent.name}
+          Input Poin Adab Santri: {selectedStudent.name}
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "14px" }}>
           {/* Poin Kebaikan */}
           <div>
             <div style={{ fontSize: "11px", fontWeight: 700, color: "#059669", marginBottom: "6px" }}>
-              🌟 Kebaikan & Prestasi (+Poin):
+              Kebaikan & Prestasi (+Poin):
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               {BK_POINT_CATALOGUE.merits.map((item) => (
@@ -644,7 +642,7 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
           {/* Poin Pelanggaran */}
           <div>
             <div style={{ fontSize: "11px", fontWeight: 700, color: "#B42318", marginBottom: "6px" }}>
-              ⚠️ Pelanggaran Kedisiplinan (-Poin):
+              Pelanggaran Kedisiplinan (-Poin):
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               {BK_POINT_CATALOGUE.violations.map((item) => (
