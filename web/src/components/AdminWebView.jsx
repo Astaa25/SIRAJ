@@ -70,6 +70,54 @@ export default function AdminWebView({
   const [sp2ActionInput, setSp2ActionInput] = useState(INITIAL_SP_THRESHOLDS.sp2Action);
   const [sp3ActionInput, setSp3ActionInput] = useState(INITIAL_SP_THRESHOLDS.sp3Action);
   const [isSpPdfModalOpen, setIsSpPdfModalOpen] = useState(false);
+  const [selectedStudentForSp, setSelectedStudentForSp] = useState(INITIAL_STUDENTS[2]); // Default: Muhammad Rizky (SP I)
+  const [spLevelForPrint, setSpLevelForPrint] = useState("SP I");
+
+  // Kebijakan Reset Poin & Fitur Opsional Ponpes (Diatur di Admin)
+  const [pointResetPolicy, setPointResetPolicy] = useState(
+    currentTenant?.pointResetPolicy || "semester" // "semester", "tahun", "akumulatif"
+  );
+  const [enableNightRonda, setEnableNightRonda] = useState(
+    currentTenant?.enableNightRonda ?? true
+  );
+  const [enableTahfidzModule, setEnableTahfidzModule] = useState(
+    currentTenant?.enableTahfidzModule ?? true
+  );
+
+  // Filter Syahriyyah Santri (ALL, Lunas, Belum Lunas)
+  const [syahriyyahFilter, setSyahriyyahFilter] = useState("ALL");
+
+  // Fungsi Buka Cetak SP Otomatis
+  const handleOpenSpModal = (student, level = "SP I") => {
+    playSoftClick();
+    setSelectedStudentForSp(student);
+    setSpLevelForPrint(level);
+    setIsSpPdfModalOpen(true);
+  };
+
+  // 1-Click Toggle Status Syahriyyah (Tanpa Payment Gateway / Tidak Ribet)
+  const handleToggleSyahriyyah = (studentId) => {
+    playSoftClick();
+    triggerHaptic([50]);
+    setStudentsList((prev) =>
+      prev.map((s) => {
+        if (s.id === studentId) {
+          const nextStatus = s.syahriyyahStatus === "Lunas" ? "Belum Lunas" : "Lunas";
+          playSuccessChime();
+          onAuditLogAdd({
+            user: "Admin Ponpes",
+            role: "Admin",
+            action: `UBAH SYAHRIYYAH: ${nextStatus.toUpperCase()}`,
+            object: `Santri: ${s.name} (NIS: ${s.nis})`,
+            status: "BERHASIL",
+            details: `Status tagihan Syahriyyah ${s.syahriyyahMonth || "Oktober 2026"} (Rp 1.250.000) diubah menjadi ${nextStatus}. Pencatatan langsung oleh Bendahara.`,
+          });
+          return { ...s, syahriyyahStatus: nextStatus };
+        }
+        return s;
+      })
+    );
+  };
 
   // CSV Importer & Exporter State (Asrama & No Kamar Terpisah)
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -112,9 +160,9 @@ export default function AdminWebView({
   // Ekspor Data Santri ke CSV
   const handleExportStudentsCsv = () => {
     playSoftClick();
-    let csvString = "NIS,Nama Santri,Kelas,Asrama/Komplek,No Kamar,Nama Wali,Skor Adab\n";
+    let csvString = "NIS,Nama Santri,Kelas,Asrama/Komplek,No Kamar,Nama Wali,Skor Adab,Syahriyyah\n";
     studentsList.forEach((st) => {
-      csvString += `${st.nis},"${st.name}","${st.class}","${st.dormBuilding || st.dorm || ''}","${st.roomNumber || ''}","${st.guardianName}",${st.scoreAdab}\n`;
+      csvString += `${st.nis},"${st.name}","${st.class}","${st.dormBuilding || st.dorm || ''}","${st.roomNumber || ''}","${st.guardianName}",${st.scoreAdab},"${st.syahriyyahStatus || 'Lunas'}"\n`;
     });
 
     const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
@@ -141,12 +189,17 @@ export default function AdminWebView({
           nis: "2026070188",
           gender: "Laki-laki",
           class: "Kelas 7-A",
-          dorm: "Komplek Abu Bakar 02",
+          dormBuilding: "Asrama Abu Bakar Ash-Shiddiq",
+          roomNumber: "Kamar 02",
           photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=80",
           guardianName: "H. Yusuf Mansur",
           scoreAdab: 100,
           pointsViolation: 0,
           pointsGood: 20,
+          spStatus: "Aman",
+          syahriyyahStatus: "Lunas",
+          syahriyyahMonth: "Oktober 2026",
+          syahriyyahAmount: 1250000,
           qrCode: "SRJ-2026070188",
           barcode: "2026070188",
           rfidTag: "04:7C:E1:A2",
@@ -158,12 +211,17 @@ export default function AdminWebView({
           nis: "2026070189",
           gender: "Laki-laki",
           class: "Kelas 7-A",
-          dorm: "Komplek Abu Bakar 04",
+          dormBuilding: "Asrama Abu Bakar Ash-Shiddiq",
+          roomNumber: "Kamar 04",
           photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&auto=format&fit=crop&q=80",
           guardianName: "Dr. H. Lukman",
           scoreAdab: 95,
           pointsViolation: 5,
           pointsGood: 15,
+          spStatus: "Aman",
+          syahriyyahStatus: "Lunas",
+          syahriyyahMonth: "Oktober 2026",
+          syahriyyahAmount: 1250000,
           qrCode: "SRJ-2026070189",
           barcode: "2026070189",
           rfidTag: "04:6D:F3:B5",
@@ -229,6 +287,9 @@ export default function AdminWebView({
           name: pesantrenNameInput,
           dormTerm: effectiveDormTerm,
           prayerLocation: prayerLocationInput,
+          pointResetPolicy: pointResetPolicy,
+          enableNightRonda: enableNightRonda,
+          enableTahfidzModule: enableTahfidzModule,
         });
       }
 
@@ -238,9 +299,9 @@ export default function AdminWebView({
         action: "UPDATE PENGATURAN PONPES",
         object: pesantrenNameInput,
         status: "DISIMPAN",
-        details: `Nama Ponpes: "${pesantrenNameInput}", Istilah Hunian: "${effectiveDormTerm}", Wilayah: "${prayerLocationInput}". Jadwal & Ambang Masbuk Sholat diperbarui.`,
+        details: `Nama Ponpes: "${pesantrenNameInput}", Istilah Hunian: "${effectiveDormTerm}", Wilayah: "${prayerLocationInput}", Reset Poin: "${pointResetPolicy}", Ronda Malam: ${enableNightRonda ? 'Aktif' : 'Nonaktif'}, Tahfidz: ${enableTahfidzModule ? 'Aktif' : 'Nonaktif'}.`,
       });
-      alert(`Pengaturan ${pesantrenNameInput} berhasil disimpan! Istilah Tempat Tinggal: "${effectiveDormTerm}".`);
+      alert(`Pengaturan ${pesantrenNameInput} berhasil disimpan!`);
     });
   };
 
@@ -261,13 +322,18 @@ export default function AdminWebView({
     });
   };
 
-  // Filter students
-  const filteredStudents = studentsList.filter(
-    (st) =>
+  // Filter students by Search Query & Syahriyyah Status
+  const filteredStudents = studentsList.filter((st) => {
+    const matchesSearch =
       st.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       st.nis.includes(searchQuery) ||
-      st.class.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      st.class.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSyahriyyah =
+      syahriyyahFilter === "ALL" ||
+      (syahriyyahFilter === "Lunas" && st.syahriyyahStatus === "Lunas") ||
+      (syahriyyahFilter === "Belum Lunas" && st.syahriyyahStatus !== "Lunas");
+    return matchesSearch && matchesSyahriyyah;
+  });
 
   return (
     <div
@@ -567,6 +633,67 @@ export default function AdminWebView({
            ------------------------------------------------------------- */}
         {adminTab === "santri" && (
           <div style={{ padding: "24px 28px" }}>
+            {/* Syahriyyah Bulanan Monitoring Header (Sederhana Tanpa Payment Gateway) */}
+            <div
+              style={{
+                background: "linear-gradient(135deg, #F4FBF7 0%, #FFFFFF 100%)",
+                borderRadius: "16px",
+                padding: "16px 20px",
+                border: "1px solid #D1FAE5",
+                marginBottom: "18px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "14px",
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ fontSize: "16px" }}>💳</span>
+                  <span style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
+                    Pemantauan Tagihan Syahriyyah / SPP Santri (Oktober 2026)
+                  </span>
+                  <span style={{ background: "#D1FAE5", color: "#065F46", padding: "2px 8px", borderRadius: "6px", fontSize: "10.5px", fontWeight: 700 }}>
+                    Rp 1.250.000 / Santri
+                  </span>
+                </div>
+                <div style={{ fontSize: "11px", color: "#5B7A70", marginTop: "3px" }}>
+                  Status pembayaran dikelola langsung secara manual oleh Bendahara/Admin Ponpes. Tanpa biaya admin & bebas repot.
+                </div>
+              </div>
+
+              {/* Filter Syahriyyah */}
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", background: "#FFFFFF", padding: "4px", borderRadius: "10px", border: "1px solid #E2EFE9" }}>
+                <span style={{ fontSize: "11px", fontWeight: 700, color: "#5B7A70", padding: "0 6px" }}>Filter:</span>
+                {[
+                  { id: "ALL", label: `Semua (${studentsList.length})` },
+                  { id: "Lunas", label: `🟢 Lunas (${studentsList.filter(s => s.syahriyyahStatus === "Lunas").length})` },
+                  { id: "Belum Lunas", label: `🔴 Belum Lunas (${studentsList.filter(s => s.syahriyyahStatus !== "Lunas").length})` },
+                ].map((f) => (
+                  <button
+                    key={f.id}
+                    onClick={() => {
+                      playSoftClick();
+                      setSyahriyyahFilter(f.id);
+                    }}
+                    style={{
+                      padding: "5px 10px",
+                      borderRadius: "8px",
+                      fontSize: "11px",
+                      fontWeight: syahriyyahFilter === f.id ? 800 : 600,
+                      background: syahriyyahFilter === f.id ? "var(--gradient-emerald)" : "transparent",
+                      color: syahriyyahFilter === f.id ? "#FFFFFF" : "#5B7A70",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Action Bar: Search, Unduh Template, Impor CSV, Ekspor CSV */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "18px" }}>
               <input
@@ -653,39 +780,43 @@ export default function AdminWebView({
 
             {/* Tabel Master Santri (Responsif & Asrama/No Kamar Terpisah) */}
             <div style={{ background: "#FFFFFF", borderRadius: "18px", border: "1px solid #E2EFE9", overflowX: "auto" }}>
-              <table style={{ width: "100%", minWidth: "750px", borderCollapse: "collapse", fontSize: "13px" }}>
+              <table style={{ width: "100%", minWidth: "900px", borderCollapse: "collapse", fontSize: "13px" }}>
                 <thead>
                   <tr style={{ background: "#F4FBF7", borderBottom: "1px solid #E2EFE9", textAlign: "left", color: "#5B7A70" }}>
-                    <th style={{ padding: "12px 16px" }}>Santri</th>
-                    <th style={{ padding: "12px 16px" }}>NIS</th>
-                    <th style={{ padding: "12px 16px" }}>Kelas</th>
-                    <th style={{ padding: "12px 16px" }}>Asrama / Komplek</th>
-                    <th style={{ padding: "12px 16px" }}>No. Kamar</th>
-                    <th style={{ padding: "12px 16px" }}>Wali Sah</th>
-                    <th style={{ padding: "12px 16px" }}>Status SP</th>
-                    <th style={{ padding: "12px 16px" }}>Skor Adab</th>
-                    <th style={{ padding: "12px 16px" }}>Barcode / QR</th>
+                    <th style={{ padding: "12px 14px" }}>Santri</th>
+                    <th style={{ padding: "12px 14px" }}>NIS</th>
+                    <th style={{ padding: "12px 14px" }}>Kelas</th>
+                    <th style={{ padding: "12px 14px" }}>Asrama / Komplek</th>
+                    <th style={{ padding: "12px 14px" }}>No. Kamar</th>
+                    <th style={{ padding: "12px 14px" }}>Wali Sah</th>
+                    <th style={{ padding: "12px 14px" }}>Status SP</th>
+                    <th style={{ padding: "12px 14px" }}>Syahriyyah Bulanan</th>
+                    <th style={{ padding: "12px 14px" }}>Skor Adab</th>
+                    <th style={{ padding: "12px 14px", textAlign: "center" }}>Aksi SP Resmi</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredStudents.map((st) => (
                     <tr key={st.id} style={{ borderBottom: "1px solid #F3F4F6" }}>
-                      <td style={{ padding: "12px 16px", display: "flex", alignItems: "center", gap: "10px" }}>
+                      <td style={{ padding: "12px 14px", display: "flex", alignItems: "center", gap: "10px" }}>
                         <img src={st.photo} alt={st.name} style={{ width: "36px", height: "36px", borderRadius: "10px", objectFit: "cover" }} />
-                        <span style={{ fontWeight: 700, color: "#06271E", whiteSpace: "nowrap" }}>{st.name}</span>
+                        <div>
+                          <div style={{ fontWeight: 700, color: "#06271E", whiteSpace: "nowrap" }}>{st.name}</div>
+                          <div style={{ fontSize: "10px", color: "#8AA49B" }}>{st.barcode || st.nis}</div>
+                        </div>
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#5B7A70", whiteSpace: "nowrap" }}>{st.nis}</td>
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>{st.class}</td>
-                      <td style={{ padding: "12px 16px", fontWeight: 600, color: "#065F46", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 14px", color: "#5B7A70", whiteSpace: "nowrap" }}>{st.nis}</td>
+                      <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>{st.class}</td>
+                      <td style={{ padding: "12px 14px", fontWeight: 600, color: "#065F46", whiteSpace: "nowrap" }}>
                         {st.dormBuilding}
                       </td>
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
                         <span style={{ background: "#E2EFE9", color: "#06271E", padding: "3px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: 700 }}>
                           {st.roomNumber}
                         </span>
                       </td>
-                      <td style={{ padding: "12px 16px", color: "#5B7A70", whiteSpace: "nowrap" }}>{st.guardianName}</td>
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 14px", color: "#5B7A70", whiteSpace: "nowrap" }}>{st.guardianName}</td>
+                      <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
                         <span
                           style={{
                             background: st.spStatus?.includes("SP III") ? "#FEE2E2" : st.spStatus?.includes("SP II") ? "#FFEDD5" : st.spStatus?.includes("SP I") ? "#FEF3C7" : "#D1FAE5",
@@ -699,13 +830,66 @@ export default function AdminWebView({
                           {st.spStatus || "Aman"}
                         </span>
                       </td>
-                      <td style={{ padding: "12px 16px", fontWeight: 800, color: st.scoreAdab >= 80 ? "#059669" : st.scoreAdab >= 50 ? "#D97706" : "#DC2626", whiteSpace: "nowrap" }}>
+                      {/* Kolom Syahriyyah Bulanan dengan 1-Click Toggle Mudah */}
+                      <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                          <span
+                            style={{
+                              background: st.syahriyyahStatus === "Lunas" ? "#D1FAE5" : "#FEE2E2",
+                              color: st.syahriyyahStatus === "Lunas" ? "#065F46" : "#B42318",
+                              padding: "3px 8px",
+                              borderRadius: "6px",
+                              fontSize: "11px",
+                              fontWeight: 800,
+                            }}
+                          >
+                            {st.syahriyyahStatus === "Lunas" ? "🟢 Lunas" : "🔴 Belum Lunas"}
+                          </span>
+                          <button
+                            onClick={() => handleToggleSyahriyyah(st.id)}
+                            title="Klik untuk ubah status lunas / belum lunas santri ini"
+                            style={{
+                              background: "#F3F4F6",
+                              border: "1px solid #D1D5DB",
+                              borderRadius: "6px",
+                              padding: "2px 6px",
+                              fontSize: "10px",
+                              fontWeight: 700,
+                              cursor: "pointer",
+                              color: "#374151",
+                            }}
+                          >
+                            🔄 Ubah
+                          </button>
+                        </div>
+                      </td>
+                      <td style={{ padding: "12px 14px", fontWeight: 800, color: st.scoreAdab >= 80 ? "#059669" : st.scoreAdab >= 50 ? "#D97706" : "#DC2626", whiteSpace: "nowrap" }}>
                         {st.scoreAdab} / 100
                       </td>
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
-                        <span style={{ background: "#D1FAE5", color: "#065F46", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: 700 }}>
-                          {st.barcode || st.nis}
-                        </span>
+                      {/* Kolom Cetak SP Resmi */}
+                      <td style={{ padding: "12px 14px", textAlign: "center", whiteSpace: "nowrap" }}>
+                        <button
+                          onClick={() => {
+                            const level = st.spStatus?.includes("SP III") ? "SP III" : st.spStatus?.includes("SP II") ? "SP II" : "SP I";
+                            handleOpenSpModal(st, level);
+                          }}
+                          style={{
+                            background: st.spStatus?.includes("SP") ? "#FEF2F2" : "#F4FBF7",
+                            border: st.spStatus?.includes("SP") ? "1px solid #FCA5A5" : "1px solid #A7F3D0",
+                            color: st.spStatus?.includes("SP") ? "#991B1B" : "#065F46",
+                            padding: "4px 10px",
+                            borderRadius: "8px",
+                            fontSize: "11px",
+                            fontWeight: 800,
+                            cursor: "pointer",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "4px",
+                          }}
+                        >
+                          <span>📄</span>
+                          <span>Cetak SP</span>
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -803,31 +987,139 @@ export default function AdminWebView({
            ------------------------------------------------------------- */}
         {adminTab === "sp" && (
           <div style={{ padding: "24px 28px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
               <div>
                 <h3 style={{ fontSize: "16px", fontWeight: 800, color: "#06271E" }}>
-                  Konfigurasi Dinamis Ambang Surat Peringatan (SP)
+                  Konfigurasi Ambang & Penerbitan Surat Peringatan (SP I, SP II, SP III)
                 </h3>
                 <p style={{ fontSize: "12px", color: "#5B7A70" }}>
-                  Parameter nilai dan sanksi dapat disetel langsung oleh Admin di sini.
+                  Parameter nilai, sanksi, dan cetak dokumen resmi ber-kop, bertanda tangan digital Kepala Pengasuhan & Pimpinan Pondok, serta QR validasi resmi.
                 </p>
               </div>
 
               <button
-                onClick={() => setIsSpPdfModalOpen(true)}
+                onClick={() => {
+                  setSelectedStudentForSp(studentsList.find((s) => s.spStatus?.includes("SP")) || studentsList[0]);
+                  setIsSpPdfModalOpen(true);
+                }}
                 style={{
                   background: "var(--gradient-emerald)",
                   color: "#FFFFFF",
-                  padding: "9px 14px",
+                  padding: "9px 16px",
                   borderRadius: "10px",
                   fontSize: "12px",
                   fontWeight: 800,
                   border: "none",
                   cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  boxShadow: "0 3px 12px rgba(6, 95, 70, 0.25)",
                 }}
               >
-                📄 Pratinjau Draf PDF Surat SP Berkop
+                <span>📄</span>
+                <span>Cetak Dokumen Resmi SP (Pratinjau)</span>
               </button>
+            </div>
+
+            {/* Daftar Santri Yang Mencapai Ambang Batas SP */}
+            <div
+              style={{
+                background: "#FFFFFF",
+                borderRadius: "18px",
+                padding: "20px",
+                border: "1px solid #E2EFE9",
+                marginBottom: "22px",
+              }}
+            >
+              <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", marginBottom: "4px" }}>
+                ⚠️ Daftar Santri Mencapai Ambang Batas Pelanggaran Poin
+              </div>
+              <p style={{ fontSize: "11px", color: "#5B7A70", marginBottom: "14px" }}>
+                Santri yang telah mencapai batas SP I, SP II, atau SP III secara otomatis dapat dicetak surat resminya untuk arsip pengasuhan & diserahkan ke wali santri.
+              </p>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                {studentsList
+                  .filter((st) => st.spStatus && st.spStatus !== "Aman")
+                  .map((st) => {
+                    const isSp3 = st.spStatus?.includes("SP III");
+                    const isSp2 = st.spStatus?.includes("SP II");
+                    const level = isSp3 ? "SP III" : isSp2 ? "SP II" : "SP I";
+                    return (
+                      <div
+                        key={st.id}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: "14px 18px",
+                          borderRadius: "14px",
+                          background: isSp3 ? "#FEF2F2" : isSp2 ? "#FFFBEB" : "#F4FBF7",
+                          border: isSp3 ? "1px solid #FECACA" : isSp2 ? "1px solid #FCD34D" : "1px solid #A7F3D0",
+                          flexWrap: "wrap",
+                          gap: "12px",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                          <img
+                            src={st.photo}
+                            alt={st.name}
+                            style={{ width: "44px", height: "44px", borderRadius: "10px", objectFit: "cover" }}
+                          />
+                          <div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              <span style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
+                                {st.name}
+                              </span>
+                              <span
+                                style={{
+                                  background: isSp3 ? "#DC2626" : isSp2 ? "#D97706" : "#059669",
+                                  color: "#FFFFFF",
+                                  padding: "2px 8px",
+                                  borderRadius: "6px",
+                                  fontSize: "10px",
+                                  fontWeight: 800,
+                                }}
+                              >
+                                {st.spStatus}
+                              </span>
+                            </div>
+                            <div style={{ fontSize: "11.5px", color: "#5B7A70", marginTop: "2px" }}>
+                              NIS: {st.nis} · {st.class} · {st.dormBuilding} ({st.roomNumber})
+                            </div>
+                            <div style={{ fontSize: "11px", color: isSp3 ? "#991B1B" : "#B45309", fontWeight: 700, marginTop: "2px" }}>
+                              Total Pelanggaran: <strong>{st.pointsViolation} Poin</strong> (Skor Adab: {st.scoreAdab}/100)
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ display: "flex", gap: "8px" }}>
+                          <button
+                            onClick={() => handleOpenSpModal(st, level)}
+                            style={{
+                              background: "var(--gradient-emerald)",
+                              color: "#FFFFFF",
+                              padding: "8px 14px",
+                              borderRadius: "10px",
+                              fontSize: "11.5px",
+                              fontWeight: 800,
+                              border: "none",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                              boxShadow: "0 2px 8px rgba(6, 95, 70, 0.25)",
+                            }}
+                          >
+                            <span>🖨️</span>
+                            <span>Cetak Dokumen Resmi {level}</span>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
 
             {/* Form Konfigurasi Ambang SP */}
@@ -841,6 +1133,9 @@ export default function AdminWebView({
                 marginBottom: "20px",
               }}
             >
+              <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", marginBottom: "12px" }}>
+                ⚙️ Setelan Parameter Ambang Batas Poin & Sanksi
+              </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", marginBottom: "18px" }}>
                 {/* SP 1 */}
                 <div style={{ background: "#F4FBF7", borderRadius: "14px", padding: "14px", border: "1px solid #D1FAE5" }}>
@@ -1107,6 +1402,108 @@ export default function AdminWebView({
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Bagian 3: Kebijakan Reset Poin Adab & Fitur Opsional Pesantren */}
+              <div
+                style={{
+                  background: "#FFFFFF",
+                  borderRadius: "18px",
+                  padding: "22px",
+                  border: "1px solid #E2EFE9",
+                }}
+              >
+                <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", marginBottom: "6px" }}>
+                  ⚙️ Kebijakan Reset Poin Adab & Fitur Opsional Pesantren
+                </div>
+                <div style={{ fontSize: "11.5px", color: "#5B7A70", marginBottom: "16px" }}>
+                  Atur siklus evaluasi poin kedisiplinan serta aktifkan/nonaktifkan modul tambahan sesuai kebutuhan pondok.
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+                  {/* 1. Kebijakan Reset Poin Adab */}
+                  <div style={{ background: "#F4FBF7", borderRadius: "14px", padding: "16px", border: "1px solid #D1FAE5" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
+                      <span style={{ fontSize: "16px" }}>📊</span>
+                      <span style={{ fontSize: "13px", fontWeight: 800, color: "#065F46" }}>
+                        Kebijakan Reset Poin Adab Santri
+                      </span>
+                    </div>
+                    <label style={{ fontSize: "11px", fontWeight: 700, color: "#5B7A70" }}>
+                      Siklus Reset Poin Kebaikan & Pelanggaran:
+                    </label>
+                    <select
+                      value={pointResetPolicy}
+                      onChange={(e) => setPointResetPolicy(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "9px 12px",
+                        borderRadius: "8px",
+                        border: "1.5px solid #10B981",
+                        fontSize: "12.5px",
+                        fontWeight: 700,
+                        marginTop: "5px",
+                        background: "#FFFFFF",
+                        color: "#06271E",
+                      }}
+                    >
+                      <option value="semester">Reset Tiap Semester (Ganjil / Genap) - Standar</option>
+                      <option value="tahun">Reset Tiap Tahun Ajaran Baru</option>
+                      <option value="akumulatif">Tidak Direset (Akumulatif Selama Menjadi Santri)</option>
+                    </select>
+                    <div style={{ fontSize: "10.5px", color: "#8AA49B", marginTop: "5px" }}>
+                      Kebijakan aktif: <strong>{pointResetPolicy === "semester" ? "Per Semester" : pointResetPolicy === "tahun" ? "Per Tahun Ajaran" : "Akumulatif Penuh"}</strong>. Tampil di grafik tren perkembangan adab Guru BK & Pengasuhan.
+                    </div>
+                  </div>
+
+                  {/* 2. Fitur Opsional Ronda Malam & Kebersihan Kamar */}
+                  <div style={{ background: enableNightRonda ? "#F4FBF7" : "#F9FAFB", borderRadius: "14px", padding: "16px", border: enableNightRonda ? "1px solid #D1FAE5" : "1px solid #E5E7EB" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span style={{ fontSize: "16px" }}>🌙</span>
+                        <span style={{ fontSize: "13px", fontWeight: 800, color: enableNightRonda ? "#065F46" : "#6B7280" }}>
+                          Ronda Malam (22:00) & Kebersihan Kamar
+                        </span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={enableNightRonda}
+                        onChange={(e) => setEnableNightRonda(e.target.checked)}
+                        style={{ width: "18px", height: "18px", accentColor: "#059669", cursor: "pointer" }}
+                      />
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#5B7A70", lineHeight: "1.4" }}>
+                      Fitur bagi Musyrif untuk absen cek fisik santri di kamar/kobong jam 22:00 WIB dan penilaian kebersihan kamar harian untuk pemilihan kamar teladan mingguan.
+                    </div>
+                    <div style={{ fontSize: "10.5px", fontWeight: 800, color: enableNightRonda ? "#059669" : "#9CA3AF", marginTop: "8px" }}>
+                      Status: {enableNightRonda ? "🟢 Fitur Aktif di Portal Musyrif" : "⚪ Fitur Dinonaktifkan"}
+                    </div>
+                  </div>
+
+                  {/* 3. Fitur Opsional Modul Tahfidz Ziyadah & Muraja'ah */}
+                  <div style={{ background: enableTahfidzModule ? "#F4FBF7" : "#F9FAFB", borderRadius: "14px", padding: "16px", border: enableTahfidzModule ? "1px solid #D1FAE5" : "1px solid #E5E7EB" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span style={{ fontSize: "16px" }}>📖</span>
+                        <span style={{ fontSize: "13px", fontWeight: 800, color: enableTahfidzModule ? "#065F46" : "#6B7280" }}>
+                          Modul Tahfidz (Ziyadah & Muraja'ah)
+                        </span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={enableTahfidzModule}
+                        onChange={(e) => setEnableTahfidzModule(e.target.checked)}
+                        style={{ width: "18px", height: "18px", accentColor: "#059669", cursor: "pointer" }}
+                      />
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#5B7A70", lineHeight: "1.4" }}>
+                      Pencatatan setoran hafalan baru (Ziyadah) & pengulangan (Muraja'ah) per surat, ayat, juz dengan predikat Mutqin/Jayyid, serta target wisuda tahfidz pondok.
+                    </div>
+                    <div style={{ fontSize: "10.5px", fontWeight: 800, color: enableTahfidzModule ? "#059669" : "#9CA3AF", marginTop: "8px" }}>
+                      Status: {enableTahfidzModule ? "🟢 Fitur Aktif di Portal Santri & Wali" : "⚪ Fitur Dinonaktifkan"}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1380,20 +1777,23 @@ export default function AdminWebView({
       )}
 
       {/* -------------------------------------------------------------
-          MODAL 3: PRATINJAU DRAF SURAT SP BERKOP PONDOK
+          MODAL 3: CETAK SURAT PERINGATAN (SP I, SP II, SP III) OTOMATIS
+          Lengkap dengan tanda tangan digital Kepala Pengasuhan & Pimpinan,
+          total pelanggaran poin, dan QR validasi resmi.
          ------------------------------------------------------------- */}
       {isSpPdfModalOpen && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0,0,0,0.75)",
-            backdropFilter: "blur(4px)",
+            background: "rgba(0,0,0,0.8)",
+            backdropFilter: "blur(6px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             zIndex: 9999,
             padding: "20px",
+            overflowY: "auto",
           }}
         >
           <div
@@ -1401,71 +1801,258 @@ export default function AdminWebView({
             style={{
               background: "#FFFFFF",
               borderRadius: "20px",
-              padding: "28px",
+              padding: "24px 28px",
               width: "100%",
-              maxWidth: "540px",
+              maxWidth: "620px",
               color: "#06271E",
               boxShadow: "0 25px 60px rgba(0,0,0,0.4)",
+              maxHeight: "92vh",
+              overflowY: "auto",
             }}
           >
-            {/* Kop Surat Resmi */}
-            <div style={{ textAlign: "center", borderBottom: "2px solid #06271E", paddingBottom: "12px", marginBottom: "16px" }}>
-              <div style={{ fontSize: "16px", fontWeight: 800, letterSpacing: "1px" }}>
-                PONDOK PESANTREN DARUSSALAM RAJAPOLAH
-              </div>
-              <div style={{ fontSize: "11px", color: "#5B7A70" }}>
-                Jl. Raya Rajapolah No. 01 Tasikmalaya, Jawa Barat · Kode Pos 46155
-              </div>
-            </div>
-
-            <div style={{ textAlign: "center", marginBottom: "14px" }}>
-              <div style={{ fontSize: "14px", fontWeight: 800, textDecoration: "underline" }}>
-                SURAT PERINGATAN KEDISIPLINAN (SP I)
-              </div>
-              <div style={{ fontSize: "11px", color: "#5B7A70" }}>
-                Nomor: SP1/PENGASUHAN/X/2026
-              </div>
-            </div>
-
-            <div style={{ fontSize: "12px", lineHeight: "1.6", color: "#374151", marginBottom: "16px" }}>
-              Menimbang akumulasi pelanggaran tata tertib pondok telah melampaui ambang batas <strong>{spThresholds.sp1} Poin</strong>, dengan ini Pengasuhan Santri menerbitkan Surat Peringatan I kepada santri bersangkutan untuk menghadiri sesi pembinaan bersama Guru BK.
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "24px", paddingTop: "12px", borderTop: "1px dashed #E2EFE9" }}>
-              <div>
-                <div style={{ fontSize: "11px", color: "#5B7A70" }}>Mengetahui,</div>
-                <div style={{ fontSize: "12px", fontWeight: 700, marginTop: "30px" }}>
-                  K.H. Asep Ridwan, Lc.
+            {/* Action Bar Pemilihan Santri & Tingkat SP */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "16px", paddingBottom: "12px", borderBottom: "1px solid #E2EFE9" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                <div>
+                  <label style={{ fontSize: "10.5px", fontWeight: 700, color: "#5B7A70", display: "block" }}>Pilih Santri:</label>
+                  <select
+                    value={selectedStudentForSp?.id}
+                    onChange={(e) => {
+                      const found = studentsList.find((s) => s.id === e.target.value);
+                      if (found) setSelectedStudentForSp(found);
+                    }}
+                    style={{ padding: "6px 10px", borderRadius: "8px", border: "1px solid #D1FAE5", fontSize: "12px", fontWeight: 700, background: "#F4FBF7" }}
+                  >
+                    {studentsList.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name} ({s.spStatus || "Aman"} · {s.pointsViolation} Poin)
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <div style={{ fontSize: "10px", color: "#8AA49B" }}>Kepala Pengasuhan</div>
+
+                <div>
+                  <label style={{ fontSize: "10.5px", fontWeight: 700, color: "#5B7A70", display: "block" }}>Tingkat SP:</label>
+                  <select
+                    value={spLevelForPrint}
+                    onChange={(e) => setSpLevelForPrint(e.target.value)}
+                    style={{ padding: "6px 10px", borderRadius: "8px", border: "1px solid #D1FAE5", fontSize: "12px", fontWeight: 700, background: "#F4FBF7" }}
+                  >
+                    <option value="SP I">SP I (Peringatan Awal)</option>
+                    <option value="SP II">SP II (Skorsing Ringan)</option>
+                    <option value="SP III">SP III (Panggilan Orang Tua & Sidang Pleno)</option>
+                  </select>
+                </div>
               </div>
 
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: "11px", color: "#5B7A70" }}>Menyetujui,</div>
-                <div style={{ fontSize: "12px", fontWeight: 700, marginTop: "30px" }}>
-                  K.H. Hasan Basri
-                </div>
-                <div style={{ fontSize: "10px", color: "#8AA49B" }}>Pimpinan Pondok Pesantren</div>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button
+                  onClick={() => {
+                    playSuccessChime();
+                    onAuditLogAdd({
+                      user: "Admin Ponpes",
+                      role: "Admin",
+                      action: `CETAK SURAT PERINGATAN: ${spLevelForPrint}`,
+                      object: `Santri: ${selectedStudentForSp?.name} (${selectedStudentForSp?.nis})`,
+                      status: "DICETAK",
+                      details: `Mencetak dokumen resmi ${spLevelForPrint} akumulasi ${selectedStudentForSp?.pointsViolation} poin pelanggaran bertanda tangan digital Kepala Pengasuhan & Pimpinan Pondok.`,
+                    });
+                    window.print();
+                  }}
+                  style={{
+                    background: "var(--gradient-emerald)",
+                    color: "#FFFFFF",
+                    padding: "7px 14px",
+                    borderRadius: "8px",
+                    fontSize: "11.5px",
+                    fontWeight: 800,
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <span>🖨️</span>
+                  <span>Cetak / Print PDF</span>
+                </button>
+                <button
+                  onClick={() => setIsSpPdfModalOpen(false)}
+                  style={{
+                    background: "#F3F4F6",
+                    color: "#374151",
+                    padding: "7px 12px",
+                    borderRadius: "8px",
+                    fontSize: "11.5px",
+                    fontWeight: 700,
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  ✕ Tutup
+                </button>
               </div>
             </div>
 
-            <button
-              onClick={() => setIsSpPdfModalOpen(false)}
+            {/* LEMBAR SURAT RESMI PONDOK PESANTREN */}
+            <div
+              id="sp-print-area"
               style={{
-                width: "100%",
-                marginTop: "18px",
-                padding: "10px",
-                borderRadius: "10px",
-                background: "var(--gradient-emerald)",
-                color: "#FFFFFF",
-                fontSize: "12px",
-                fontWeight: 700,
-                border: "none",
-                cursor: "pointer",
+                background: "#FFFFFF",
+                border: "2px solid #06271E",
+                borderRadius: "14px",
+                padding: "24px 22px",
+                boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
+                fontFamily: "'Times New Roman', Times, serif",
+                color: "#111827",
               }}
             >
-              Tutup Pratinjau
-            </button>
+              {/* Kop Surat Resmi */}
+              <div style={{ textAlign: "center", borderBottom: "3px double #06271E", paddingBottom: "10px", marginBottom: "14px" }}>
+                <div style={{ fontSize: "16px", fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase" }}>
+                  {pesantrenNameInput || "PONDOK PESANTREN DARUSSALAM RAJAPOLAH"}
+                </div>
+                <div style={{ fontSize: "11.5px", fontStyle: "italic", color: "#374151", marginTop: "2px" }}>
+                  MAJELIS PENGASUHAN SANTRI & BIRO KEDISIPLINAN PONDOK
+                </div>
+                <div style={{ fontSize: "10px", color: "#4B5563", marginTop: "2px" }}>
+                  Jl. Raya Rajapolah No. 01 Tasikmalaya, Jawa Barat · Kode Pos 46155 · Telp: (0265) 421-998
+                </div>
+              </div>
+
+              {/* Judul & Nomor Surat */}
+              <div style={{ textAlign: "center", marginBottom: "14px" }}>
+                <div style={{ fontSize: "13.5px", fontWeight: 800, textDecoration: "underline", textTransform: "uppercase" }}>
+                  SURAT PERINGATAN KEDISIPLINAN ({spLevelForPrint})
+                </div>
+                <div style={{ fontSize: "10.5px", color: "#374151", marginTop: "2px" }}>
+                  Nomor: SP.{spLevelForPrint.replace(/\s+/g, '')}/PENGASUHAN/X/2026 · Sifat: PENTING & RESMI
+                </div>
+              </div>
+
+              {/* Pembuka Surat */}
+              <div style={{ fontSize: "11.5px", lineHeight: "1.5", textAlign: "justify", marginBottom: "12px" }}>
+                <em>Bismillaahirrohmaanirrohiim.</em> Berdasarkan rekapitulasi Sistem Informasi & Presensi Terpadu Santri (SIRAJ), Majelis Pengasuhan Pondok Pesantren dengan ini menerbitkan surat peringatan resmi kepada:
+              </div>
+
+              {/* Tabel Biodata Santri */}
+              <div style={{ background: "#F9FAFB", border: "1px solid #D1D5DB", borderRadius: "8px", padding: "10px 14px", marginBottom: "12px", fontSize: "11.5px" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <tbody>
+                    <tr>
+                      <td style={{ width: "38%", padding: "2px 0", fontWeight: 700 }}>Nama Lengkap Santri</td>
+                      <td style={{ width: "4%" }}>:</td>
+                      <td style={{ fontWeight: 800, color: "#06271E" }}>{selectedStudentForSp?.name}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: "2px 0", fontWeight: 700 }}>Nomor Induk Santri (NIS)</td>
+                      <td>:</td>
+                      <td>{selectedStudentForSp?.nis}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: "2px 0", fontWeight: 700 }}>Kelas / Program</td>
+                      <td>:</td>
+                      <td>{selectedStudentForSp?.class}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: "2px 0", fontWeight: 700 }}>Tempat Tinggal / Kamar</td>
+                      <td>:</td>
+                      <td>{selectedStudentForSp?.dormBuilding || selectedStudentForSp?.dorm} · {selectedStudentForSp?.roomNumber || 'Kamar 01'}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: "2px 0", fontWeight: 700 }}>Total Poin Pelanggaran</td>
+                      <td>:</td>
+                      <td style={{ fontWeight: 800, color: "#B42318" }}>
+                        {selectedStudentForSp?.pointsViolation} Poin (Ambang {spLevelForPrint}: {spLevelForPrint === "SP I" ? spThresholds.sp1 : spLevelForPrint === "SP II" ? spThresholds.sp2 : spThresholds.sp3} Poin)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: "2px 0", fontWeight: 700 }}>Nama Orang Tua / Wali</td>
+                      <td>:</td>
+                      <td>{selectedStudentForSp?.guardianName} ({selectedStudentForSp?.guardianPhone || "+62 812-8899-7711"})</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Klausul Tindakan & Sanksi Edukatif */}
+              <div style={{ fontSize: "11.5px", lineHeight: "1.5", textAlign: "justify", marginBottom: "14px" }}>
+                {spLevelForPrint === "SP I" && (
+                  <div>
+                    Menimbang bahwa akumulasi poin pelanggaran ananda telah mencapai ambang batas <strong>SP I ({spThresholds.sp1} Poin)</strong>, dengan ini santri diwajibkan:
+                    <ol style={{ margin: "4px 0 0 16px", padding: 0 }}>
+                      <li>Mengikuti sesi konseling pembinaan bersama Guru BK ({spThresholds.sp1Action}).</li>
+                      <li>Melaporkan presensi salat berjamaah secara mandiri kepada Musyrif Asrama selama 14 hari.</li>
+                    </ol>
+                  </div>
+                )}
+                {spLevelForPrint === "SP II" && (
+                  <div>
+                    Menimbang bahwa ananda telah melampaui ambang batas <strong>SP II ({spThresholds.sp2} Poin)</strong>, maka Pengasuhan menetapkan:
+                    <ol style={{ margin: "4px 0 0 16px", padding: 0 }}>
+                      <li>Pemberian sanksi edukatif khidmat kebersihan lingkungan ({spThresholds.sp2Action}).</li>
+                      <li>Pencabutan izin Gate Pass keluar pondok selama 30 hari kalender.</li>
+                    </ol>
+                  </div>
+                )}
+                {spLevelForPrint === "SP III" && (
+                  <div>
+                    Menimbang pelanggaran disiplin berat telah melampaui ambang batas <strong>SP III ({spThresholds.sp3} Poin)</strong>, maka Majelis menetapkan:
+                    <ol style={{ margin: "4px 0 0 16px", padding: 0 }}>
+                      <li>Panggilan resmi orang tua/wali santri menghadap Pimpinan Pondok Pesantren ({spThresholds.sp3Action}).</li>
+                      <li>Penandatanganan pakta integritas bermaterai di hadapan Majelis Pimpinan.</li>
+                    </ol>
+                  </div>
+                )}
+              </div>
+
+              <div style={{ fontSize: "11px", color: "#374151", marginBottom: "16px" }}>
+                Ditetapkan di: Tasikmalaya pada tanggal 22 Oktober 2026 M / 9 Rabiul Akhir 1448 H.
+              </div>
+
+              {/* Tanda Tangan Digital 2 Pejabat Resmi & QR Validasi */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", alignItems: "flex-end", paddingTop: "8px", borderTop: "1px dashed #D1D5DB" }}>
+                {/* 1. Tanda Tangan Kepala Pengasuhan */}
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "10px", color: "#4B5563" }}>Mengetahui,</div>
+                  <div style={{ fontSize: "10.5px", fontWeight: 700, color: "#111827" }}>Kepala Pengasuhan Santri</div>
+                  <div style={{ margin: "6px auto", width: "70px", height: "42px", border: "1px dashed #059669", borderRadius: "6px", background: "#ECFDF5", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "9px", color: "#065F46", fontWeight: 800 }}>TERVERIFIKASI</span>
+                    <span style={{ fontSize: "8px", color: "#047857" }}>ED25519-PENG</span>
+                  </div>
+                  <div style={{ fontSize: "11px", fontWeight: 800, textDecoration: "underline" }}>K.H. Asep Ridwan, Lc.</div>
+                  <div style={{ fontSize: "9.5px", color: "#6B7280" }}>NIP. 19780814 200401 1 002</div>
+                </div>
+
+                {/* 2. QR Validasi Resmi Kriptografi */}
+                <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <div style={{ background: "#FFFFFF", padding: "4px", border: "1px solid #111827", borderRadius: "6px" }}>
+                    {/* QR Representation */}
+                    <div style={{ width: "52px", height: "52px", background: "conic-gradient(from 0deg, #000 0%, #000 25%, #fff 25%, #fff 50%, #000 50%, #000 75%, #fff 75%)", backgroundSize: "13px 13px", borderRadius: "2px" }} />
+                  </div>
+                  <div style={{ fontSize: "8.5px", fontWeight: 800, color: "#111827", marginTop: "3px" }}>
+                    VALIDASI RESMI
+                  </div>
+                  <div style={{ fontSize: "7.5px", color: "#6B7280" }}>
+                    SHA-256: e82f...91a4
+                  </div>
+                </div>
+
+                {/* 3. Tanda Tangan Pimpinan Pondok */}
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "10px", color: "#4B5563" }}>Menyetujui,</div>
+                  <div style={{ fontSize: "10.5px", fontWeight: 700, color: "#111827" }}>Pimpinan Pondok Pesantren</div>
+                  <div style={{ margin: "6px auto", width: "70px", height: "42px", border: "1px dashed #D97706", borderRadius: "6px", background: "#FFFBEB", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "9px", color: "#92400E", fontWeight: 800 }}>STEMPEL RESMI</span>
+                    <span style={{ fontSize: "8px", color: "#B45309" }}>PIMPINAN</span>
+                  </div>
+                  <div style={{ fontSize: "11px", fontWeight: 800, textDecoration: "underline" }}>
+                    {currentTenant?.leader || "K.H. Hasan Basri"}
+                  </div>
+                  <div style={{ fontSize: "9.5px", color: "#6B7280" }}>Khadimul Ma'had</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

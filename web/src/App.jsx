@@ -157,6 +157,7 @@ export default function App() {
             onTriggerLoader={handleTriggerLoader}
             onAuditLogAdd={handleAuditLogAdd}
             tenantDormTerm={currentTenant?.dormTerm || "Asrama"}
+            currentTenant={currentTenant}
           />
         );
       case "guru":
@@ -182,6 +183,7 @@ export default function App() {
             currentMusyrif={currentUser}
             currentUser={currentUser}
             tenantDormTerm={currentTenant?.dormTerm || "Asrama"}
+            currentTenant={currentTenant}
             onTriggerLoader={handleTriggerLoader}
             onAuditLogAdd={handleAuditLogAdd}
           />
@@ -189,6 +191,7 @@ export default function App() {
       case "satpam":
         return (
           <PortalSatpamView
+            currentTenant={currentTenant}
             onTriggerLoader={handleTriggerLoader}
             onAuditLogAdd={handleAuditLogAdd}
           />
@@ -196,6 +199,7 @@ export default function App() {
       case "bk":
         return (
           <PortalBKView
+            currentTenant={currentTenant}
             onTriggerLoader={handleTriggerLoader}
             onAuditLogAdd={handleAuditLogAdd}
           />

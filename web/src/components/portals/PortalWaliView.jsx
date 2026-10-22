@@ -9,10 +9,10 @@ import {
 } from "../../data/mockData";
 import { playSoftClick, playSuccessChime } from "../../utils/audio";
 
-export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantDormTerm = "Asrama" }) {
+export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantDormTerm = "Asrama", currentTenant }) {
   const [students] = useState(INITIAL_STUDENTS);
   const [selectedStudentIndex, setSelectedStudentIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState("jurnal"); // jurnal, gatepass, adab (Dompet Uang Saku Dihapus!)
+  const [activeTab, setActiveTab] = useState("jurnal"); // jurnal, gatepass, adab, tahfidz
   const [selectedDateKey, setSelectedDateKey] = useState("2026-10-22");
   const [activeCategory, setActiveCategory] = useState("kelas_pagi");
   const [jurnalViewMode, setJurnalViewMode] = useState("daily"); // daily | weekly
@@ -215,8 +215,155 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
       </div>
 
       {/* -------------------------------------------------------------
+          PEMBERITAHUAN DINI (EARLY WARNING) STATUS SP
+          (Hanya tampil jika santri sudah mencapai SP I, SP II, atau SP III.
+           Jika status "Aman", kotak peringatan tidak ditampilkan)
+         ------------------------------------------------------------- */}
+      {currentStudent.spStatus?.includes("SP I") && (
+        <div
+          style={{
+            background: "#FFFBEB",
+            border: "1.5px solid #FCD34D",
+            borderRadius: "16px",
+            padding: "14px 18px",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            boxShadow: "0 4px 14px rgba(217, 119, 6, 0.1)",
+          }}
+        >
+          <span style={{ fontSize: "24px" }}>⚠️</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: "#92400E" }}>
+              PEMBERITAHUAN RESMI PENGASUHAN: AMBANG SURAT PERINGATAN I (SP I)
+            </div>
+            <div style={{ fontSize: "11.5px", color: "#B45309", marginTop: "2px", lineHeight: "1.5" }}>
+              Ananda <strong>{currentStudent.name}</strong> telah mencapai ambang batas SP I dengan akumulasi <strong>{currentStudent.pointsViolation} Poin Pelanggaran</strong>. Ananda saat ini sedang dalam bimbingan konseling Guru BK dan Musyrif {tenantDormTerm}.
+            </div>
+          </div>
+        </div>
+      )}
+
+      {currentStudent.spStatus?.includes("SP II") && (
+        <div
+          style={{
+            background: "#FEF2F2",
+            border: "1.5px solid #FECACA",
+            borderRadius: "16px",
+            padding: "14px 18px",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            boxShadow: "0 4px 14px rgba(220, 38, 38, 0.12)",
+          }}
+        >
+          <span style={{ fontSize: "24px" }}>🚨</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: "#991B1B" }}>
+              PERINGATAN TINGKAT LANJUT: AMBANG SURAT PERINGATAN II (SP II)
+            </div>
+            <div style={{ fontSize: "11.5px", color: "#B91C1C", marginTop: "2px", lineHeight: "1.5" }}>
+              Akumulasi poin ananda telah melampaui batas SP II (<strong>{currentStudent.pointsViolation} Poin</strong>). Mohon kerja sama dan perhatian orang tua/wali santri untuk pendampingan intensif bersama pengasuhan pondok.
+            </div>
+          </div>
+        </div>
+      )}
+
+      {currentStudent.spStatus?.includes("SP III") && (
+        <div
+          style={{
+            background: "linear-gradient(135deg, #7F1D1D 0%, #991B1B 100%)",
+            border: "1.5px solid #DC2626",
+            borderRadius: "16px",
+            padding: "14px 18px",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            color: "#FFFFFF",
+            boxShadow: "0 4px 16px rgba(127, 29, 29, 0.3)",
+          }}
+        >
+          <span style={{ fontSize: "24px" }}>⛔</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: "#FEE2E2" }}>
+              SURAT PANGGILAN RESMI WALI SANTRI (SP III)
+            </div>
+            <div style={{ fontSize: "11.5px", color: "#FECACA", marginTop: "2px", lineHeight: "1.5" }}>
+              Ananda mencapai akumulasi <strong>{currentStudent.pointsViolation} Poin</strong>. Orang tua/wali santri dimohon hadir memenuhi panggilan resmi sidang majelis pimpinan pondok pesantren.
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------------------------------------------------
+          PEMANTAUAN STATUS SYAHRIYYAH / SPP BULANAN (BEBAS REPOT & TRANSPARAN)
+         ------------------------------------------------------------- */}
+      <div
+        style={{
+          background: "#FFFFFF",
+          borderRadius: "16px",
+          padding: "14px 18px",
+          border: "1px solid #E2EFE9",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "10px",
+          boxShadow: "0 2px 10px rgba(6, 39, 30, 0.03)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div
+            style={{
+              width: "42px",
+              height: "42px",
+              borderRadius: "12px",
+              background: currentStudent.syahriyyahStatus === "Lunas" ? "#ECFDF5" : "#FEF2F2",
+              border: currentStudent.syahriyyahStatus === "Lunas" ? "1px solid #A7F3D0" : "1px solid #FECACA",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "20px",
+            }}
+          >
+            💳
+          </div>
+          <div>
+            <div style={{ fontSize: "13px", fontWeight: 800, color: "#06271E" }}>
+              Status Tagihan Syahriyyah / SPP Bulanan
+            </div>
+            <div style={{ fontSize: "11px", color: "#5B7A70", marginTop: "2px" }}>
+              Periode: <strong>{currentStudent.syahriyyahMonth || "Oktober 2026"}</strong> · Nominal: <strong>Rp 1.250.000</strong>
+            </div>
+            <div style={{ fontSize: "10px", color: "#8AA49B", marginTop: "1px" }}>
+              Pencatatan langsung oleh Bendahara Pondok Pesantren · Bebas repot tanpa biaya admin
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              background: currentStudent.syahriyyahStatus === "Lunas" ? "#D1FAE5" : "#FEE2E2",
+              color: currentStudent.syahriyyahStatus === "Lunas" ? "#065F46" : "#B42318",
+              padding: "7px 14px",
+              borderRadius: "10px",
+              fontSize: "12px",
+              fontWeight: 800,
+              border: currentStudent.syahriyyahStatus === "Lunas" ? "1px solid #A7F3D0" : "1px solid #FECACA",
+            }}
+          >
+            <span>{currentStudent.syahriyyahStatus === "Lunas" ? "🟢" : "🔴"}</span>
+            <span>{currentStudent.syahriyyahStatus === "Lunas" ? "LUNAS (TERCATAT)" : "BELUM LUNAS"}</span>
+          </span>
+        </div>
+      </div>
+
+      {/* -------------------------------------------------------------
           SUB-NAVIGATION TAB FOR WALI SANTRI
-          (Diperbaiki agar tidak terpotong seperti di Gambar 1, Dompet Uang Saku dihapus!)
          ------------------------------------------------------------- */}
       <div
         style={{
@@ -234,6 +381,9 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
           { id: "jurnal", label: "Jurnal & Rekap Presensi", icon: "📖" },
           { id: "gatepass", label: "Gate Pass 24 Jam", icon: "🎫" },
           { id: "adab", label: "Rapor Adab Santri", icon: "⭐" },
+          ...((currentTenant?.enableTahfidzModule ?? true)
+            ? [{ id: "tahfidz", label: "Hafalan Tahfidz & Wisuda", icon: "🕌" }]
+            : []),
         ].map((tab) => {
           const isActive = activeTab === tab.id;
           return (
@@ -244,7 +394,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                 setActiveTab(tab.id);
               }}
               style={{
-                flex: "1 1 160px",
+                flex: "1 1 140px",
                 padding: "9px 14px",
                 borderRadius: "12px",
                 fontSize: "12.5px",
@@ -1090,6 +1240,181 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                     <span style={{ fontSize: "12px", fontWeight: 800, color: "#D97706" }}>
                       {item.points}
                     </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------------------------------------------------
+          TAB 4: MUTABA'AH TAHFIDZ (ZIYADAH, MURAJA'AH & TARGET WISUDA)
+          (Fitur Tambahan Opsional Sesuai Konfigurasi Admin Ponpes)
+         ------------------------------------------------------------- */}
+      {activeTab === "tahfidz" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          {/* Target Kelulusan Wisuda Tahfidz Card */}
+          <div
+            style={{
+              background: "linear-gradient(135deg, #06271E 0%, #0D4332 100%)",
+              borderRadius: "20px",
+              padding: "20px 24px",
+              border: "1px solid rgba(232, 182, 90, 0.35)",
+              color: "#FFFFFF",
+              boxShadow: "0 8px 24px rgba(6, 39, 30, 0.25)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "14px" }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ fontSize: "20px" }}>🕌</span>
+                  <div style={{ fontSize: "16px", fontWeight: 800, color: "#FFFFFF" }}>
+                    Target Kelulusan Menuju Wisuda Tahfidz Pondok
+                  </div>
+                </div>
+                <div style={{ fontSize: "12px", color: "#FFE49A", marginTop: "3px" }}>
+                  Program Mutaba'ah Intensif Ziyadah (Hafalan Baru) & Muraja'ah (Pengulangan)
+                </div>
+              </div>
+
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: "11px", color: "#A7F3D0" }}>Total Hafalan Ananda</div>
+                <div style={{ fontSize: "22px", fontWeight: 900, color: "#FFE49A" }}>
+                  {currentStudent.tahfidzProgress?.totalJuz || 4.5} <span style={{ fontSize: "13px", fontWeight: 600 }}>/ {currentStudent.tahfidzProgress?.targetWisuda || 6.0} Juz</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Progress Bar Menuju Wisuda */}
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", marginBottom: "6px" }}>
+                <span style={{ color: "#A7F3D0" }}>Progres Capaian Wisuda Akbar 1448 H</span>
+                <span style={{ color: "#FFE49A", fontWeight: 800 }}>75% Terpenuhi</span>
+              </div>
+              <div style={{ width: "100%", height: "10px", background: "rgba(255,255,255,0.15)", borderRadius: "10px", overflow: "hidden" }}>
+                <div
+                  style={{
+                    width: "75%",
+                    height: "100%",
+                    background: "linear-gradient(90deg, #10B981 0%, #F59E0B 100%)",
+                    borderRadius: "10px",
+                  }}
+                />
+              </div>
+              <div style={{ fontSize: "10.5px", color: "#8AA49B", marginTop: "6px" }}>
+                Sisa target: <strong>1.5 Juz</strong> menuju pengesahan wisuda tahfidz pondok pesantren.
+              </div>
+            </div>
+          </div>
+
+          {/* Grid Dua Kolom: Setoran Baru (Ziyadah) vs Pengulangan (Muraja'ah) */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "14px" }}>
+            {/* Kolom 1: Ziyadah (Hafalan Baru) */}
+            <div
+              style={{
+                background: "#FFFFFF",
+                borderRadius: "18px",
+                padding: "18px",
+                border: "1px solid #D1FAE5",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span style={{ fontSize: "16px" }}>📖</span>
+                  <div style={{ fontSize: "13px", fontWeight: 800, color: "#065F46" }}>
+                    Setoran Hafalan Baru (Ziyadah)
+                  </div>
+                </div>
+                <span style={{ background: "#D1FAE5", color: "#065F46", padding: "2px 6px", borderRadius: "6px", fontSize: "10px", fontWeight: 800 }}>
+                  Harian Ba'da Subuh
+                </span>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {[
+                  { date: "22 Okt 2026", surah: "Surah An-Naba'", verses: "Ayat 1 - 20 (Juz 30)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                  { date: "20 Okt 2026", surah: "Surah An-Nazi'at", verses: "Ayat 1 - 15 (Juz 30)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                  { date: "18 Okt 2026", surah: "'Abasa", verses: "Ayat 1 - 25 (Juz 30)", grade: "Jayyid Jiddan (Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      background: "#F4FBF7",
+                      borderRadius: "12px",
+                      padding: "10px 12px",
+                      border: "1px solid #E2EFE9",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontSize: "12.5px", fontWeight: 800, color: "#06271E" }}>
+                        {item.surah}
+                      </span>
+                      <span style={{ background: "#D1FAE5", color: "#065F46", padding: "2px 6px", borderRadius: "4px", fontSize: "9.5px", fontWeight: 800 }}>
+                        {item.grade}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#047857", fontWeight: 600, marginTop: "2px" }}>
+                      {item.verses}
+                    </div>
+                    <div style={{ fontSize: "10px", color: "#8AA49B", marginTop: "2px" }}>
+                      {item.date} · Diuji oleh {item.ustadz}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Kolom 2: Muraja'ah (Pengulangan Hafalan) */}
+            <div
+              style={{
+                background: "#FFFFFF",
+                borderRadius: "18px",
+                padding: "18px",
+                border: "1px solid #FEF3C7",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span style={{ fontSize: "16px" }}>🔄</span>
+                  <div style={{ fontSize: "13px", fontWeight: 800, color: "#92400E" }}>
+                    Pengulangan Hafalan (Muraja'ah)
+                  </div>
+                </div>
+                <span style={{ background: "#FEF3C7", color: "#92400E", padding: "2px 6px", borderRadius: "6px", fontSize: "10px", fontWeight: 800 }}>
+                  Ba'da Ashar & Maghrib
+                </span>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {[
+                  { date: "21 Okt 2026", surah: "Surah Al-Mulk", verses: "Ayat 1 - 30 (Juz 29 Penuh)", grade: "Jayyid Jiddan (Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                  { date: "19 Okt 2026", surah: "Surah Al-Qalam", verses: "Ayat 1 - 25 (Juz 29)", grade: "Jayyid (Cukup Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                  { date: "17 Okt 2026", surah: "Surah Al-Haqqah", verses: "Ayat 1 - 20 (Juz 29)", grade: "Mutqin (Sangat Lancar)", ustadz: "Ust. Maimun, Al-Hafidz" },
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      background: "#FFFBEB",
+                      borderRadius: "12px",
+                      padding: "10px 12px",
+                      border: "1px solid #FEF3C7",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontSize: "12.5px", fontWeight: 800, color: "#06271E" }}>
+                        {item.surah}
+                      </span>
+                      <span style={{ background: "#FEF3C7", color: "#92400E", padding: "2px 6px", borderRadius: "4px", fontSize: "9.5px", fontWeight: 800 }}>
+                        {item.grade}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#92400E", fontWeight: 600, marginTop: "2px" }}>
+                      {item.verses}
+                    </div>
+                    <div style={{ fontSize: "10px", color: "#8AA49B", marginTop: "2px" }}>
+                      {item.date} · Diuji oleh {item.ustadz}
+                    </div>
                   </div>
                 ))}
               </div>

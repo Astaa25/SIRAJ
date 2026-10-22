@@ -423,8 +423,40 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
                   </div>
                 )}
 
-                {/* Close Button / Countdown Notification */}
-                <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end" }}>
+                {/* Close Button & Print Slip Fisik Gerbang */}
+                <div style={{ marginTop: "16px", display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+                  {scanResult.status === "approved" && (
+                    <button
+                      onClick={() => {
+                        playSuccessChime();
+                        onAuditLogAdd({
+                          user: "Pak Slamet (Satpam)",
+                          role: "Satpam",
+                          action: "CETAK SLIP GERBANG FISIK",
+                          object: `Santri: ${scanResult.student?.name} (${scanResult.pass?.id})`,
+                          status: "DICETAK",
+                          details: "Satpam mencetak slip surat jalan fisik 1 lembar kecil untuk santri & penjemput.",
+                        });
+                        window.print();
+                      }}
+                      style={{
+                        background: "#F4FBF7",
+                        border: "1px solid #10B981",
+                        color: "#065F46",
+                        borderRadius: "10px",
+                        padding: "8px 14px",
+                        fontSize: "12px",
+                        fontWeight: 800,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      <span>🖨️</span>
+                      <span>Cetak Slip Fisik</span>
+                    </button>
+                  )}
                   <button
                     onClick={() => setScanResult(null)}
                     style={{

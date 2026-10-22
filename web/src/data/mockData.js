@@ -16,7 +16,11 @@ export const INITIAL_TENANTS = [
     shortName: "PP. Darussalam Rajapolah",
     location: "Rajapolah, Tasikmalaya, Jawa Barat",
     leader: "K.H. Hasan Basri",
-    dormTerm: "Asrama", // Istilah: Asrama, Sakan, Komplek, atau Gedung
+    dormTerm: "Asrama", // Istilah: Asrama, Sakan, Komplek, Kobong, atau Lainnya
+    pointResetPolicy: "semester", // "semester", "tahun", "akumulatif"
+    enableNightRonda: true, // Fitur opsional ronda malam & kebersihan kamar
+    enableTahfidzModule: true, // Fitur opsional mutaba'ah ziyadah & muraja'ah
+    syahriyyahFee: 1250000, // SPP bulanan santri
     licenseType: "Enterprise Unlimited",
     licenseKey: "SRJ-ENT-DARUSSALAM-2026-X981",
     status: "Aktif",
@@ -101,6 +105,39 @@ export const INITIAL_STUDENTS = [
     qrCode: "SRJ-2026070114",
     barcode: "2026070114",
     rfidTag: "04:8A:F2:C1",
+    syahriyyahStatus: "Lunas",
+    syahriyyahMonth: "Oktober 2026",
+    syahriyyahAmount: 1250000,
+    tahfidzProgress: {
+      totalJuz: 4.5,
+      targetWisuda: 6.0,
+      ziyadah: [
+        { date: "22 Okt 2026", surah: "An-Naba'", verses: "Ayat 1-20", grade: "Mutqin", ustadz: "Ust. Maimun" },
+        { date: "20 Okt 2026", surah: "An-Nazi'at", verses: "Ayat 1-15", grade: "Mutqin", ustadz: "Ust. Maimun" },
+      ],
+      murajaah: [
+        { date: "21 Okt 2026", surah: "Al-Mulk", verses: "Ayat 1-30", grade: "Jayyid Jiddan", ustadz: "Ust. Maimun" },
+        { date: "19 Okt 2026", surah: "Al-Qalam", verses: "Ayat 1-25", grade: "Jayyid", ustadz: "Ust. Maimun" },
+      ],
+    },
+    adabTrendHistory: [
+      { month: "Juli", good: 10, violation: 0 },
+      { month: "Agustus", good: 18, violation: 5 },
+      { month: "September", good: 22, violation: 5 },
+      { month: "Oktober", good: 25, violation: 5 },
+    ],
+    counselingNotes: [
+      {
+        id: "c-101",
+        date: "18 Okt 2026",
+        counselor: "Ustaz Hamdan, S.Psi. (Guru BK)",
+        category: "Kedisiplinan KBM",
+        topic: "Keterlambatan masuk kelas pagi karena piket asrama",
+        actionPlan: "Jadwal piket dimajukan 15 menit sebelum bel masuk agar siap tepat waktu",
+        status: "Selesai",
+        isConfidential: true,
+      },
+    ],
   },
   {
     id: "santri-002",
@@ -127,6 +164,9 @@ export const INITIAL_STUDENTS = [
     qrCode: "SRJ-2024090082",
     barcode: "2024090082",
     rfidTag: "04:9B:D3:E5",
+    syahriyyahStatus: "Lunas",
+    syahriyyahMonth: "Oktober 2026",
+    syahriyyahAmount: 1250000,
   },
   {
     id: "santri-003",
@@ -153,6 +193,27 @@ export const INITIAL_STUDENTS = [
     qrCode: "SRJ-2025080031",
     barcode: "2025080031",
     rfidTag: "04:3E:D2:11",
+    syahriyyahStatus: "Belum Lunas",
+    syahriyyahMonth: "Oktober 2026",
+    syahriyyahAmount: 1250000,
+    adabTrendHistory: [
+      { month: "Juli", good: 15, violation: 10 },
+      { month: "Agustus", good: 12, violation: 25 },
+      { month: "September", good: 10, violation: 40 },
+      { month: "Oktober", good: 10, violation: 48 },
+    ],
+    counselingNotes: [
+      {
+        id: "c-102",
+        date: "20 Okt 2026",
+        counselor: "Ustaz Hamdan, S.Psi. (Guru BK)",
+        category: "Akumulasi Poin SP I",
+        topic: "Konseling santri mencapai ambang batas SP I (48 Poin) akibat keterlambatan Subuh & alfa KBM",
+        actionPlan: "Santri wajib menghafal 1/2 juz Al-Qur'an dan lapor mandiri ke Musyrif Asrama tiap Subuh",
+        status: "Dalam Pembinaan",
+        isConfidential: true,
+      },
+    ],
   },
   {
     id: "santri-004",
@@ -179,6 +240,27 @@ export const INITIAL_STUDENTS = [
     qrCode: "SRJ-2026070155",
     barcode: "2026070155",
     rfidTag: "04:5A:F1:C9",
+    syahriyyahStatus: "Lunas",
+    syahriyyahMonth: "Oktober 2026",
+    syahriyyahAmount: 1250000,
+    adabTrendHistory: [
+      { month: "Juli", good: 8, violation: 20 },
+      { month: "Agustus", good: 6, violation: 55 },
+      { month: "September", good: 5, violation: 85 },
+      { month: "Oktober", good: 5, violation: 105 },
+    ],
+    counselingNotes: [
+      {
+        id: "c-103",
+        date: "15 Okt 2026",
+        counselor: "Ustaz Hamdan, S.Psi. (Guru BK)",
+        category: "Akumulasi Poin SP II",
+        topic: "Pelanggaran disiplin berat & meninggalkan asrama tanpa surat izin resmi Musyrif",
+        actionPlan: "Pemberian sanksi edukatif khidmat kebersihan masjid selama 7 hari didampingi musyrif",
+        status: "Sanksi Berjalan",
+        isConfidential: true,
+      },
+    ],
   },
   {
     id: "santri-005",
@@ -205,6 +287,27 @@ export const INITIAL_STUDENTS = [
     qrCode: "SRJ-2025080019",
     barcode: "2025080019",
     rfidTag: "04:7B:A8:12",
+    syahriyyahStatus: "Belum Lunas",
+    syahriyyahMonth: "Oktober 2026",
+    syahriyyahAmount: 1250000,
+    adabTrendHistory: [
+      { month: "Juli", good: 5, violation: 35 },
+      { month: "Agustus", good: 4, violation: 75 },
+      { month: "September", good: 3, violation: 120 },
+      { month: "Oktober", good: 2, violation: 160 },
+    ],
+    counselingNotes: [
+      {
+        id: "c-104",
+        date: "12 Okt 2026",
+        counselor: "Ustaz Hamdan, S.Psi. & K.H. Asep Ridwan",
+        category: "Sidang Pleno SP III",
+        topic: "Panggilan resmi wali santri ke kantor pimpinan pondok terkait pelanggaran akumulasi 160 poin",
+        actionPlan: "Perjanjian tertulis bermaterai di hadapan Kepala Pengasuhan & Pimpinan Pondok",
+        status: "Perjanjian Khusus",
+        isConfidential: true,
+      },
+    ],
   },
 ];
 
@@ -847,3 +950,54 @@ export const ROLES_LIST = [
   { id: "satpam", label: "Satpam Gerbang", icon: "🛡️", desc: "Scan Langsung Popup 5 Detik" },
   { id: "wali", label: "Wali Santri", icon: "👨‍👩‍👧", desc: "Jurnal, Kartu 3D, Gate Pass 24 Jam" },
 ];
+
+// =====================================================================
+// DATA RONDA MALAM (22:00 WIB) & PENILAIAN KEBERSIHAN KAMAR ASRAMA
+// =====================================================================
+export const INITIAL_DORM_ROOMS = [
+  {
+    id: "room-01",
+    roomNumber: "Kamar 01",
+    dormBuilding: "Asrama Abu Bakar Ash-Shiddiq",
+    capacity: 8,
+    presentAtNight: 8,
+    isComplete: true,
+    cleanlinessScore: 96,
+    cleanlinessRating: "Sangat Bersih (Bintang 5)",
+    notes: "Lantai disapu pel bersih, kasur rapi, lemari tertutup rapi",
+  },
+  {
+    id: "room-02",
+    roomNumber: "Kamar 02",
+    dormBuilding: "Asrama Abu Bakar Ash-Shiddiq",
+    capacity: 8,
+    presentAtNight: 8,
+    isComplete: true,
+    cleanlinessScore: 90,
+    cleanlinessRating: "Bersih (Bintang 4)",
+    notes: "Sandal tertata di rak luar, buku belajar rapi di meja",
+  },
+  {
+    id: "room-03",
+    roomNumber: "Kamar 03",
+    dormBuilding: "Asrama Abu Bakar Ash-Shiddiq",
+    capacity: 8,
+    presentAtNight: 8,
+    isComplete: true,
+    cleanlinessScore: 88,
+    cleanlinessRating: "Bersih (Bintang 4)",
+    notes: "Kamar Ahmad Fauzan dkk, ventilasi terbuka baik",
+  },
+  {
+    id: "room-04",
+    roomNumber: "Kamar 04",
+    dormBuilding: "Asrama Abu Bakar Ash-Shiddiq",
+    capacity: 8,
+    presentAtNight: 7,
+    isComplete: false,
+    cleanlinessScore: 80,
+    cleanlinessRating: "Cukup (Bintang 3)",
+    notes: "1 santri izin di asrama sakit, jemuran baju perlu dirapikan",
+  },
+];
+
