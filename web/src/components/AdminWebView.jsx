@@ -342,11 +342,12 @@ export default function AdminWebView({
         flexDirection: "column",
         width: "100%",
         minHeight: "780px",
-        background: "#F4FBF7",
+        background: "var(--theme-card-bg-subtle)",
         borderRadius: "24px",
         overflow: "hidden",
-        border: "1px solid rgba(6, 95, 70, 0.15)",
-        boxShadow: "0 20px 50px rgba(6, 39, 30, 0.25)",
+        border: "1px solid var(--theme-card-border)",
+        boxShadow: "var(--theme-card-shadow)",
+        transition: "all 0.3s ease",
       }}
     >
       {/* Mobile / Tablet Responsive Bar */}
@@ -509,18 +510,19 @@ export default function AdminWebView({
         {/* Top Header Bar */}
         <div
           style={{
-            background: "#FFFFFF",
+            background: "var(--theme-card-bg)",
             padding: "16px 28px",
-            borderBottom: "1px solid #E2EFE9",
+            borderBottom: "1px solid var(--theme-card-border)",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             flexWrap: "wrap",
             gap: "12px",
+            transition: "all 0.3s ease",
           }}
         >
           <div>
-            <h2 style={{ fontSize: "18px", fontWeight: 800, color: "#06271E" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 800, color: "var(--theme-text-title)" }}>
               {adminTab === "dashboard" && "Dashboard KPI & Statistik Real-Time"}
               {adminTab === "santri" && "Master Santri & Pengimpor CSV Cerdas"}
               {adminTab === "ews" && "Early Warning System (EWS) — Santri Asrama Sakit & Izin"}
@@ -571,15 +573,16 @@ export default function AdminWebView({
                 <div
                   key={idx}
                   style={{
-                    background: "#FFFFFF",
+                    background: "var(--theme-card-bg)",
                     borderRadius: "18px",
                     padding: "18px",
-                    border: "1px solid #E2EFE9",
-                    boxShadow: "0 4px 15px rgba(6, 39, 30, 0.04)",
+                    border: "1px solid var(--theme-card-border)",
+                    boxShadow: "var(--theme-card-shadow)",
+                    transition: "all 0.3s ease",
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                    <span style={{ fontSize: "12px", color: "#5B7A70", fontWeight: 600 }}>{kpi.label}</span>
+                    <span style={{ fontSize: "12px", color: "var(--theme-text-muted)", fontWeight: 600 }}>{kpi.label}</span>
                   </div>
                   <div style={{ fontSize: "26px", fontWeight: 800, color: kpi.color }}>
                     {kpi.val}
@@ -592,8 +595,8 @@ export default function AdminWebView({
             </div>
 
             {/* Sesi KBM & Salat Berlangsung */}
-            <div style={{ background: "#FFFFFF", borderRadius: "18px", padding: "20px", border: "1px solid #E2EFE9" }}>
-              <div style={{ fontSize: "15px", fontWeight: 800, color: "#06271E", marginBottom: "12px" }}>
+            <div style={{ background: "var(--theme-card-bg)", borderRadius: "18px", padding: "20px", border: "1px solid var(--theme-card-border)", boxShadow: "var(--theme-card-shadow)", transition: "all 0.3s ease" }}>
+              <div style={{ fontSize: "15px", fontWeight: 800, color: "var(--theme-text-title)", marginBottom: "12px" }}>
                 Status Sesi Pembelajaran & Salat Hari Ini
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>

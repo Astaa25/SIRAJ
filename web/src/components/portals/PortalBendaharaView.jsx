@@ -8,6 +8,7 @@ import { playSoftClick, playSuccessChime, triggerHaptic } from "../../utils/audi
 export default function PortalBendaharaView({
   currentUser,
   currentTenant,
+  theme = "dark",
   onTriggerLoader,
   onAuditLogAdd,
   onUpdateTenant,
@@ -292,80 +293,84 @@ export default function PortalBendaharaView({
       >
         <div
           style={{
-            background: "#FFFFFF",
+            background: "var(--theme-card-bg)",
             borderRadius: "16px",
             padding: "16px 18px",
-            border: "1px solid #E2EFE9",
-            boxShadow: "0 2px 8px rgba(6,39,30,0.03)",
+            border: "1px solid var(--theme-card-border)",
+            boxShadow: "var(--theme-card-shadow)",
+            transition: "all 0.3s ease",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-            <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#5B7A70" }}>Total Target Kas SPP</span>
+            <span style={{ fontSize: "11.5px", fontWeight: 700, color: "var(--theme-text-muted)" }}>Total Target Kas SPP</span>
           </div>
-          <div style={{ fontSize: "20px", fontWeight: 900, color: "#06271E" }}>
+          <div style={{ fontSize: "20px", fontWeight: 900, color: "var(--theme-text-title)" }}>
             Rp {targetTotalKas.toLocaleString("id-ID")}
           </div>
-          <div style={{ fontSize: "10.5px", color: "#8AA49B", marginTop: "3px" }}>
+          <div style={{ fontSize: "10.5px", color: "var(--theme-text-dim)", marginTop: "3px" }}>
             {totalStudents} Santri x Rp {currentFee.toLocaleString("id-ID")}
           </div>
         </div>
 
         <div
           style={{
-            background: "#F4FBF7",
+            background: "var(--theme-kpi-green-bg)",
             borderRadius: "16px",
             padding: "16px 18px",
-            border: "1px solid #D1FAE5",
-            boxShadow: "0 2px 8px rgba(6,39,30,0.03)",
+            border: "1px solid var(--theme-kpi-green-border)",
+            boxShadow: "var(--theme-card-shadow)",
+            transition: "all 0.3s ease",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-            <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#065F46" }}>Penerimaan Terkumpul</span>
+            <span style={{ fontSize: "11.5px", fontWeight: 700, color: "var(--theme-kpi-green-text)" }}>Penerimaan Terkumpul</span>
           </div>
-          <div style={{ fontSize: "20px", fontWeight: 900, color: "#059669" }}>
+          <div style={{ fontSize: "20px", fontWeight: 900, color: "var(--theme-kpi-green-text)" }}>
             Rp {kasTerkumpul.toLocaleString("id-ID")}
           </div>
-          <div style={{ fontSize: "10.5px", color: "#059669", fontWeight: 700, marginTop: "3px" }}>
+          <div style={{ fontSize: "10.5px", color: "var(--theme-kpi-green-text)", fontWeight: 700, marginTop: "3px" }}>
             {lunasCount} Santri Lunas ({persenLunas}% Terbayar)
           </div>
         </div>
 
         <div
           style={{
-            background: "#FEF2F2",
+            background: "var(--theme-kpi-red-bg)",
             borderRadius: "16px",
             padding: "16px 18px",
-            border: "1px solid #FECACA",
-            boxShadow: "0 2px 8px rgba(6,39,30,0.03)",
+            border: "1px solid var(--theme-kpi-red-border)",
+            boxShadow: "var(--theme-card-shadow)",
+            transition: "all 0.3s ease",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-            <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#991B1B" }}>Piutang / Belum Lunas</span>
+            <span style={{ fontSize: "11.5px", fontWeight: 700, color: "var(--theme-kpi-red-text)" }}>Piutang / Belum Lunas</span>
           </div>
-          <div style={{ fontSize: "20px", fontWeight: 900, color: "#DC2626" }}>
+          <div style={{ fontSize: "20px", fontWeight: 900, color: "var(--theme-kpi-red-text)" }}>
             Rp {piutangTertunggak.toLocaleString("id-ID")}
           </div>
-          <div style={{ fontSize: "10.5px", color: "#B91C1C", fontWeight: 700, marginTop: "3px" }}>
+          <div style={{ fontSize: "10.5px", color: "var(--theme-kpi-red-text)", fontWeight: 700, marginTop: "3px" }}>
             {belumLunasCount} Santri Belum Lunas
           </div>
         </div>
 
         <div
           style={{
-            background: "#FFFFFF",
+            background: "var(--theme-card-bg)",
             borderRadius: "16px",
             padding: "16px 18px",
-            border: "1px solid #E2EFE9",
-            boxShadow: "0 2px 8px rgba(6,39,30,0.03)",
+            border: "1px solid var(--theme-card-border)",
+            boxShadow: "var(--theme-card-shadow)",
+            transition: "all 0.3s ease",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-            <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#5B7A70" }}>Periode Aktif</span>
+            <span style={{ fontSize: "11.5px", fontWeight: 700, color: "var(--theme-text-muted)" }}>Periode Aktif</span>
           </div>
           <div style={{ fontSize: "18px", fontWeight: 900, color: "#D97706" }}>
             {sppMonthInput}
           </div>
-          <div style={{ fontSize: "10.5px", color: "#8AA49B", marginTop: "3px" }}>
+          <div style={{ fontSize: "10.5px", color: "var(--theme-text-dim)", marginTop: "3px" }}>
             Kasir: Loket Kantor Bendahara
           </div>
         </div>
@@ -378,11 +383,12 @@ export default function PortalBendaharaView({
         style={{
           display: "flex",
           gap: "8px",
-          background: "#FFFFFF",
+          background: "var(--theme-card-bg)",
           padding: "6px",
           borderRadius: "14px",
-          border: "1px solid #E2EFE9",
+          border: "1px solid var(--theme-card-border)",
           overflowX: "auto",
+          transition: "all 0.3s ease",
         }}
       >
         {[
@@ -403,7 +409,7 @@ export default function PortalBendaharaView({
               fontSize: "12px",
               fontWeight: activeTab === tab.id ? 800 : 600,
               background: activeTab === tab.id ? "var(--gradient-emerald)" : "transparent",
-              color: activeTab === tab.id ? "#FFFFFF" : "#5B7A70",
+              color: activeTab === tab.id ? "#FFFFFF" : "var(--theme-text-muted)",
               border: "none",
               cursor: "pointer",
               display: "flex",
@@ -426,15 +432,17 @@ export default function PortalBendaharaView({
           {/* Filter Bar */}
           <div
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-card-bg)",
               borderRadius: "16px",
               padding: "16px 18px",
-              border: "1px solid #E2EFE9",
+              border: "1px solid var(--theme-card-border)",
+              boxShadow: "var(--theme-card-shadow)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               flexWrap: "wrap",
               gap: "12px",
+              transition: "all 0.3s ease",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1, minWidth: "260px" }}>
@@ -447,9 +455,10 @@ export default function PortalBendaharaView({
                   width: "100%",
                   padding: "9px 14px",
                   borderRadius: "10px",
-                  border: "1px solid #CBD5E1",
+                  border: "1px solid var(--theme-input-border)",
+                  background: "var(--theme-input-bg)",
+                  color: "var(--theme-input-text)",
                   fontSize: "12px",
-                  color: "#06271E",
                   outline: "none",
                 }}
               />
@@ -457,7 +466,7 @@ export default function PortalBendaharaView({
 
             {/* Filter Status Syahriyyah */}
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ fontSize: "11px", fontWeight: 700, color: "#5B7A70" }}>Status:</span>
+              <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)" }}>Status:</span>
               {[
                 { id: "ALL", label: `Semua (${totalStudents})` },
                 { id: "Lunas", label: `Lunas (${lunasCount})` },
@@ -474,9 +483,15 @@ export default function PortalBendaharaView({
                     borderRadius: "8px",
                     fontSize: "11px",
                     fontWeight: statusFilter === f.id ? 800 : 600,
-                    background: statusFilter === f.id ? "var(--gradient-emerald)" : "#F3F4F6",
-                    color: statusFilter === f.id ? "#FFFFFF" : "#5B7A70",
-                    border: "none",
+                    background:
+                      statusFilter === f.id
+                        ? "var(--gradient-emerald)"
+                        : "var(--theme-card-bg-subtle)",
+                    color: statusFilter === f.id ? "#FFFFFF" : "var(--theme-text-muted)",
+                    border:
+                      statusFilter === f.id
+                        ? "none"
+                        : "1px solid var(--theme-card-border)",
                     cursor: "pointer",
                   }}
                 >
@@ -489,16 +504,17 @@ export default function PortalBendaharaView({
           {/* Tabel Santri & Syahriyyah */}
           <div
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-card-bg)",
               borderRadius: "16px",
-              border: "1px solid #E2EFE9",
+              border: "1px solid var(--theme-card-border)",
+              boxShadow: "var(--theme-card-shadow)",
               overflowX: "auto",
-              boxShadow: "0 2px 10px rgba(6,39,30,0.03)",
+              transition: "all 0.3s ease",
             }}
           >
             <table style={{ width: "100%", minWidth: "720px", borderCollapse: "collapse", fontSize: "12px" }}>
               <thead>
-                <tr style={{ background: "#F4FBF7", borderBottom: "1.5px solid #D1FAE5", color: "#065F46", textAlign: "left" }}>
+                <tr style={{ background: "var(--theme-table-header-bg)", borderBottom: "1.5px solid var(--theme-table-header-border)", color: "var(--theme-table-header-color)", textAlign: "left" }}>
                   <th style={{ padding: "12px 14px" }}>Santri</th>
                   <th style={{ padding: "12px 14px" }}>NIS & Kelas</th>
                   <th style={{ padding: "12px 14px" }}>Hunian Asrama</th>
@@ -510,7 +526,7 @@ export default function PortalBendaharaView({
               </thead>
               <tbody>
                 {filteredStudents.map((st) => (
-                  <tr key={st.id} style={{ borderBottom: "1px solid #F3F4F6" }}>
+                  <tr key={st.id} style={{ borderBottom: "1px solid var(--theme-table-border)" }}>
                     <td style={{ padding: "12px 14px", display: "flex", alignItems: "center", gap: "10px" }}>
                       <img
                         src={st.photo}
@@ -518,36 +534,37 @@ export default function PortalBendaharaView({
                         style={{ width: "38px", height: "38px", borderRadius: "10px", objectFit: "cover" }}
                       />
                       <div>
-                        <div style={{ fontWeight: 800, color: "#06271E", whiteSpace: "nowrap" }}>
+                        <div style={{ fontWeight: 800, color: "var(--theme-text-title)", whiteSpace: "nowrap" }}>
                           {st.name}
                         </div>
-                        <div style={{ fontSize: "10px", color: "#8AA49B" }}>
+                        <div style={{ fontSize: "10px", color: "var(--theme-text-dim)" }}>
                           ID: {st.id}
                         </div>
                       </div>
                     </td>
-                    <td style={{ padding: "12px 14px", color: "#5B7A70", whiteSpace: "nowrap" }}>
+                    <td style={{ padding: "12px 14px", color: "var(--theme-text-muted)", whiteSpace: "nowrap" }}>
                       <div>{st.nis}</div>
-                      <div style={{ fontSize: "10.5px", color: "#065F46", fontWeight: 700 }}>{st.class}</div>
+                      <div style={{ fontSize: "10.5px", color: "#10B981", fontWeight: 700 }}>{st.class}</div>
                     </td>
                     <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
-                      <div style={{ color: "#06271E", fontWeight: 600 }}>{st.dormBuilding}</div>
-                      <span style={{ background: "#E2EFE9", color: "#06271E", padding: "1px 6px", borderRadius: "4px", fontSize: "10px", fontWeight: 700 }}>
+                      <div style={{ color: "var(--theme-text-title)", fontWeight: 600 }}>{st.dormBuilding}</div>
+                      <span style={{ background: "var(--theme-pill-bg)", color: "var(--theme-pill-color)", border: "1px solid var(--theme-pill-border)", padding: "1px 6px", borderRadius: "4px", fontSize: "10px", fontWeight: 700 }}>
                         {st.roomNumber}
                       </span>
                     </td>
                     <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
-                      <div style={{ color: "#06271E" }}>{st.guardianName}</div>
-                      <div style={{ fontSize: "10.5px", color: "#5B7A70" }}>{st.guardianPhone}</div>
+                      <div style={{ color: "var(--theme-text-title)" }}>{st.guardianName}</div>
+                      <div style={{ fontSize: "10.5px", color: "var(--theme-text-muted)" }}>{st.guardianPhone}</div>
                     </td>
-                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap", fontWeight: 700, color: "#06271E" }}>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap", fontWeight: 700, color: "var(--theme-text-title)" }}>
                       Rp {currentFee.toLocaleString("id-ID")}
                     </td>
                     <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
                       <span
                         style={{
-                          background: st.syahriyyahStatus === "Lunas" ? "#D1FAE5" : "#FEE2E2",
-                          color: st.syahriyyahStatus === "Lunas" ? "#065F46" : "#B42318",
+                          background: st.syahriyyahStatus === "Lunas" ? "var(--theme-kpi-green-bg)" : "var(--theme-kpi-red-bg)",
+                          color: st.syahriyyahStatus === "Lunas" ? "var(--theme-kpi-green-text)" : "var(--theme-kpi-red-text)",
+                          border: st.syahriyyahStatus === "Lunas" ? "1px solid var(--theme-kpi-green-border)" : "1px solid var(--theme-kpi-red-border)",
                           padding: "3px 8px",
                           borderRadius: "6px",
                           fontSize: "11px",
@@ -564,9 +581,9 @@ export default function PortalBendaharaView({
                           onClick={() => handleToggleSyahriyyah(st)}
                           title="Klik untuk ubah Lunas / Belum Lunas"
                           style={{
-                            background: st.syahriyyahStatus === "Lunas" ? "#F3F4F6" : "#ECFDF5",
-                            border: st.syahriyyahStatus === "Lunas" ? "1px solid #D1D5DB" : "1px solid #A7F3D0",
-                            color: st.syahriyyahStatus === "Lunas" ? "#374151" : "#065F46",
+                            background: st.syahriyyahStatus === "Lunas" ? "var(--theme-card-bg-subtle)" : "var(--gradient-emerald)",
+                            border: st.syahriyyahStatus === "Lunas" ? "1px solid var(--theme-card-border)" : "none",
+                            color: st.syahriyyahStatus === "Lunas" ? "var(--theme-text-title)" : "#FFFFFF",
                             padding: "6px 12px",
                             borderRadius: "8px",
                             fontSize: "11px",
@@ -631,29 +648,31 @@ export default function PortalBendaharaView({
             }}
           >
             <div>
-              <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
+              <div style={{ fontSize: "14px", fontWeight: 800, color: "var(--theme-text-title)" }}>
                 Buku Rekapitulasi Kas Pembayaran Masuk
               </div>
-              <div style={{ fontSize: "11px", color: "#5B7A70", marginTop: "2px" }}>
+              <div style={{ fontSize: "11px", color: "var(--theme-text-muted)", marginTop: "2px" }}>
                 Arsip tanda bukti pembayaran resmi yang telah disahkan Bendahara Pondok Pesantren.
               </div>
             </div>
-            <span style={{ background: "#D1FAE5", color: "#065F46", padding: "4px 10px", borderRadius: "8px", fontSize: "11px", fontWeight: 800 }}>
+            <span style={{ background: "var(--theme-pill-bg)", color: "var(--theme-pill-color)", border: "1px solid var(--theme-pill-border)", padding: "4px 10px", borderRadius: "8px", fontSize: "11px", fontWeight: 800 }}>
               {transactions.length} Transaksi Tercatat
             </span>
           </div>
 
           <div
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-card-bg)",
               borderRadius: "16px",
-              border: "1px solid #E2EFE9",
+              border: "1px solid var(--theme-card-border)",
+              boxShadow: "var(--theme-card-shadow)",
               overflowX: "auto",
+              transition: "all 0.3s ease",
             }}
           >
             <table style={{ width: "100%", minWidth: "700px", borderCollapse: "collapse", fontSize: "12px" }}>
               <thead>
-                <tr style={{ background: "#F4FBF7", borderBottom: "1.5px solid #D1FAE5", color: "#065F46", textAlign: "left" }}>
+                <tr style={{ background: "var(--theme-table-header-bg)", borderBottom: "1.5px solid var(--theme-table-header-border)", color: "var(--theme-table-header-color)", textAlign: "left" }}>
                   <th style={{ padding: "12px 14px" }}>No. Kuitansi</th>
                   <th style={{ padding: "12px 14px" }}>Nama Santri & NIS</th>
                   <th style={{ padding: "12px 14px" }}>Wali Pembayar</th>
@@ -665,26 +684,26 @@ export default function PortalBendaharaView({
               </thead>
               <tbody>
                 {transactions.map((trx) => (
-                  <tr key={trx.id} style={{ borderBottom: "1px solid #F3F4F6" }}>
-                    <td style={{ padding: "12px 14px", fontWeight: 800, color: "#047857", whiteSpace: "nowrap" }}>
+                  <tr key={trx.id} style={{ borderBottom: "1px solid var(--theme-table-border)" }}>
+                    <td style={{ padding: "12px 14px", fontWeight: 800, color: "#10B981", whiteSpace: "nowrap" }}>
                       {trx.receiptNo}
                     </td>
                     <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
-                      <div style={{ fontWeight: 700, color: "#06271E" }}>{trx.studentName}</div>
-                      <div style={{ fontSize: "10px", color: "#8AA49B" }}>NIS: {trx.nis} · {trx.class}</div>
+                      <div style={{ fontWeight: 700, color: "var(--theme-text-title)" }}>{trx.studentName}</div>
+                      <div style={{ fontSize: "10px", color: "var(--theme-text-dim)" }}>NIS: {trx.nis} · {trx.class}</div>
                     </td>
-                    <td style={{ padding: "12px 14px", color: "#5B7A70", whiteSpace: "nowrap" }}>
+                    <td style={{ padding: "12px 14px", color: "var(--theme-text-muted)", whiteSpace: "nowrap" }}>
                       {trx.guardianName}
                     </td>
-                    <td style={{ padding: "12px 14px", color: "#06271E", whiteSpace: "nowrap" }}>
+                    <td style={{ padding: "12px 14px", color: "var(--theme-text-title)", whiteSpace: "nowrap" }}>
                       {trx.paymentDate}
                     </td>
                     <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
-                      <span style={{ background: "#EFF6FF", color: "#1D4ED8", padding: "2px 8px", borderRadius: "6px", fontSize: "10.5px", fontWeight: 700 }}>
+                      <span style={{ background: "rgba(59, 130, 246, 0.15)", color: "#60A5FA", border: "1px solid rgba(59, 130, 246, 0.3)", padding: "2px 8px", borderRadius: "6px", fontSize: "10.5px", fontWeight: 700 }}>
                         {trx.method}
                       </span>
                     </td>
-                    <td style={{ padding: "12px 14px", fontWeight: 800, color: "#059669", whiteSpace: "nowrap" }}>
+                    <td style={{ padding: "12px 14px", fontWeight: 800, color: "#34D399", whiteSpace: "nowrap" }}>
                       Rp {trx.amount.toLocaleString("id-ID")}
                     </td>
                     <td style={{ padding: "12px 14px", textAlign: "center", whiteSpace: "nowrap" }}>
@@ -723,19 +742,20 @@ export default function PortalBendaharaView({
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <div
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-card-bg)",
               borderRadius: "18px",
               padding: "22px 24px",
-              border: "1px solid #E2EFE9",
-              boxShadow: "0 2px 10px rgba(6,39,30,0.03)",
+              border: "1px solid var(--theme-card-border)",
+              boxShadow: "var(--theme-card-shadow)",
+              transition: "all 0.3s ease",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingBottom: "10px", borderBottom: "1px solid #E2EFE9" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingBottom: "10px", borderBottom: "1px solid var(--theme-card-border)" }}>
               <div>
-                <div style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
+                <div style={{ fontSize: "15px", fontWeight: 800, color: "var(--theme-text-title)" }}>
                   Konfigurasi Tarif Syahriyyah / SPP & Periode Aktif
                 </div>
-                <div style={{ fontSize: "11px", color: "#5B7A70", marginTop: "2px" }}>
+                <div style={{ fontSize: "11px", color: "var(--theme-text-muted)", marginTop: "2px" }}>
                   Perubahan di sini otomatis tampil di kartu status Wali Santri dan rekap tagihan Admin Ponpes.
                 </div>
               </div>
@@ -744,7 +764,7 @@ export default function PortalBendaharaView({
             <form onSubmit={handleSaveSppSettings} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "14px" }}>
                 <div>
-                  <label style={{ fontSize: "11.5px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "4px" }}>
+                  <label style={{ fontSize: "11.5px", fontWeight: 700, color: "var(--theme-text-title)", display: "block", marginBottom: "4px" }}>
                     Besaran Iuran SPP Bulanan (Rupiah):
                   </label>
                   <input
@@ -755,21 +775,22 @@ export default function PortalBendaharaView({
                       width: "100%",
                       padding: "9px 14px",
                       borderRadius: "10px",
-                      border: "1px solid #CBD5E1",
+                      border: "1px solid var(--theme-input-border)",
+                      background: "var(--theme-input-bg)",
+                      color: "var(--theme-input-text)",
                       fontSize: "13px",
                       fontWeight: 700,
-                      color: "#06271E",
                       outline: "none",
                     }}
                     required
                   />
-                  <div style={{ fontSize: "10px", color: "#8AA49B", marginTop: "3px" }}>
+                  <div style={{ fontSize: "10px", color: "var(--theme-text-dim)", marginTop: "3px" }}>
                     Saat ini: Rp {sppFeeInput.toLocaleString("id-ID")} per santri per bulan.
                   </div>
                 </div>
 
                 <div>
-                  <label style={{ fontSize: "11.5px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "4px" }}>
+                  <label style={{ fontSize: "11.5px", fontWeight: 700, color: "var(--theme-text-title)", display: "block", marginBottom: "4px" }}>
                     Periode Bulan Tagihan Berjalan:
                   </label>
                   <input
@@ -781,22 +802,23 @@ export default function PortalBendaharaView({
                       width: "100%",
                       padding: "9px 14px",
                       borderRadius: "10px",
-                      border: "1px solid #CBD5E1",
+                      border: "1px solid var(--theme-input-border)",
+                      background: "var(--theme-input-bg)",
+                      color: "var(--theme-input-text)",
                       fontSize: "13px",
                       fontWeight: 700,
-                      color: "#06271E",
                       outline: "none",
                     }}
                     required
                   />
-                  <div style={{ fontSize: "10px", color: "#8AA49B", marginTop: "3px" }}>
+                  <div style={{ fontSize: "10px", color: "var(--theme-text-dim)", marginTop: "3px" }}>
                     Label bulan yang ditampilkan di kartu status Wali Santri.
                   </div>
                 </div>
               </div>
 
               <div>
-                <label style={{ fontSize: "11.5px", fontWeight: 700, color: "#06271E", display: "block", marginBottom: "4px" }}>
+                <label style={{ fontSize: "11.5px", fontWeight: 700, color: "var(--theme-text-title)", display: "block", marginBottom: "4px" }}>
                   Informasi Rekening Resmi Pembayaran Pesantren:
                 </label>
                 <input
@@ -807,13 +829,14 @@ export default function PortalBendaharaView({
                     width: "100%",
                     padding: "9px 14px",
                     borderRadius: "10px",
-                    border: "1px solid #CBD5E1",
+                    border: "1px solid var(--theme-input-border)",
+                    background: "var(--theme-input-bg)",
+                    color: "var(--theme-input-text)",
                     fontSize: "12px",
-                    color: "#06271E",
                     outline: "none",
                   }}
                 />
-                <div style={{ fontSize: "10px", color: "#8AA49B", marginTop: "3px" }}>
+                <div style={{ fontSize: "10px", color: "var(--theme-text-dim)", marginTop: "3px" }}>
                   Rekening tujuan transfer manual bagi wali santri yang ingin transfer via bank.
                 </div>
               </div>

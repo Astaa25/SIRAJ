@@ -10,6 +10,8 @@ export default function ShowcaseHeader({
   setActiveRole,
   deviceMode,
   setDeviceMode,
+  theme = "dark",
+  onToggleTheme,
   is2sLoaderEnabled,
   setIs2sLoaderEnabled,
   isMuted,
@@ -43,12 +45,15 @@ export default function ShowcaseHeader({
   return (
     <header
       style={{
-        background: "linear-gradient(180deg, #06271E 0%, #03140F 100%)",
-        borderBottom: "1px solid rgba(232, 182, 90, 0.25)",
-        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.4)",
+        background: "var(--theme-header-bg)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderBottom: "1px solid var(--theme-header-border)",
+        boxShadow: theme === "dark" ? "0 4px 20px rgba(0, 0, 0, 0.4)" : "0 4px 20px rgba(6, 95, 70, 0.08)",
         position: "sticky",
         top: 0,
         zIndex: 1000,
+        transition: "background 0.3s ease, border-color 0.3s ease",
       }}
     >
       {/* Top Bar: Brand, Tenant, User, & Controls */}
@@ -78,7 +83,7 @@ export default function ShowcaseHeader({
           />
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF", letterSpacing: "0.05em" }}>
+              <span style={{ fontSize: "17px", fontWeight: 800, color: "var(--theme-header-text)", letterSpacing: "0.05em" }}>
                 SIRAJ
               </span>
               <span
@@ -95,7 +100,7 @@ export default function ShowcaseHeader({
                 v1.0 Production
               </span>
             </div>
-            <div style={{ fontSize: "10.5px", color: "#FFE49A", fontWeight: 500 }}>
+            <div style={{ fontSize: "10.5px", color: theme === "dark" ? "#FFE49A" : "#047857", fontWeight: 600 }}>
               {currentTenant?.name || "Pondok Pesantren Darussalam Rajapolah Tasikmalaya"}
             </div>
           </div>
@@ -107,8 +112,8 @@ export default function ShowcaseHeader({
           {currentUser && (
             <div
               style={{
-                background: "rgba(13, 67, 50, 0.65)",
-                border: "1px solid rgba(232, 182, 90, 0.3)",
+                background: theme === "dark" ? "rgba(13, 67, 50, 0.65)" : "rgba(6, 95, 70, 0.08)",
+                border: theme === "dark" ? "1px solid rgba(232, 182, 90, 0.3)" : "1px solid #D1FAE5",
                 borderRadius: "12px",
                 padding: "4px 10px 4px 6px",
                 display: "flex",
@@ -128,10 +133,10 @@ export default function ShowcaseHeader({
                 }}
               />
               <div style={{ lineHeight: 1.2 }}>
-                <div style={{ fontSize: "11px", fontWeight: 800, color: "#FFFFFF" }}>
+                <div style={{ fontSize: "11px", fontWeight: 800, color: "var(--theme-header-text)" }}>
                   {currentUser.name}
                 </div>
-                <div style={{ fontSize: "9.5px", color: "#A7F3D0" }}>
+                <div style={{ fontSize: "9.5px", color: "var(--theme-header-sub)" }}>
                   {currentUser.roleLabel || currentUser.role}
                 </div>
               </div>
@@ -269,6 +274,33 @@ export default function ShowcaseHeader({
             )}
           </div>
 
+          {/* Theme Switcher Toggle (Gelap / Terang) */}
+          <button
+            onClick={() => {
+              playSoftClick();
+              if (onToggleTheme) onToggleTheme();
+            }}
+            style={{
+              background: theme === "dark" ? "rgba(16, 185, 129, 0.2)" : "#FFFFFF",
+              border: theme === "dark" ? "1px solid #10B981" : "1.5px solid #059669",
+              color: theme === "dark" ? "#FFE49A" : "#065F46",
+              borderRadius: "10px",
+              padding: "6px 12px",
+              fontSize: "11px",
+              fontWeight: 800,
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              cursor: "pointer",
+              boxShadow: theme === "dark" ? "0 0 12px rgba(16, 185, 129, 0.25)" : "0 2px 8px rgba(6, 95, 70, 0.12)",
+              transition: "all 0.2s ease",
+            }}
+            title="Ganti Tema: Gelap (Base Hijau Gelap) / Terang (Base Putih Gradien Ijo Muda)"
+          >
+            <span>{theme === "dark" ? "🌙" : "☀️"}</span>
+            <span>{theme === "dark" ? "Tema Gelap" : "Tema Terang"}</span>
+          </button>
+
           {/* 2-Second Loading Toggle */}
           <button
             onClick={() => {
@@ -345,14 +377,16 @@ export default function ShowcaseHeader({
           gap: "8px",
           overflowX: "auto",
           whiteSpace: "nowrap",
-          background: "rgba(0, 0, 0, 0.35)",
+          background: "var(--theme-subbar-bg)",
+          borderTop: "1px solid var(--theme-subbar-border)",
           alignItems: "center",
+          transition: "background 0.3s ease",
         }}
       >
         <span
           style={{
             fontSize: "11px",
-            color: "#FFE49A",
+            color: theme === "dark" ? "#FFE49A" : "#065F46",
             fontWeight: 800,
             textTransform: "uppercase",
             letterSpacing: "0.05em",
@@ -378,11 +412,11 @@ export default function ShowcaseHeader({
                 fontWeight: isActive ? 800 : 600,
                 background: isActive
                   ? "var(--gradient-emerald)"
-                  : "rgba(255, 255, 255, 0.06)",
+                  : "var(--theme-role-btn-bg)",
                 border: isActive
                   ? "1px solid #FFE49A"
-                  : "1px solid rgba(16, 185, 129, 0.2)",
-                color: isActive ? "#FFFFFF" : "#C4D8D0",
+                  : "1px solid var(--theme-role-btn-border)",
+                color: isActive ? "#FFFFFF" : "var(--theme-role-btn-color)",
                 boxShadow: isActive ? "0 4px 14px rgba(16, 185, 129, 0.45)" : "none",
                 display: "inline-flex",
                 alignItems: "center",

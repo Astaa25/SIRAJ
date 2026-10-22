@@ -64,8 +64,27 @@ export default function App() {
   const [isLoaderOpen, setIsLoaderOpen] = useState(false);
   const [loaderMessage, setLoaderMessage] = useState("");
   const [loaderCallback, setLoaderCallback] = useState(null);
-  const [auditLogs, setAuditLogs] = useState(INITIAL_AUDIT_LOGS);
   const [isMuted, setIsMuted] = useState(false);
+
+  // Theme State: 'dark' (Base Hijau Gelap) | 'light' (Base Putih Gradien Ijo Muda)
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem("siraj_theme") || "dark";
+    } catch (e) {
+      return "dark";
+    }
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem("siraj_theme", theme);
+    } catch (e) {}
+  }, [theme]);
+
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
 
   useEffect(() => {
     setAudioMuted(isMuted);
@@ -217,6 +236,7 @@ export default function App() {
           <PortalBendaharaView
             currentUser={currentUser}
             currentTenant={currentTenant}
+            theme={theme}
             onTriggerLoader={handleTriggerLoader}
             onAuditLogAdd={handleAuditLogAdd}
             onUpdateTenant={(updated) => {
@@ -256,13 +276,16 @@ export default function App() {
 
   return (
     <div
+      data-theme={theme}
       className="islamic-pattern-bg"
       style={{
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        background: "#03140F",
-        color: "#FFFFFF",
+        background: "var(--theme-base-bg)",
+        backgroundColor: "var(--theme-body-bg)",
+        color: "var(--theme-text-title)",
+        transition: "background 0.3s ease, color 0.3s ease",
       }}
     >
       {/* Cinematic Splash Screen (Bisa diputar ulang) */}
@@ -306,6 +329,8 @@ export default function App() {
             setActiveRole={setActiveRole}
             deviceMode={deviceMode}
             setDeviceMode={setDeviceMode}
+            theme={theme}
+            onToggleTheme={handleToggleTheme}
             is2sLoaderEnabled={is2sLoaderEnabled}
             setIs2sLoaderEnabled={setIs2sLoaderEnabled}
             isMuted={isMuted}
@@ -337,7 +362,7 @@ export default function App() {
                   gap: "10px",
                 }}
               >
-                <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px" }}>
+                <div style={{ fontSize: "11px", color: "var(--theme-mode-label)", display: "flex", alignItems: "center", gap: "6px" }}>
                   <span>Mode Layar HP (Smartphone · 425px):</span>
                   <span style={{ fontWeight: 800, color: "#FFE49A" }}>
                     {activeRole.toUpperCase()}
@@ -374,7 +399,7 @@ export default function App() {
                   gap: "10px",
                 }}
               >
-                <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px" }}>
+                <div style={{ fontSize: "11px", color: "var(--theme-mode-label)", display: "flex", alignItems: "center", gap: "6px" }}>
                   <span>Mode Layar Tablet (768px Responsive):</span>
                   <span style={{ fontWeight: 800, color: "#FFE49A" }}>
                     {activeRole.toUpperCase()}
@@ -405,7 +430,7 @@ export default function App() {
                   margin: "0 auto",
                 }}
               >
-                <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
+                <div style={{ fontSize: "11px", color: "var(--theme-mode-label)", display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
                   <span>Mode Layar Laptop / Komputer Desktop (1420px):</span>
                   <span style={{ fontWeight: 800, color: "#FFE49A" }}>
                     {activeRole === "superadmin" ? "SUPER ADMIN PUSAT" : activeRole === "bendahara" ? "BENDAHARA PONPES" : "ADMIN PONPES"}
