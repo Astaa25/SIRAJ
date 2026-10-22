@@ -77,6 +77,22 @@ export default function App() {
     }
   }, [activeRole, isLaptopRole, deviceMode]);
 
+  // Forensic Append-Only Security Audit Logs
+  const [auditLogs, setAuditLogs] = useState(() => {
+    try {
+      const saved = localStorage.getItem("siraj_audit_logs");
+      return saved ? JSON.parse(saved) : INITIAL_AUDIT_LOGS;
+    } catch (e) {
+      return INITIAL_AUDIT_LOGS;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("siraj_audit_logs", JSON.stringify(auditLogs));
+    } catch (e) {}
+  }, [auditLogs]);
+
   const [is2sLoaderEnabled, setIs2sLoaderEnabled] = useState(true);
   const [isLoaderOpen, setIsLoaderOpen] = useState(false);
   const [loaderMessage, setLoaderMessage] = useState("");
