@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { playSuccessChime } from "../utils/audio";
 
+const BRAND_LETTERS = ["S", "I", "R", "A", "J"];
+
 /**
  * SIRAJ Cinematic Splash Screen
- * Fast, reliable, and gracefully dismissible.
+ * Fast, stunning 210px rotating mandala, and gracefully dismissible.
  */
 export default function SplashScreen({ onFinish, pesantrenName = "Ekosistem Digital & Presensi Terpadu Pondok Pesantren" }) {
-  const [stage, setStage] = useState(1); // Start immediately at 1 so content is ALWAYS visible (never blank!)
-  const [lettersVisible, setLettersVisible] = useState(5);
+  const [stage, setStage] = useState(1);
+  const [lettersVisible, setLettersVisible] = useState(0);
   const onFinishRef = useRef(onFinish);
 
   useEffect(() => {
@@ -15,21 +17,28 @@ export default function SplashScreen({ onFinish, pesantrenName = "Ekosistem Digi
   });
 
   useEffect(() => {
-    // 0.5s: Tagline & Pesantren Name appears
+    // Reveal letters sequentially
+    BRAND_LETTERS.forEach((_, idx) => {
+      setTimeout(() => {
+        setLettersVisible((prev) => Math.max(prev, idx + 1));
+      }, 100 + idx * 80);
+    });
+
+    // 0.6s: Tagline & Pesantren Name appears
     const t1 = setTimeout(() => {
       setStage(3);
-    }, 500);
+    }, 600);
 
-    // 2.2s: Chime & exit transition
+    // 2.7s: Chime & exit transition
     const t2 = setTimeout(() => {
       setStage(4);
       playSuccessChime();
-    }, 2200);
+    }, 2700);
 
-    // 2.7s: Complete
+    // 3.2s: Complete
     const t3 = setTimeout(() => {
       if (onFinishRef.current) onFinishRef.current();
-    }, 2700);
+    }, 3200);
 
     return () => {
       clearTimeout(t1);
@@ -214,7 +223,7 @@ export default function SplashScreen({ onFinish, pesantrenName = "Ekosistem Digi
             letterSpacing: "0.2em",
           }}
         >
-          {brandLetters.map((char, i) => (
+          {BRAND_LETTERS.map((char, i) => (
             <span
               key={i}
               style={{

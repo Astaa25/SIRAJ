@@ -20,7 +20,7 @@ import { INITIAL_AUDIT_LOGS, INITIAL_TENANTS, SYSTEM_USERS } from "./data/mockDa
 import { setAudioMuted, playSoftClick } from "./utils/audio";
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
 
   // Authentication State: Default to Admin Ponpes so Admin Ponpes is NEVER missing on load/refresh!
   const [currentUser, setCurrentUser] = useState(() => {
