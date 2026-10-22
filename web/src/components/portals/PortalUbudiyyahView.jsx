@@ -42,7 +42,7 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
           triggerHaptic([150, 70, 150]);
 
           setScannerStatus("duplicate");
-          setScannerMsg(`⚠️ Santri Ahmad Fauzan SUDAH tercatat pada ${activePrayer.name} hari ini!`);
+          setScannerMsg(`DUPLIKASI: Santri Ahmad Fauzan SUDAH tercatat pada ${activePrayer.name} hari ini!`);
 
           onAuditLogAdd({
             user: "Ustaz Zaid (Ubudiyyah)",
@@ -58,7 +58,7 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
           triggerHaptic([60, 40]);
 
           setScannerStatus("success");
-          setScannerMsg(`🕌 Ahmad Fauzan — Tercatat MASBUK pada ${activePrayer.name} (Waktu Pindai: ${currentTimeStr})`);
+          setScannerMsg(`Ahmad Fauzan — Tercatat MASBUK pada ${activePrayer.name} (Waktu Pindai: ${currentTimeStr})`);
 
           onAuditLogAdd({
             user: "Ustaz Zaid (Ubudiyyah)",
@@ -190,7 +190,7 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
       </div>
 
       {/* Grid: Viewfinder Pemindai Kamera Pintu Masjid & Status Jamaah */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" }}>
         {/* KOLOM KIRI: SCANNER PINTU MASJID */}
         <div
           style={{
@@ -202,10 +202,10 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
             <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-              📷 Kamera Pemindai Pintu Masuk Masjid
+              Kamera Pemindai Pintu Masuk Masjid
             </div>
             <span style={{ fontSize: "10px", background: "#D1FAE5", color: "#065F46", padding: "2px 8px", borderRadius: "8px", fontWeight: 700 }}>
-              🟢 Deteksi Jam Salat
+              Deteksi Jam Salat
             </span>
           </div>
 
@@ -298,7 +298,7 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
                 cursor: "pointer",
               }}
             >
-              ✨ Tepat Waktu
+              Tepat Waktu
             </button>
             <button
               onClick={() => handleScanPrayerAttendance(true, false)}
@@ -313,7 +313,7 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
                 cursor: "pointer",
               }}
             >
-              ⏱️ Masbuk
+              Masbuk
             </button>
             <button
               onClick={() => handleScanPrayerAttendance(false, true)}
@@ -329,7 +329,7 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
               }}
               title="Menguji getar ganda pada ponsel petugas"
             >
-              ⚡ Uji Getar
+              Uji Getar
             </button>
           </div>
         </div>
@@ -347,7 +347,7 @@ export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, cu
           }}
         >
           <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-            📋 Rekap Kehadiran {activePrayer.name} Per Asrama
+            Rekap Kehadiran {activePrayer.name} Per Asrama
           </div>
 
           {[

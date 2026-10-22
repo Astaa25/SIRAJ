@@ -137,7 +137,6 @@ export default function SuperAdminView({ onTriggerLoader, onAuditLogAdd, current
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "22px" }}>🌐</span>
             <h2 style={{ fontSize: "19px", fontWeight: 800, color: "#FFFFFF" }}>
               Pusat Kendali Super Admin Multi-Pesantren
             </h2>
@@ -180,7 +179,6 @@ export default function SuperAdminView({ onTriggerLoader, onAuditLogAdd, current
             boxShadow: "0 4px 14px rgba(232, 182, 90, 0.4)",
           }}
         >
-          <span>➕</span>
           <span>Daftarkan Ponpes Baru & Lisensi</span>
         </button>
       </div>
@@ -205,7 +203,7 @@ export default function SuperAdminView({ onTriggerLoader, onAuditLogAdd, current
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr))", gap: "14px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px" }}>
           {tenants.map((t) => {
             const isCurrentActive = currentTenant?.id === t.id;
             return (
@@ -234,7 +232,7 @@ export default function SuperAdminView({ onTriggerLoader, onAuditLogAdd, current
                     {t.name}
                   </div>
                   <div style={{ fontSize: "11.5px", color: "#5B7A70", marginTop: "2px" }}>
-                    📍 {t.location} · Pimpinan: {t.leader}
+                    {t.location} · Pimpinan: {t.leader}
                   </div>
                   <div style={{ fontSize: "11px", color: "#0D4332", marginTop: "6px", background: "rgba(16, 185, 129, 0.08)", padding: "4px 8px", borderRadius: "6px" }}>
                     Istilah Hunian: <strong>{t.dormTerm}</strong> · Admin: {t.adminEmail}
@@ -283,7 +281,7 @@ export default function SuperAdminView({ onTriggerLoader, onAuditLogAdd, current
         }}
       >
         <div style={{ fontSize: "15px", fontWeight: 800, color: "#06271E", marginBottom: "12px" }}>
-          👥 Manajemen Akun Seluruh Administrator & Pengguna (Bisa Dinonaktifkan)
+          Manajemen Akun Seluruh Administrator & Pengguna (Bisa Dinonaktifkan)
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -376,7 +374,7 @@ export default function SuperAdminView({ onTriggerLoader, onAuditLogAdd, current
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
               <div style={{ fontSize: "16px", fontWeight: 800, color: "#06271E" }}>
-                🏛️ Daftarkan Pondok Pesantren Baru & Lisensi
+                Daftarkan Pondok Pesantren Baru & Lisensi
               </div>
               <button
                 onClick={() => setIsAddTenantModalOpen(false)}

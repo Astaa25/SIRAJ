@@ -1045,16 +1045,16 @@ export const INITIAL_SYAHRIYYAH_TRANSACTIONS = [
 
 // List of roles for navigation reference
 export const ROLES_LIST = [
-  { id: "superadmin", label: "Super Admin", icon: "🌐", desc: "Multi-Ponpes, Lisensi & Database" },
-  { id: "admin", label: "Admin Ponpes", icon: "💻", desc: "KPI, Master Santri, Ambang SP" },
-  { id: "bendahara", label: "Bendahara Ponpes", icon: "💰", desc: "Pencatatan Syahriyyah/SPP & Kuitansi" },
-  { id: "pengasuhan", label: "Kepala Pengasuhan", icon: "👳", desc: "Pimpinan Musyrif & Per Asrama" },
-  { id: "bk", label: "Guru BK", icon: "📋", desc: "Konseling & Kategori SP I-III" },
-  { id: "guru", label: "Guru KBM", icon: "👨‍🏫", desc: "Presensi Mapel Guru Tertentu" },
-  { id: "ubudiyyah", label: "Ustadz Ubudiyyah", icon: "🕌", desc: "Auto Waktu Salat Masjid" },
-  { id: "musyrif", label: "Musyrif Asrama", icon: "🏠", desc: "Nama & Asrama, Izin Gate Pass" },
-  { id: "satpam", label: "Satpam Gerbang", icon: "🛡️", desc: "Scan Langsung Popup 5 Detik" },
-  { id: "wali", label: "Wali Santri", icon: "👨‍👩‍👧", desc: "Jurnal, Kartu 3D, Gate Pass 24 Jam" },
+  { id: "superadmin", label: "Super Admin", icon: "", desc: "Multi-Ponpes, Lisensi & Database" },
+  { id: "admin", label: "Admin Ponpes", icon: "", desc: "KPI, Master Santri, Ambang SP" },
+  { id: "bendahara", label: "Bendahara Ponpes", icon: "", desc: "Pencatatan Syahriyyah/SPP & Kuitansi" },
+  { id: "pengasuhan", label: "Kepala Pengasuhan", icon: "", desc: "Pimpinan Musyrif & Per Asrama" },
+  { id: "bk", label: "Guru BK", icon: "", desc: "Konseling & Kategori SP I-III" },
+  { id: "guru", label: "Guru KBM", icon: "", desc: "Presensi Mapel Guru Tertentu" },
+  { id: "ubudiyyah", label: "Ustadz Ubudiyyah", icon: "", desc: "Auto Waktu Salat Masjid" },
+  { id: "musyrif", label: "Musyrif Asrama", icon: "", desc: "Nama & Asrama, Izin Gate Pass" },
+  { id: "satpam", label: "Satpam Gerbang", icon: "", desc: "Scan Langsung Popup 5 Detik" },
+  { id: "wali", label: "Wali Santri", icon: "", desc: "Jurnal, Kartu 3D, Gate Pass 24 Jam" },
 ];
 
 // =====================================================================

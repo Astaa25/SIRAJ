@@ -55,7 +55,7 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
 
           setScannerStatus("duplicate");
           setScannerMessage(
-            "⚠️ DUPLIKASI TERDETEKSI: Kartu Ahmad Fauzan sudah dipindai pada jam 08:42 WIB!"
+            "DUPLIKASI TERDETEKSI: Kartu Ahmad Fauzan sudah dipindai pada jam 08:42 WIB!"
           );
 
           onAuditLogAdd({
@@ -73,7 +73,7 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
 
           setScannerStatus("success");
           setScannerMessage(
-            "✅ SUKSES: Ahmad Fauzan (NIS: 2026070114) — Tercatat HADIR tepat waktu!"
+            "SUKSES: Ahmad Fauzan (NIS: 2026070114) — Tercatat HADIR tepat waktu!"
           );
 
           onAuditLogAdd({
@@ -205,7 +205,7 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
       </div>
 
       {/* Grid: Viewfinder Pemindai Kamera & Rekap Kehadiran */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" }}>
         {/* KOLOM KIRI: KAMERA VIEWFINDER LANGSUNG AKTIF (Tanpa Goyang Layar) */}
         <div
           style={{
@@ -345,7 +345,6 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
                 boxShadow: "0 4px 12px rgba(6, 95, 70, 0.2)",
               }}
             >
-              <span>✅</span>
               <span>Pindai Kartu (Hadir)</span>
             </button>
 
@@ -367,7 +366,6 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
               }}
               title="Menguji getar ganda pada ponsel pengajar bila kartu dipindai dua kali"
             >
-              <span>⚡</span>
               <span>Uji Getar Anti-Duplikasi</span>
             </button>
           </div>
@@ -387,7 +385,7 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-              📊 Rekap Kelas {activeClass.class} ({activeClass.subject})
+              Rekap Kelas {activeClass.class} ({activeClass.subject})
             </div>
             <span style={{ fontSize: "11px", color: "#5B7A70" }}>
               Total: {activeClass.totalStudents} Santri

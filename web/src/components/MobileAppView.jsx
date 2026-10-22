@@ -218,7 +218,7 @@ export default function MobileAppView({
           category: "Top-Up",
           amount: topUpAmount,
           time: "22 Okt 2026 · " + currentTimeStr,
-          icon: "💳",
+          icon: "",
           merchant: "BSI Virtual Account (+Ir. H. Abdullah)",
           ref: "TOPUP-" + Date.now().toString().slice(-8),
         };
@@ -344,7 +344,7 @@ export default function MobileAppView({
           <span className="tabular-nums">{currentTimeStr}</span>
           <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px" }}>
             <span>LTE 5G</span>
-            <span>100% ⚡</span>
+            <span>100% </span>
           </div>
         </div>
 
@@ -381,9 +381,9 @@ export default function MobileAppView({
                 cursor: "pointer",
               }}
             >
-              <option value="Wali Santri">👨‍👩‍👦 Wali Santri</option>
-              <option value="Musyrif">📷 Musyrif (Scan & Manual)</option>
-              <option value="Satpam">🛡️ Satpam (Gate Pass)</option>
+              <option value="Wali Santri">Wali Santri</option>
+              <option value="Musyrif">Musyrif (Scan & Manual)</option>
+              <option value="Satpam">Satpam (Gate Pass)</option>
             </select>
           </div>
 
@@ -513,7 +513,7 @@ export default function MobileAppView({
                   marginBottom: "10px",
                 }}
               >
-                <span>✅</span>
+                
                 <span>{scannerMessage}</span>
               </div>
             )}
@@ -533,7 +533,7 @@ export default function MobileAppView({
                   marginBottom: "10px",
                 }}
               >
-                <span>⚠️</span>
+                
                 <span>{scannerMessage}</span>
               </div>
             )}
@@ -556,7 +556,7 @@ export default function MobileAppView({
                   gap: "8px",
                 }}
               >
-                <span>📷</span>
+                
                 <span>Simulasi Pindai Kartu Santri (Valid)</span>
               </button>
 
@@ -572,7 +572,7 @@ export default function MobileAppView({
                   border: "1px solid #E8B65A",
                 }}
               >
-                ⚠️ Tes Pindai Ulang (Anti-Duplikasi)
+                Tes Pindai Ulang (Anti-Duplikasi)
               </button>
 
               {/* Seksi 13: Pencatatan Tanpa QR */}
@@ -592,7 +592,7 @@ export default function MobileAppView({
                   gap: "6px",
                 }}
               >
-                <span>📝</span>
+                
                 <span>Catat Sakit / Izin Tanpa QR (Seksi 13)</span>
               </button>
 
@@ -608,7 +608,7 @@ export default function MobileAppView({
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: isOfflineMode ? "8px" : "0px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    <span style={{ fontSize: "14px" }}>{isOfflineMode ? "📴" : "📶"}</span>
+                    <span style={{ fontSize: "14px" }}>{isOfflineMode ? "OFFLINE" : "ONLINE"}</span>
                     <span style={{ fontSize: "11px", fontWeight: 700, color: isOfflineMode ? "#FFE49A" : "#34D399" }}>
                       {isOfflineMode ? "Mode Offline Lokal (Masjid / Minim Sinyal)" : "Online · Supabase Cloud Sync"}
                     </span>
@@ -655,7 +655,7 @@ export default function MobileAppView({
                         boxShadow: "0 2px 10px rgba(16, 185, 129, 0.3)",
                       }}
                     >
-                      <span>🔄</span>
+                      
                       <span>Pulihkan & Sinkronkan ke Cloud ({offlineQueueCount} Data)</span>
                     </button>
                   </div>
@@ -756,7 +756,7 @@ export default function MobileAppView({
                         fontWeight: 700,
                       }}
                     >
-                      💾 Simpan & Sinkron
+                      Simpan & Sinkron
                     </button>
                     <button
                       onClick={() => setIsManualModalOpen(false)}
@@ -876,7 +876,7 @@ export default function MobileAppView({
                   border: "2px solid #10B981",
                 }}
               >
-                <div style={{ fontSize: "28px", marginBottom: "4px" }}>✅</div>
+                <div style={{ fontSize: "24px", marginBottom: "4px", fontWeight: 800, color: "#10B981" }}>✓</div>
                 <div style={{ fontSize: "15px", fontWeight: 800 }}>GERBANG DIBUKA — SAH</div>
                 <div style={{ fontSize: "11px", marginTop: "4px" }}>
                   Data penjemputan berhasil di-update secara atomik ke server & dicatat di audit log.
@@ -897,7 +897,7 @@ export default function MobileAppView({
                   border: "1px solid #FFE49A",
                 }}
               >
-                🛡️ Verifikasi Identitas & Buka Gerbang
+                Verifikasi Identitas & Buka Gerbang
               </button>
             )}
           </div>
@@ -1096,7 +1096,7 @@ export default function MobileAppView({
                       cursor: "pointer",
                     }}
                   >
-                    📅 Jurnal Harian
+                    Jurnal Harian
                   </button>
                   <button
                     onClick={() => {
@@ -1120,7 +1120,7 @@ export default function MobileAppView({
                       cursor: "pointer",
                     }}
                   >
-                    📊 Rekap Mingguan
+                    Rekap Mingguan
                   </button>
                 </div>
 
@@ -1234,7 +1234,7 @@ export default function MobileAppView({
                       }}
                     >
                       <h5 style={{ fontSize: "12.5px", fontWeight: 800, color: "#06271E", marginBottom: "8px" }}>
-                        🌟 Sorotan Capaian Pekan Ini
+                        Sorotan Capaian Pekan Ini
                       </h5>
                       <ul style={{ paddingLeft: "16px", margin: 0, fontSize: "11.5px", color: "#065F46", lineHeight: 1.6 }}>
                         {WEEKLY_SUMMARY_DATA.highlights.map((h, idx) => (
@@ -1254,7 +1254,7 @@ export default function MobileAppView({
                       }}
                     >
                       <div style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "18px" }}>👳</span>
+                        
                         <div>
                           <div style={{ fontSize: "11px", fontWeight: 700, color: "#065F46" }}>
                             Catatan Musyrif Asrama (Ustaz Farhan)
@@ -1294,7 +1294,7 @@ export default function MobileAppView({
                         cursor: "pointer",
                       }}
                     >
-                      📄 Unduh Rapor Pekanan (PDF Berkop Pondok)
+                      Unduh Rapor Pekanan (PDF Berkop Pondok)
                     </button>
                   </div>
                 ) : (
@@ -1342,7 +1342,7 @@ export default function MobileAppView({
                   </div>
 
                   <div style={{ fontSize: "11px", color: "#5B7A70", fontWeight: 600 }}>
-                    🕌 Ashar: <span className="tabular-nums" style={{ color: "#065F46", fontWeight: 700 }}>15:22 WIB</span>
+                    Ashar: <span className="tabular-nums" style={{ color: "#065F46", fontWeight: 700 }}>15:22 WIB</span>
                   </div>
                 </div>
 
@@ -1440,7 +1440,7 @@ export default function MobileAppView({
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
                     <div>
                       <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", color: "#FFE49A", fontWeight: 700 }}>
-                        <span>💳</span>
+                        <span></span>
                         <span>Dompet Uang Saku & Koperasi</span>
                       </div>
                       <div className="tabular-nums" style={{ fontSize: "20px", fontWeight: 800, color: "#FFFFFF", marginTop: "2px" }}>
@@ -1524,7 +1524,7 @@ export default function MobileAppView({
                         fontSize: "18px",
                       }}
                     >
-                      🎬
+                      
                     </div>
                     <div>
                       <div style={{ fontSize: "11px", fontWeight: 800, color: "#FFE49A" }}>
@@ -1664,7 +1664,7 @@ export default function MobileAppView({
                               transition: "all 0.2s ease",
                             }}
                           >
-                            <span>📖 {item.surah} ({item.verses})</span>
+                            <span>{item.surah} ({item.verses})</span>
                             <span
                               style={{
                                 fontSize: "10px",
@@ -1759,7 +1759,7 @@ export default function MobileAppView({
                       ID: {gatePass.id}
                     </div>
                     <div style={{ fontSize: "10px", color: "#059669", fontWeight: 600 }}>
-                      🔒 Dilindungi Tanda Tangan Ed25519
+                      Dilindungi Tanda Tangan Ed25519
                     </div>
                   </div>
                 </div>
@@ -2061,7 +2061,7 @@ export default function MobileAppView({
                           animation: "progressPulse 1.8s infinite",
                         }}
                       />
-                      <span style={{ fontSize: "14px" }}>📍</span>
+                      
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: "10px", color: "#FFE49A", fontWeight: 700 }}>
@@ -2345,11 +2345,11 @@ export default function MobileAppView({
             }}
           >
             {[
-              { id: "jurnal", label: "Jurnal", icon: "📖" },
-              { id: "gatepass", label: "Gate Pass", icon: "🛡️" },
-              { id: "poskestren", label: "Kesehatan", icon: "🏥" },
-              { id: "adab", label: "Rapor Adab", icon: "⚖️" },
-              { id: "peta", label: "Peta Ponpes", icon: "🗺️" },
+              { id: "jurnal", label: "Jurnal", icon: "" },
+              { id: "gatepass", label: "Gate Pass", icon: "" },
+              { id: "poskestren", label: "Kesehatan", icon: "" },
+              { id: "adab", label: "Rapor Adab", icon: "" },
+              { id: "peta", label: "Peta Ponpes", icon: "" },
             ].map((tab) => {
               const isActive = activeTab === tab.id;
               return (
@@ -2469,7 +2469,7 @@ export default function MobileAppView({
                     fontWeight: 700,
                   }}
                 >
-                  Salin 📋
+                  Salin
                 </button>
               </div>
 
@@ -2514,7 +2514,7 @@ export default function MobileAppView({
                   lineHeight: "1.4",
                 }}
               >
-                🔒 <b>Batas Harian:</b> Maksimal jajan Rp 25.000 / hari untuk melatih kedisiplinan hidup hemat santri.
+                <b>Batas Harian:</b> Maksimal jajan Rp 25.000 / hari untuk melatih kedisiplinan hidup hemat santri.
               </div>
 
               <div style={{ display: "flex", gap: "8px" }}>
@@ -2531,7 +2531,7 @@ export default function MobileAppView({
                     boxShadow: "0 4px 12px rgba(6, 95, 70, 0.3)",
                   }}
                 >
-                  💳 Konfirmasi & Top-Up
+                   Konfirmasi & Top-Up
                 </button>
                 <button
                   onClick={() => setIsTopUpModalOpen(false)}
@@ -2829,7 +2829,7 @@ export default function MobileAppView({
                       </button>
                       <span className="tabular-nums">04:15 / {selectedKajianVideo.duration}</span>
                     </div>
-                    <span>🔊 Stereo</span>
+                    <span>Stereo</span>
                   </div>
                 </div>
               </div>
@@ -2845,7 +2845,7 @@ export default function MobileAppView({
                 }}
               >
                 <div style={{ fontSize: "11px", fontWeight: 700, color: "#FFE49A", marginBottom: "6px" }}>
-                  📖 Ringkasan & Intisari Nasihat:
+                  Ringkasan & Intisari Nasihat:
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                   {selectedKajianVideo.keyPoints.map((point, idx) => (
@@ -2873,7 +2873,7 @@ export default function MobileAppView({
                     fontSize: "11px",
                   }}
                 >
-                  📥 Unduh Rangkuman PDF
+                  Unduh Rangkuman PDF
                 </button>
                 <button
                   onClick={() => setIsVideoModalOpen(false)}
@@ -3107,7 +3107,7 @@ export default function MobileAppView({
                     fontSize: "11px",
                   }}
                 >
-                  🔄 {isIdCardFlipped ? "Lihat Sisi Depan" : "Balik Kartu (Panca Jiwa)"}
+                  {isIdCardFlipped ? "Lihat Sisi Depan" : "Balik Kartu (Panca Jiwa)"}
                 </button>
                 <button
                   onClick={() => setIsIdCardModalOpen(false)}
@@ -3208,7 +3208,7 @@ export default function MobileAppView({
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
                   <div style={{ fontSize: "13px", fontWeight: 800, color: "#FFFFFF" }}>
-                    📖 {selectedTahfidzItem.surah}
+                    {selectedTahfidzItem.surah}
                   </div>
                   <span
                     style={{
@@ -3245,7 +3245,7 @@ export default function MobileAppView({
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
                   <div style={{ fontSize: "11px", fontWeight: 700, color: "#FFE49A" }}>
-                    🎙️ Rekaman Catatan Ustaz Pembimbing
+                    Rekaman Catatan Ustaz Pembimbing
                   </div>
                   <span style={{ fontSize: "10px", color: "#8AA49B" }}>00:45</span>
                 </div>
@@ -3308,7 +3308,7 @@ export default function MobileAppView({
               >
                 {tahfidzDoaSent ? (
                   <div className="fade-in-up">
-                    <div style={{ fontSize: "20px", marginBottom: "4px" }}>💖</div>
+                    
                     <div style={{ fontSize: "12px", fontWeight: 800, color: "#FFE49A" }}>
                       Doa & Apresiasi Telah Terkirim!
                     </div>
@@ -3336,7 +3336,7 @@ export default function MobileAppView({
                         boxShadow: "0 2px 8px rgba(232, 182, 90, 0.4)",
                       }}
                     >
-                      <span>❤️</span>
+                      
                       <span>Kirim Doa & Apresiasi Orang Tua</span>
                     </button>
                   </div>

@@ -140,7 +140,6 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "20px" }}>🛡️</span>
             <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
               Pos Keamanan Gerbang Utama (Satpam Ponpes)
             </h2>
@@ -486,7 +485,7 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
         }}
       >
         <div style={{ fontSize: "13px", fontWeight: 800, color: "#06271E", marginBottom: "10px" }}>
-          📜 Riwayat Verifikasi Gerbang Masuk/Keluar Hari Ini:
+          Riwayat Verifikasi Gerbang Masuk/Keluar Hari Ini:
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>

@@ -132,10 +132,10 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
             </div>
             {/* Nama Asrama dan No Kamar Terpisah Sesuai Arahan */}
             <div style={{ fontSize: "11px", color: "#A7F3D0", marginTop: "2px", display: "flex", alignItems: "center", gap: "6px" }}>
-              <span>🏢 {currentStudent.dormBuilding}</span>
+              <span>{currentStudent.dormBuilding}</span>
               <span>·</span>
               <span style={{ background: "rgba(255,255,255,0.1)", padding: "1px 6px", borderRadius: "6px" }}>
-                🚪 {currentStudent.roomNumber}
+                Kamar {currentStudent.roomNumber}
               </span>
             </div>
           </div>
@@ -180,7 +180,6 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                     }}
                     title={`Lihat data ananda ${st.name}`}
                   >
-                    <span>{idx === 0 ? "👦" : "👧"}</span>
                     <span>{st.name.split(" ")[0]}</span>
                   </button>
                 );
@@ -231,7 +230,9 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
             boxShadow: "0 4px 14px rgba(217, 119, 6, 0.1)",
           }}
         >
-          <span style={{ fontSize: "24px" }}>⚠️</span>
+          <span style={{ background: "#FEF3C7", color: "#92400E", padding: "4px 8px", borderRadius: "8px", fontSize: "12px", fontWeight: 800 }}>
+            SP I
+          </span>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: "13px", fontWeight: 800, color: "#92400E" }}>
               PEMBERITAHUAN RESMI PENGASUHAN: AMBANG SURAT PERINGATAN I (SP I)
@@ -256,7 +257,9 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
             boxShadow: "0 4px 14px rgba(220, 38, 38, 0.12)",
           }}
         >
-          <span style={{ fontSize: "24px" }}>🚨</span>
+          <span style={{ background: "#FEE2E2", color: "#B42318", padding: "4px 8px", borderRadius: "8px", fontSize: "12px", fontWeight: 800 }}>
+            SP II
+          </span>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: "13px", fontWeight: 800, color: "#991B1B" }}>
               PERINGATAN TINGKAT LANJUT: AMBANG SURAT PERINGATAN II (SP II)
@@ -282,7 +285,9 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
             boxShadow: "0 4px 16px rgba(127, 29, 29, 0.3)",
           }}
         >
-          <span style={{ fontSize: "24px" }}>⛔</span>
+          <span style={{ background: "rgba(255, 255, 255, 0.2)", color: "#FFFFFF", padding: "4px 8px", borderRadius: "8px", fontSize: "12px", fontWeight: 800 }}>
+            SP III
+          </span>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: "13px", fontWeight: 800, color: "#FEE2E2" }}>
               SURAT PANGGILAN RESMI WALI SANTRI (SP III)
@@ -357,7 +362,6 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
               border: currentStudent.syahriyyahStatus === "Lunas" ? "1px solid #A7F3D0" : "1px solid #FECACA",
             }}
           >
-            <span>{currentStudent.syahriyyahStatus === "Lunas" ? "🟢" : "🔴"}</span>
             <span>{currentStudent.syahriyyahStatus === "Lunas" ? "LUNAS (TERCATAT)" : "BELUM LUNAS"}</span>
           </span>
         </div>
@@ -379,11 +383,11 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
         }}
       >
         {[
-          { id: "jurnal", label: "Jurnal & Rekap Presensi", icon: "📖" },
-          { id: "gatepass", label: "Gate Pass 24 Jam", icon: "🎫" },
-          { id: "adab", label: "Rapor Adab Santri", icon: "⭐" },
+          { id: "jurnal", label: "Jurnal & Rekap Presensi" },
+          { id: "gatepass", label: "Gate Pass 24 Jam" },
+          { id: "adab", label: "Rapor Adab Santri" },
           ...((currentTenant?.enableTahfidzModule ?? true)
-            ? [{ id: "tahfidz", label: "Hafalan Tahfidz & Wisuda", icon: "🕌" }]
+            ? [{ id: "tahfidz", label: "Hafalan Tahfidz & Wisuda" }]
             : []),
         ].map((tab) => {
           const isActive = activeTab === tab.id;
@@ -412,7 +416,6 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                 whiteSpace: "nowrap",
               }}
             >
-              <span>{tab.icon}</span>
               <span>{tab.label}</span>
             </button>
           );
@@ -465,7 +468,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                   cursor: "pointer",
                 }}
               >
-                📅 Jurnal Harian
+                Jurnal Harian
               </button>
               <button
                 onClick={() => {
@@ -484,7 +487,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                   cursor: "pointer",
                 }}
               >
-                📊 Rekap Mingguan (Pekan Ke-4)
+                Rekap Mingguan (Pekan Ke-4)
               </button>
             </div>
 
@@ -504,7 +507,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                     cursor: "pointer",
                   }}
                 >
-                  ◀ Kemarin (21 Okt)
+                  Kemarin (21 Okt)
                 </button>
                 <button
                   onClick={() => handleDateSwitch("2026-10-22")}
@@ -519,7 +522,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                     cursor: "pointer",
                   }}
                 >
-                  Hari Ini (22 Okt) 🟢
+                  Hari Ini (22 Okt)
                 </button>
               </div>
             )}
@@ -562,7 +565,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                       borderRadius: "8px",
                     }}
                   >
-                    ✅ {currentDateSchedule.summary.hadir} Hadir
+                    {currentDateSchedule.summary.hadir} Hadir
                   </span>
                   <span
                     style={{
@@ -574,7 +577,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                       borderRadius: "8px",
                     }}
                   >
-                    ⚠️ {currentDateSchedule.summary.terlambat} Terlambat
+                    {currentDateSchedule.summary.terlambat} Terlambat
                   </span>
                   <span
                     style={{
@@ -586,7 +589,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                       borderRadius: "8px",
                     }}
                   >
-                    🏥 {currentDateSchedule.summary.izinSakit} Sakit/Izin
+                    {currentDateSchedule.summary.izinSakit} Sakit/Izin
                   </span>
                 </div>
               </div>
@@ -670,7 +673,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                         )}
                       </div>
                       <div style={{ fontSize: "11px", color: "#5B7A70", marginTop: "3px" }}>
-                        🕒 {session.time} · {session.teacher}
+                        {session.time} · {session.teacher}
                       </div>
                       <div
                         style={{
@@ -731,7 +734,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                               cursor: "pointer",
                             }}
                           >
-                            📖 Rincian Setoran
+                            Rincian Setoran
                           </button>
                         </div>
                       )}
@@ -770,7 +773,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                       {WEEKLY_SUMMARY_DATA.overallRate}%
                     </div>
                     <div style={{ fontSize: "10px", color: "#D1FAE5", fontWeight: 700 }}>
-                      Predikat: Mumtaz ⭐
+                      Predikat: Mumtaz
                     </div>
                   </div>
                 </div>
@@ -890,7 +893,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                 }}
               >
                 <div style={{ fontSize: "13px", fontWeight: 800, color: "#06271E", marginBottom: "6px" }}>
-                  📝 Catatan Evaluasi Musyrif Asrama (Ustaz Farhan)
+                  Catatan Evaluasi Musyrif Asrama (Ustaz Farhan)
                 </div>
                 <div style={{ fontSize: "12px", color: "#5B7A70", lineHeight: "1.5", fontStyle: "italic" }}>
                   "{WEEKLY_SUMMARY_DATA.musyrifNote}"
@@ -921,7 +924,6 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                       gap: "6px",
                     }}
                   >
-                    <span>📥</span>
                     <span>Unduh Draf Rapor Mingguan Resmi (PDF Berkop)</span>
                   </button>
                 </div>
@@ -979,7 +981,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                     borderRadius: "8px",
                   }}
                 >
-                  🕒 Berlaku Seharian Penuh
+                  Berlaku Seharian Penuh
                 </span>
                 <div style={{ fontSize: "10px", color: "#A7F3D0", marginTop: "3px" }}>
                   06:00 – 21:00 WIB
@@ -1172,7 +1174,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
               }}
             >
               <div style={{ fontSize: "13px", fontWeight: 800, color: "#065F46", marginBottom: "10px" }}>
-                🌟 Riwayat Poin Kebaikan (+{currentStudent.pointsGood} Poin)
+                Riwayat Poin Kebaikan (+{currentStudent.pointsGood} Poin)
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 {INITIAL_ADAB_RECORD.goodPoints.map((item) => (
@@ -1214,7 +1216,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
               }}
             >
               <div style={{ fontSize: "13px", fontWeight: 800, color: "#9A6212", marginBottom: "10px" }}>
-                ⚠️ Catatan Disiplin (-{currentStudent.pointsViolation} Poin)
+                Catatan Disiplin (-{currentStudent.pointsViolation} Poin)
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 {INITIAL_ADAB_RECORD.violationPoints.map((item) => (
@@ -1269,7 +1271,6 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "14px" }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "20px" }}>🕌</span>
                   <div style={{ fontSize: "16px", fontWeight: 800, color: "#FFFFFF" }}>
                     Target Kelulusan Menuju Wisuda Tahfidz Pondok
                   </div>
@@ -1310,7 +1311,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
           </div>
 
           {/* Grid Dua Kolom: Setoran Baru (Ziyadah) vs Pengulangan (Muraja'ah) */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "14px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px" }}>
             {/* Kolom 1: Ziyadah (Hafalan Baru) */}
             <div
               style={{
@@ -1322,7 +1323,6 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span style={{ fontSize: "16px" }}>📖</span>
                   <div style={{ fontSize: "13px", fontWeight: 800, color: "#065F46" }}>
                     Setoran Hafalan Baru (Ziyadah)
                   </div>
@@ -1380,7 +1380,6 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span style={{ fontSize: "16px" }}>🔄</span>
                   <div style={{ fontSize: "13px", fontWeight: 800, color: "#92400E" }}>
                     Pengulangan Hafalan (Muraja'ah)
                   </div>
@@ -1611,7 +1610,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
             </div>
 
             <div style={{ fontSize: "11px", color: "#5B7A70", marginBottom: "14px" }}>
-              💡 Ketuk kartu di atas untuk membalik tampilan (Animasi 3D Flip)
+              Ketuk kartu di atas untuk membalik tampilan (Animasi 3D Flip)
             </div>
 
             <button
@@ -1664,7 +1663,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
               <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-                📖 Rincian Mutaba'ah Tahfidz
+                Rincian Mutaba'ah Tahfidz
               </div>
               <button
                 onClick={() => setIsTahfidzModalOpen(false)}
@@ -1682,7 +1681,7 @@ export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantD
                 {selectedTahfidzItem.verses} · Sesi: {selectedTahfidzItem.time}
               </div>
               <div style={{ fontSize: "12px", fontWeight: 800, color: "#059669", marginTop: "8px" }}>
-                Skor Penilaian Tajwid / Makhraj: ⭐ {selectedTahfidzItem.status}
+                Skor Penilaian Tajwid / Makhraj: {selectedTahfidzItem.status}
               </div>
             </div>
 

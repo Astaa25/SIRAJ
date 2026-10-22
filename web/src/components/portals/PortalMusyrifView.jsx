@@ -213,7 +213,7 @@ export default function PortalMusyrifView({
         });
 
         alert(
-          `✅ Setoran ${
+          `Setoran ${
             tahfidzType === "ziyadah" ? "Ziyadah" : "Muraja'ah"
           } ananda ${targetStudent?.name} berhasil dicatat dengan predikat ${tahfidzGrade}!`
         );
@@ -565,13 +565,13 @@ export default function PortalMusyrifView({
                     </div>
                     <div style={{ display: "flex", gap: "8px", marginTop: "4px", fontSize: "10.5px" }}>
                       <span style={{ color: "#059669", fontWeight: 700 }}>
-                        ⭐ Skor Adab: {st.scoreAdab}/100
+                        Skor Adab: {st.scoreAdab}/100
                       </span>
                       <span style={{ color: "#3B82F6", fontWeight: 700 }}>
-                        🕌 Ubudiyyah: 96% Tepat Waktu
+                        Ubudiyyah: 96% Tepat Waktu
                       </span>
                       <span style={{ color: st.pointsViolation > 0 ? "#DC2626" : "#059669", fontWeight: 700 }}>
-                        ⚠️ Pelanggaran: {st.pointsViolation} Poin
+                        Pelanggaran: {st.pointsViolation} Poin
                       </span>
                     </div>
                   </div>
@@ -595,7 +595,6 @@ export default function PortalMusyrifView({
                       boxShadow: "0 2px 8px rgba(6, 95, 70, 0.25)",
                     }}
                   >
-                    <span>📄</span>
                     <span>Cetak Rapor Bulanan</span>
                   </button>
                 </div>
@@ -627,7 +626,7 @@ export default function PortalMusyrifView({
             >
               <div>
                 <div style={{ fontSize: "13px", fontWeight: 800, color: "#92400E" }}>
-                  💾 Mode Offline SQLite: {offlineQueueCount} Antrean Presensi Tersimpan Lokal
+                  Mode Offline SQLite: {offlineQueueCount} Antrean Presensi Tersimpan Lokal
                 </div>
                 <div style={{ fontSize: "11px", color: "#B45309", marginTop: "2px" }}>
                   Data presensi {assignedDorm} aman tersimpan di storage lokal perangkat saat jaringan minim.
@@ -647,7 +646,7 @@ export default function PortalMusyrifView({
                   cursor: "pointer",
                 }}
               >
-                🔄 Sinkronisasi Batch Cloud (2 Detik)
+                Sinkronisasi Batch Cloud (2 Detik)
               </button>
             </div>
           )}
@@ -663,7 +662,7 @@ export default function PortalMusyrifView({
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
               <div>
                 <h3 style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
-                  🚨 Santri {assignedDorm} Sedang Sakit / Izin (EWS)
+                  Santri {assignedDorm} Sedang Sakit / Izin (EWS)
                 </h3>
                 <p style={{ fontSize: "11px", color: "#5B7A70" }}>
                   Nama {tenantDormTerm} dan Nomor Kamar terpisah untuk akurasi pencatatan
@@ -710,7 +709,7 @@ export default function PortalMusyrifView({
                     </div>
 
                     <div style={{ fontSize: "11.5px", color: "#047857", fontWeight: 700, marginTop: "3px" }}>
-                      🏢 {item.dormBuilding} · 🚪 {item.roomNumber}
+                      {item.dormBuilding} · Kamar {item.roomNumber}
                     </div>
 
                     <div style={{ fontSize: "12px", color: "#374151", marginTop: "3px" }}>
@@ -763,7 +762,7 @@ export default function PortalMusyrifView({
           >
             <div>
               <h3 style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
-                🎫 Otorisasi Gate Pass & Cetak Surat Jalan Resmi Fisik
+                Otorisasi Gate Pass & Cetak Surat Jalan Resmi Fisik
               </h3>
               <p style={{ fontSize: "11.5px", color: "#5B7A70", marginTop: "2px" }}>
                 Musyrif berhak mengesahkan izin keluar 24 jam dan mencetak slip fisik 1 lembar kecil untuk santri yang dijemput.
@@ -783,7 +782,7 @@ export default function PortalMusyrifView({
                 cursor: "pointer",
               }}
             >
-              ➕ Terbitkan Gate Pass Baru
+              Terbitkan Gate Pass Baru
             </button>
           </div>
 
@@ -813,7 +812,7 @@ export default function PortalMusyrifView({
                     </span>
                   </div>
                   <div style={{ fontSize: "11.5px", color: "#5B7A70", marginTop: "2px" }}>
-                    🏢 {pass.dormBuilding} ({pass.roomNumber}) · Keperluan: "{pass.reason}"
+                    {pass.dormBuilding} (Kamar {pass.roomNumber}) · Keperluan: "{pass.reason}"
                   </div>
                   <div style={{ fontSize: "11px", color: "#047857", fontWeight: 700, marginTop: "2px" }}>
                     Penjemput: {pass.authorizedPicker} (NIK: {pass.pickerNik}) · Berlaku: {pass.validTimeRange}
@@ -837,7 +836,6 @@ export default function PortalMusyrifView({
                       gap: "6px",
                     }}
                   >
-                    <span>🖨️</span>
                     <span>Cetak Slip Fisik (1 Lembar Kecil)</span>
                   </button>
                 </div>
@@ -867,7 +865,6 @@ export default function PortalMusyrifView({
           >
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span style={{ fontSize: "18px" }}>🌙</span>
                 <h3 style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
                   Ronda Malam Cek Fisik (22:00 WIB) & Kebersihan Kamar
                 </h3>
@@ -877,7 +874,7 @@ export default function PortalMusyrifView({
               </p>
             </div>
             <span style={{ background: "#FEF3C7", color: "#92400E", padding: "4px 10px", borderRadius: "8px", fontSize: "11px", fontWeight: 800 }}>
-              ⏰ Target Cek: Pukul 22:00 WIB
+              Target Cek: Pukul 22:00 WIB
             </span>
           </div>
 
@@ -897,11 +894,11 @@ export default function PortalMusyrifView({
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
                     <div style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
-                      🚪 {room.roomNumber}
+                      Kamar {room.roomNumber}
                     </div>
                     {isBest && (
                       <span style={{ background: "#D1FAE5", color: "#065F46", padding: "2px 8px", borderRadius: "6px", fontSize: "10px", fontWeight: 800 }}>
-                        🏆 Kandidat Kamar Teladan
+                        Kandidat Kamar Teladan
                       </span>
                     )}
                   </div>
@@ -913,7 +910,7 @@ export default function PortalMusyrifView({
                   {/* Kehadiran Fisik 22:00 */}
                   <div style={{ background: "#F4FBF7", padding: "8px 10px", borderRadius: "10px", border: "1px solid #D1FAE5", marginBottom: "10px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div style={{ fontSize: "11px", fontWeight: 700, color: "#065F46" }}>
-                      {room.isComplete ? "✅ Santri Lengkap di Kamar" : "⚠️ Ada Santri Belum Masuk / Sakit"}
+                      {room.isComplete ? "Santri Lengkap di Kamar" : "Ada Santri Belum Masuk / Sakit"}
                     </div>
                     <button
                       onClick={() => handleVerifyNightPresence(room.id)}
@@ -996,7 +993,6 @@ export default function PortalMusyrifView({
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "14px" }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "20px" }}>📖</span>
                   <h3 style={{ fontSize: "16px", fontWeight: 800, color: "#FFFFFF" }}>
                     Mutaba'ah Setoran Tahfidz (Ziyadah & Muraja'ah)
                   </h3>
@@ -1047,7 +1043,7 @@ export default function PortalMusyrifView({
                 <div style={{ background: "rgba(255,255,255,0.08)", borderRadius: "14px", padding: "14px 18px", border: "1px solid rgba(255,255,255,0.1)" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
                     <div style={{ fontSize: "12px", color: "#A7F3D0" }}>
-                      🎓 Target Kelulusan Wisuda Tahfidz Ananda <strong>{activeSt?.name}</strong>
+                      Target Kelulusan Wisuda Tahfidz Ananda <strong>{activeSt?.name}</strong>
                     </div>
                     <div style={{ fontSize: "13px", fontWeight: 900, color: "#FFE49A" }}>
                       {totalJuz} <span style={{ fontSize: "11px", fontWeight: 600 }}>/ {targetWisuda} Juz ({percent}%)</span>
@@ -1069,7 +1065,7 @@ export default function PortalMusyrifView({
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10.5px", color: "#8AA49B" }}>
                     <span>Syarat Minimal Wisuda Tahfidz: {targetWisuda} Juz Mutqin</span>
                     <span style={{ color: percent >= 100 ? "#10B981" : "#FFE49A", fontWeight: 700 }}>
-                      {percent >= 100 ? "🎉 Syarat Wisuda Terpenuhi!" : `Sisa ${parseFloat((targetWisuda - totalJuz).toFixed(2))} Juz Menuju Wisuda`}
+                      {percent >= 100 ? "Syarat Wisuda Terpenuhi!" : `Sisa ${parseFloat((targetWisuda - totalJuz).toFixed(2))} Juz Menuju Wisuda`}
                     </span>
                   </div>
                 </div>
@@ -1089,7 +1085,6 @@ export default function PortalMusyrifView({
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingBottom: "10px", borderBottom: "1px solid #E2EFE9" }}>
               <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", display: "flex", alignItems: "center", gap: "6px" }}>
-                <span>✍️</span>
                 <span>Form Input Setoran Hafalan Santri</span>
               </div>
               <span style={{ fontSize: "11px", color: "#5B7A70" }}>
@@ -1126,7 +1121,6 @@ export default function PortalMusyrifView({
                       gap: "6px",
                     }}
                   >
-                    <span>🟢</span>
                     <span>Ziyadah (Hafalan Baru)</span>
                   </button>
 
@@ -1152,7 +1146,6 @@ export default function PortalMusyrifView({
                       gap: "6px",
                     }}
                   >
-                    <span>🔄</span>
                     <span>Muraja'ah (Pengulangan)</span>
                   </button>
                 </div>
@@ -1340,7 +1333,6 @@ export default function PortalMusyrifView({
                     boxShadow: "0 4px 12px rgba(6, 95, 70, 0.3)",
                   }}
                 >
-                  <span>💾</span>
                   <span>Simpan Setoran Hafalan Santri</span>
                 </button>
               </div>
@@ -1354,12 +1346,12 @@ export default function PortalMusyrifView({
             const murajaahList = activeSt?.tahfidzProgress?.murajaah || [];
 
             return (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "12px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "12px" }}>
                 {/* Kolom Riwayat Ziyadah */}
                 <div style={{ background: "#FFFFFF", borderRadius: "16px", padding: "16px", border: "1px solid #D1FAE5" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                     <span style={{ fontSize: "13px", fontWeight: 800, color: "#065F46" }}>
-                      🟢 Riwayat Ziyadah ({activeSt?.name})
+                      Riwayat Ziyadah ({activeSt?.name})
                     </span>
                     <span style={{ fontSize: "10px", color: "#5B7A70" }}>{ziyadahList.length} Setoran</span>
                   </div>
@@ -1393,7 +1385,7 @@ export default function PortalMusyrifView({
                 <div style={{ background: "#FFFFFF", borderRadius: "16px", padding: "16px", border: "1px solid #FEF3C7" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                     <span style={{ fontSize: "13px", fontWeight: 800, color: "#92400E" }}>
-                      🔄 Riwayat Muraja'ah ({activeSt?.name})
+                      Riwayat Muraja'ah ({activeSt?.name})
                     </span>
                     <span style={{ fontSize: "10px", color: "#5B7A70" }}>{murajaahList.length} Pengulangan</span>
                   </div>
@@ -1464,7 +1456,7 @@ export default function PortalMusyrifView({
             {/* Action Bar Modal */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingBottom: "10px", borderBottom: "1px solid #E2EFE9" }}>
               <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-                📄 Draf Rapor Bulanan Siap Cetak (Disiplin, Adab & Ubudiyyah)
+                Draf Rapor Bulanan Siap Cetak (Disiplin, Adab & Ubudiyyah)
               </div>
               <div style={{ display: "flex", gap: "8px" }}>
                 <button
@@ -1494,7 +1486,6 @@ export default function PortalMusyrifView({
                     gap: "6px",
                   }}
                 >
-                  <span>🖨️</span>
                   <span>Cetak / Print PDF</span>
                 </button>
                 <button
@@ -1800,7 +1791,7 @@ export default function PortalMusyrifView({
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
               <div style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
-                🎫 Otorisasi Gate Pass (Langsung dari Musyrif)
+                Otorisasi Gate Pass (Langsung dari Musyrif)
               </div>
               <button
                 onClick={() => setIsGatePassModalOpen(false)}
@@ -1908,7 +1899,7 @@ export default function PortalMusyrifView({
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
               <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-                📝 Catat Sakit / Izin Tanpa QR (Seksi 13)
+                Catat Sakit / Izin Tanpa QR (Seksi 13)
               </div>
               <button
                 onClick={() => setIsManualModalOpen(false)}

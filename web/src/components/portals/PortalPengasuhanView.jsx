@@ -226,7 +226,7 @@ export default function PortalPengasuhanView({ onTriggerLoader, onAuditLogAdd })
       </div>
 
       {/* Grid: EWS Asrama Sakit/Izin & Otorisasi Gate Pass */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" }}>
         {/* KOLOM KIRI: EARLY WARNING SYSTEM (SANTRI SAKIT & IZIN ASRAMA DARI MUSYRIF) */}
         <div
           style={{
@@ -239,7 +239,7 @@ export default function PortalPengasuhanView({ onTriggerLoader, onAuditLogAdd })
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
             <div>
               <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-                🚨 EWS Santri Asrama Sakit & Izin
+                EWS Santri Asrama Sakit & Izin
               </div>
               <div style={{ fontSize: "11px", color: "#5B7A70" }}>
                 Laporan real-time musyrif kamar asrama
@@ -347,7 +347,7 @@ export default function PortalPengasuhanView({ onTriggerLoader, onAuditLogAdd })
         >
           <div>
             <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
-              🎫 Otorisasi Gate Pass Kepulangan Santri
+              Otorisasi Gate Pass Kepulangan Santri
             </div>
             <div style={{ fontSize: "11px", color: "#5B7A70" }}>
               Kepala Pengasuhan berwenang mengesahkan izin keluar santri
@@ -402,7 +402,7 @@ export default function PortalPengasuhanView({ onTriggerLoader, onAuditLogAdd })
                   cursor: "pointer",
                 }}
               >
-                ✅ Sahkan Izin Pulang
+                Sahkan Izin Pulang
               </button>
               <button
                 onClick={() => handleApproveGatePass(false)}
@@ -432,7 +432,7 @@ export default function PortalPengasuhanView({ onTriggerLoader, onAuditLogAdd })
             }}
           >
             <div style={{ fontSize: "12px", fontWeight: 800, color: "#92400E", marginBottom: "6px" }}>
-              ⚖️ Ambang SP Aktif Pengasuhan:
+              Ambang SP Aktif Pengasuhan:
             </div>
             <div style={{ fontSize: "11px", color: "#78350F", lineHeight: "1.5" }}>
               • SP 1: Ambang {INITIAL_SP_THRESHOLDS.sp1} Poin (Panggilan Wali & BK)<br />

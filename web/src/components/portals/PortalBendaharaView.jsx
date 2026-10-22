@@ -176,7 +176,7 @@ export default function PortalBendaharaView({
         details: `Tarif SPP baru: Rp ${sppFeeInput.toLocaleString("id-ID")} · Periode aktif: ${sppMonthInput}. Tampil otomatis di dashboard seluruh Wali Santri.`,
       });
 
-      alert(`✅ Pengaturan Syahriyyah berhasil diperbarui: Rp ${sppFeeInput.toLocaleString("id-ID")} untuk periode ${sppMonthInput}.`);
+      alert(`Pengaturan Syahriyyah berhasil diperbarui: Rp ${sppFeeInput.toLocaleString("id-ID")} untuk periode ${sppMonthInput}.`);
     });
   };
 
@@ -460,8 +460,8 @@ export default function PortalBendaharaView({
               <span style={{ fontSize: "11px", fontWeight: 700, color: "#5B7A70" }}>Status:</span>
               {[
                 { id: "ALL", label: `Semua (${totalStudents})` },
-                { id: "Lunas", label: `🟢 Lunas (${lunasCount})` },
-                { id: "Belum Lunas", label: `🔴 Belum Lunas (${belumLunasCount})` },
+                { id: "Lunas", label: `Lunas (${lunasCount})` },
+                { id: "Belum Lunas", label: `Belum Lunas (${belumLunasCount})` },
               ].map((f) => (
                 <button
                   key={f.id}

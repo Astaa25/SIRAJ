@@ -131,7 +131,6 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ fontSize: "20px" }}>📋</span>
             <h2 style={{ fontSize: "17px", fontWeight: 800, color: "#FFFFFF" }}>
               Biro Bimbingan Konseling (BK) & Pembinaan Adab
             </h2>
@@ -154,7 +153,7 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
               fontWeight: 800,
             }}
           >
-            📌 Kebijakan: {resetPolicyLabel}
+            Kebijakan: {resetPolicyLabel}
           </span>
           <div style={{ fontSize: "10px", color: "#A7F3D0", marginTop: "3px" }}>
             Dikonfigurasi di Admin Ponpes
@@ -176,10 +175,10 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
       >
         {[
           { id: "ALL", label: "Semua Santri" },
-          { id: "Aman", label: "🟢 Bebas SP" },
-          { id: "SP I", label: "🟡 Ambang SP I" },
-          { id: "SP II", label: "🟠 Ambang SP II" },
-          { id: "SP III", label: "🔴 Ambang SP III" },
+          { id: "Aman", label: "Bebas SP" },
+          { id: "SP I", label: "Ambang SP I" },
+          { id: "SP II", label: "Ambang SP II" },
+          { id: "SP III", label: "Ambang SP III" },
         ].map((cat) => (
           <button
             key={cat.id}
@@ -205,7 +204,7 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
       </div>
 
       {/* Daftar Kartu Santri untuk Dipilih */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "12px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "12px" }}>
         {filteredStudents.map((st) => {
           const isSelected = selectedStudent.id === st.id;
           const isSp = st.spStatus && st.spStatus !== "Aman";
@@ -450,7 +449,7 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
         </div>
 
         {/* Grid Form Input Konseling & Riwayat Konseling */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" }}>
           {/* Form Konseling */}
           <form
             onSubmit={handleSaveConfidentialCounseling}
@@ -595,7 +594,7 @@ export default function PortalBKView({ onTriggerLoader, onAuditLogAdd, currentTe
           Input Poin Adab Santri: {selectedStudent.name}
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "14px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px" }}>
           {/* Poin Kebaikan */}
           <div>
             <div style={{ fontSize: "11px", fontWeight: 700, color: "#059669", marginBottom: "6px" }}>

@@ -196,7 +196,6 @@ export default function ShowcaseHeader({
               }}
               title="Layar HP (Smartphone 425px)"
             >
-              <span>📱</span>
               <span>HP</span>
             </button>
 
@@ -222,7 +221,6 @@ export default function ShowcaseHeader({
               }}
               title="Layar Tablet (768px)"
             >
-              <span>📟</span>
               <span>Tablet</span>
             </button>
 
@@ -249,7 +247,6 @@ export default function ShowcaseHeader({
                 }}
                 title="Layar Laptop / PC Desktop (Khusus Super Admin & Admin Ponpes)"
               >
-                <span>💻</span>
                 <span>Laptop</span>
               </button>
             ) : (
@@ -267,7 +264,6 @@ export default function ShowcaseHeader({
                   userSelect: "none",
                 }}
               >
-                <span>🔒</span>
                 <span>Laptop</span>
               </div>
             )}
@@ -294,7 +290,6 @@ export default function ShowcaseHeader({
             }}
             title="Animasi loading Rub el Hizb 2 detik"
           >
-            <span>⏳</span>
             <span>2s Loader: {is2sLoaderEnabled ? "AKTIF" : "CEPAT"}</span>
           </button>
 
@@ -316,7 +311,7 @@ export default function ShowcaseHeader({
             }}
             title="Efek Suara & Haptik"
           >
-            {isMuted ? "🔇 Senyap" : "🔊 Suara"}
+            {isMuted ? "Senyap" : "Suara"}
           </button>
 
           {/* Replay Splash */}
@@ -336,7 +331,7 @@ export default function ShowcaseHeader({
               cursor: "pointer",
             }}
           >
-            🎬 Splash
+            Splash
           </button>
         </div>
       </div>
@@ -367,7 +362,7 @@ export default function ShowcaseHeader({
             gap: "5px",
           }}
         >
-          <span>🔑</span> Akses Peran:
+          Akses Peran:
         </span>
 
         {ROLES_LIST.map((role) => {
@@ -397,7 +392,6 @@ export default function ShowcaseHeader({
                 flexShrink: 0,
               }}
             >
-              <span>{role.icon}</span>
               <span>{role.label}</span>
               {isActive && (
                 <span

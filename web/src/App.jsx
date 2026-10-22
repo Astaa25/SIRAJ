@@ -338,7 +338,7 @@ export default function App() {
                 }}
               >
                 <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span>📱 Mode Layar HP (Smartphone · 425px):</span>
+                  <span>Mode Layar HP (Smartphone · 425px):</span>
                   <span style={{ fontWeight: 800, color: "#FFE49A" }}>
                     {activeRole.toUpperCase()}
                   </span>
@@ -375,7 +375,7 @@ export default function App() {
                 }}
               >
                 <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span>📟 Mode Layar Tablet (768px Responsive):</span>
+                  <span>Mode Layar Tablet (768px Responsive):</span>
                   <span style={{ fontWeight: 800, color: "#FFE49A" }}>
                     {activeRole.toUpperCase()}
                   </span>
@@ -406,7 +406,7 @@ export default function App() {
                 }}
               >
                 <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
-                  <span>💻 Mode Layar Laptop / Komputer Desktop (1420px):</span>
+                  <span>Mode Layar Laptop / Komputer Desktop (1420px):</span>
                   <span style={{ fontWeight: 800, color: "#FFE49A" }}>
                     {activeRole === "superadmin" ? "SUPER ADMIN PUSAT" : activeRole === "bendahara" ? "BENDAHARA PONPES" : "ADMIN PONPES"}
                   </span>

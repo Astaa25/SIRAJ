@@ -430,12 +430,12 @@ export default function AdminWebView({
           {/* Sidebar Nav Items */}
           <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1 }}>
             {[
-              { id: "dashboard", label: "Dashboard & KPI", icon: "📊" },
-              { id: "santri", label: "Master Santri & CSV", icon: "👥" },
-              { id: "ews", label: "EWS Asrama Sakit", icon: "🚨", badge: String(ewsAlerts.length) },
-              { id: "sp", label: "Setelan Ambang SP", icon: "⚖️" },
-              { id: "settings", label: "Pengaturan Ponpes", icon: "⚙️" },
-              { id: "audit", label: "Audit Log (Kekal)", icon: "📜" },
+              { id: "dashboard", label: "Dashboard & KPI" },
+              { id: "santri", label: "Master Santri & CSV" },
+              { id: "ews", label: "EWS Asrama Sakit", badge: String(ewsAlerts.length) },
+              { id: "sp", label: "Setelan Ambang SP" },
+              { id: "settings", label: "Pengaturan Ponpes" },
+              { id: "audit", label: "Audit Log (Kekal)" },
             ].map((item) => {
               const isActive = adminTab === item.id;
               return (
@@ -462,7 +462,6 @@ export default function AdminWebView({
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <span>{item.icon}</span>
                     <span>{item.label}</span>
                   </div>
                   {item.badge && (
@@ -496,7 +495,7 @@ export default function AdminWebView({
               marginTop: "14px",
             }}
           >
-            <div style={{ fontWeight: 700, color: "#FFE49A" }}>🔒 {pesantrenNameInput}</div>
+            <div style={{ fontWeight: 700, color: "#FFE49A" }}>{pesantrenNameInput}</div>
             <div style={{ fontSize: "10px", color: "#8AA49B", marginTop: "2px" }}>
               Audit Forensik Append-Only Aktif
             </div>
@@ -529,8 +528,12 @@ export default function AdminWebView({
               {adminTab === "settings" && "Pengaturan Pondok Pesantren, Istilah Asrama & Jadwal Sholat"}
               {adminTab === "audit" && "Append-Only Security Audit Log (Catatan Kekal Seluruh Sistem)"}
             </h2>
-            <div style={{ fontSize: "11.5px", color: "#5B7A70", marginTop: "2px" }}>
-              {pesantrenNameInput} · Status Server: <span style={{ color: "#059669", fontWeight: 700 }}>🟢 Terkoneksi Supabase Cloud</span>
+            <div style={{ fontSize: "11.5px", color: "#5B7A70", marginTop: "2px", display: "flex", alignItems: "center", gap: "6px" }}>
+              <span>{pesantrenNameInput} · Status Server:</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", color: "#059669", fontWeight: 700 }}>
+                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#059669" }} />
+                Terkoneksi Supabase Cloud
+              </span>
             </div>
           </div>
 
@@ -560,10 +563,10 @@ export default function AdminWebView({
           <div style={{ padding: "24px 28px" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "24px" }}>
               {[
-                { label: "Total Santri Aktif", val: "1,248", desc: "100% data terverifikasi", color: "#065F46", icon: "👥" },
-                { label: "Kehadiran Hari Ini", val: "97.4%", desc: "+1.2% dari pekan lalu", color: "#059669", icon: "📈" },
-                { label: "Sesi KBM & Salat", val: "14 Sesi", desc: "Kelas Pagi, Salat, Tahfidz, Malam", color: "#D97706", icon: "⏱️" },
-                { label: "Santri Asrama Sakit", val: `${ewsAlerts.length} Santri`, desc: "Pantauan Musyrif Komplek", color: "#B42318", icon: "🚨" },
+                { label: "Total Santri Aktif", val: "1,248", desc: "100% data terverifikasi", color: "#065F46" },
+                { label: "Kehadiran Hari Ini", val: "97.4%", desc: "+1.2% dari pekan lalu", color: "#059669" },
+                { label: "Sesi KBM & Salat", val: "14 Sesi", desc: "Kelas Pagi, Salat, Tahfidz, Malam", color: "#D97706" },
+                { label: "Santri Asrama Sakit", val: `${ewsAlerts.length} Santri`, desc: "Pantauan Musyrif Komplek", color: "#B42318" },
               ].map((kpi, idx) => (
                 <div
                   key={idx}
@@ -577,7 +580,6 @@ export default function AdminWebView({
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
                     <span style={{ fontSize: "12px", color: "#5B7A70", fontWeight: 600 }}>{kpi.label}</span>
-                    <span style={{ fontSize: "20px" }}>{kpi.icon}</span>
                   </div>
                   <div style={{ fontSize: "26px", fontWeight: 800, color: kpi.color }}>
                     {kpi.val}
@@ -650,7 +652,9 @@ export default function AdminWebView({
             >
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "16px" }}>💳</span>
+                  <span style={{ background: "#D1FAE5", color: "#065F46", padding: "2px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: 800 }}>
+                    SPP
+                  </span>
                   <span style={{ fontSize: "14px", fontWeight: 800, color: "#06271E" }}>
                     Pemantauan Tagihan Syahriyyah / SPP Santri (Oktober 2026)
                   </span>
@@ -668,8 +672,8 @@ export default function AdminWebView({
                 <span style={{ fontSize: "11px", fontWeight: 700, color: "#5B7A70", padding: "0 6px" }}>Filter:</span>
                 {[
                   { id: "ALL", label: `Semua (${studentsList.length})` },
-                  { id: "Lunas", label: `🟢 Lunas (${studentsList.filter(s => s.syahriyyahStatus === "Lunas").length})` },
-                  { id: "Belum Lunas", label: `🔴 Belum Lunas (${studentsList.filter(s => s.syahriyyahStatus !== "Lunas").length})` },
+                  { id: "Lunas", label: `Lunas (${studentsList.filter(s => s.syahriyyahStatus === "Lunas").length})` },
+                  { id: "Belum Lunas", label: `Belum Lunas (${studentsList.filter(s => s.syahriyyahStatus !== "Lunas").length})` },
                 ].map((f) => (
                   <button
                     key={f.id}
@@ -841,7 +845,7 @@ export default function AdminWebView({
                               fontWeight: 800,
                             }}
                           >
-                            {st.syahriyyahStatus === "Lunas" ? "🟢 Lunas" : "🔴 Belum Lunas"}
+                            {st.syahriyyahStatus === "Lunas" ? "Lunas" : "Belum Lunas"}
                           </span>
                           <button
                             onClick={() => handleToggleSyahriyyah(st.id)}
@@ -850,14 +854,14 @@ export default function AdminWebView({
                               background: "#F3F4F6",
                               border: "1px solid #D1D5DB",
                               borderRadius: "6px",
-                              padding: "2px 6px",
+                              padding: "2px 8px",
                               fontSize: "10px",
                               fontWeight: 700,
                               cursor: "pointer",
                               color: "#374151",
                             }}
                           >
-                            🔄 Ubah
+                            Ubah
                           </button>
                         </div>
                       </td>
@@ -885,7 +889,6 @@ export default function AdminWebView({
                             gap: "4px",
                           }}
                         >
-                          <span>📄</span>
                           <span>Cetak SP</span>
                         </button>
                       </td>
@@ -913,7 +916,7 @@ export default function AdminWebView({
                 fontSize: "13px",
               }}
             >
-              <strong>🚨 Monitoring Early Warning System (EWS) Asrama:</strong> Fokus memantau santri asrama yang dilaporkan sakit di kamar atau izin darurat oleh Musyrif komplek untuk penanganan cepat.
+              <strong>Monitoring Early Warning System (EWS) Asrama:</strong> Fokus memantau santri asrama yang dilaporkan sakit di kamar atau izin darurat oleh Musyrif komplek untuk penanganan cepat.
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -1015,7 +1018,6 @@ export default function AdminWebView({
                   boxShadow: "0 3px 12px rgba(6, 95, 70, 0.25)",
                 }}
               >
-                <span>📄</span>
                 <span>Cetak Dokumen Resmi SP (Pratinjau)</span>
               </button>
             </div>
@@ -1031,7 +1033,7 @@ export default function AdminWebView({
               }}
             >
               <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", marginBottom: "4px" }}>
-                ⚠️ Daftar Santri Mencapai Ambang Batas Pelanggaran Poin
+                Daftar Santri Mencapai Ambang Batas Pelanggaran Poin
               </div>
               <p style={{ fontSize: "11px", color: "#5B7A70", marginBottom: "14px" }}>
                 Santri yang telah mencapai batas SP I, SP II, atau SP III secara otomatis dapat dicetak surat resminya untuk arsip pengasuhan & diserahkan ke wali santri.
@@ -1110,7 +1112,6 @@ export default function AdminWebView({
                               boxShadow: "0 2px 8px rgba(6, 95, 70, 0.25)",
                             }}
                           >
-                            <span>🖨️</span>
                             <span>Cetak Dokumen Resmi {level}</span>
                           </button>
                         </div>
@@ -1132,7 +1133,7 @@ export default function AdminWebView({
               }}
             >
               <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", marginBottom: "12px" }}>
-                ⚙️ Setelan Parameter Ambang Batas Poin & Sanksi
+                Setelan Parameter Ambang Batas Poin & Sanksi
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", marginBottom: "18px" }}>
                 {/* SP 1 */}
@@ -1212,7 +1213,7 @@ export default function AdminWebView({
                   cursor: "pointer",
                 }}
               >
-                💾 Simpan Perubahan Ambang SP
+                Simpan Perubahan Ambang SP
               </button>
             </form>
           </div>
@@ -1225,7 +1226,7 @@ export default function AdminWebView({
           <div style={{ padding: "24px 28px" }}>
             <div style={{ marginBottom: "20px" }}>
               <h3 style={{ fontSize: "17px", fontWeight: 800, color: "#06271E" }}>
-                ⚙️ Pengaturan Pondok Pesantren & Jadwal Sholat Otomatis
+                Pengaturan Pondok Pesantren & Jadwal Sholat Otomatis
               </h3>
               <p style={{ fontSize: "12px", color: "#5B7A70" }}>
                 Sesuaikan nama pondok pesantren, istilah tempat tinggal (Asrama / Sakan / Komplek), lokasi penentuan waktu sholat, dan jam otomatis presensi.
@@ -1243,7 +1244,7 @@ export default function AdminWebView({
                 }}
               >
                 <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", marginBottom: "14px" }}>
-                  🏛️ Identitas & Istilah Pondok Pesantren
+                  Identitas & Istilah Pondok Pesantren
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
@@ -1363,10 +1364,10 @@ export default function AdminWebView({
                 }}
               >
                 <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", marginBottom: "6px" }}>
-                  🕌 Jadwal Waktu Sholat Otomatis & Toleransi Masbuk
+                  Jadwal Waktu Sholat Otomatis & Toleransi Masbuk
                 </div>
                 <div style={{ fontSize: "11.5px", color: "#059669", marginBottom: "16px", background: "#ECFDF5", padding: "10px 14px", borderRadius: "10px", border: "1px solid #A7F3D0" }}>
-                  ⚡ <strong>Auto-Switch Sesi:</strong> Saat aplikasi dibuka pada jam tertentu (misal Dzuhur 11:52–15:14, lalu buka 15:15), sistem otomatis masuk ke sesi Ashar tanpa memilih sesi lagi. Presensi lewat batas waktu otomatis dicatat Masbuk. Penentuan tepat waktu vs masbuk murni berdasarkan waktu salat lokal dari setelan admin tanpa perlu pemilihan shaf atau rakaat manual.
+                  <strong>Auto-Switch Sesi:</strong> Saat aplikasi dibuka pada jam tertentu (misal Dzuhur 11:52–15:14, lalu buka 15:15), sistem otomatis masuk ke sesi Ashar tanpa memilih sesi lagi. Presensi lewat batas waktu otomatis dicatat Masbuk. Penentuan tepat waktu vs masbuk murni berdasarkan waktu salat lokal dari setelan admin tanpa perlu pemilihan shaf atau rakaat manual.
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
@@ -1413,7 +1414,7 @@ export default function AdminWebView({
                 }}
               >
                 <div style={{ fontSize: "14px", fontWeight: 800, color: "#06271E", marginBottom: "6px" }}>
-                  ⚙️ Kebijakan Reset Poin Adab & Fitur Opsional Pesantren
+                  Kebijakan Reset Poin Adab & Fitur Opsional Pesantren
                 </div>
                 <div style={{ fontSize: "11.5px", color: "#5B7A70", marginBottom: "16px" }}>
                   Atur siklus evaluasi poin kedisiplinan serta aktifkan/nonaktifkan modul tambahan sesuai kebutuhan pondok.
@@ -1423,7 +1424,6 @@ export default function AdminWebView({
                   {/* 1. Kebijakan Reset Poin Adab */}
                   <div style={{ background: "#F4FBF7", borderRadius: "14px", padding: "16px", border: "1px solid #D1FAE5" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
-                      <span style={{ fontSize: "16px" }}>📊</span>
                       <span style={{ fontSize: "13px", fontWeight: 800, color: "#065F46" }}>
                         Kebijakan Reset Poin Adab Santri
                       </span>
@@ -1459,7 +1459,6 @@ export default function AdminWebView({
                   <div style={{ background: enableNightRonda ? "#F4FBF7" : "#F9FAFB", borderRadius: "14px", padding: "16px", border: enableNightRonda ? "1px solid #D1FAE5" : "1px solid #E5E7EB" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        <span style={{ fontSize: "16px" }}>🌙</span>
                         <span style={{ fontSize: "13px", fontWeight: 800, color: enableNightRonda ? "#065F46" : "#6B7280" }}>
                           Ronda Malam (22:00) & Kebersihan Kamar
                         </span>
@@ -1475,7 +1474,7 @@ export default function AdminWebView({
                       Fitur bagi Musyrif untuk absen cek fisik santri di kamar/kobong jam 22:00 WIB dan penilaian kebersihan kamar harian untuk pemilihan kamar teladan mingguan.
                     </div>
                     <div style={{ fontSize: "10.5px", fontWeight: 800, color: enableNightRonda ? "#059669" : "#9CA3AF", marginTop: "8px" }}>
-                      Status: {enableNightRonda ? "🟢 Fitur Aktif di Portal Musyrif" : "⚪ Fitur Dinonaktifkan"}
+                      Status: {enableNightRonda ? "Fitur Aktif di Portal Musyrif" : "Fitur Dinonaktifkan"}
                     </div>
                   </div>
 
@@ -1483,7 +1482,6 @@ export default function AdminWebView({
                   <div style={{ background: enableTahfidzModule ? "#F4FBF7" : "#F9FAFB", borderRadius: "14px", padding: "16px", border: enableTahfidzModule ? "1px solid #D1FAE5" : "1px solid #E5E7EB" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        <span style={{ fontSize: "16px" }}>📖</span>
                         <span style={{ fontSize: "13px", fontWeight: 800, color: enableTahfidzModule ? "#065F46" : "#6B7280" }}>
                           Modul Tahfidz (Ziyadah & Muraja'ah)
                         </span>
@@ -1499,7 +1497,7 @@ export default function AdminWebView({
                       Pencatatan setoran hafalan baru (Ziyadah) & pengulangan (Muraja'ah) per surat, ayat, juz dengan predikat Mutqin/Jayyid, serta target wisuda tahfidz pondok.
                     </div>
                     <div style={{ fontSize: "10.5px", fontWeight: 800, color: enableTahfidzModule ? "#059669" : "#9CA3AF", marginTop: "8px" }}>
-                      Status: {enableTahfidzModule ? "🟢 Fitur Aktif di Portal Santri & Wali" : "⚪ Fitur Dinonaktifkan"}
+                      Status: {enableTahfidzModule ? "Fitur Aktif di Portal Santri & Wali" : "Fitur Dinonaktifkan"}
                     </div>
                   </div>
                 </div>
@@ -1524,7 +1522,6 @@ export default function AdminWebView({
                     gap: "8px",
                   }}
                 >
-                  <span>💾</span>
                   <span>Simpan Pengaturan Pondok Pesantren</span>
                 </button>
               </div>
@@ -1547,7 +1544,7 @@ export default function AdminWebView({
                 </p>
               </div>
               <span style={{ background: "#D1FAE5", color: "#065F46", padding: "4px 10px", borderRadius: "8px", fontSize: "11px", fontWeight: 800 }}>
-                🔒 Zero-Trust Immutability
+                Zero-Trust Immutability
               </span>
             </div>
 
@@ -1628,7 +1625,7 @@ export default function AdminWebView({
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
               <div style={{ fontSize: "15px", fontWeight: 800, color: "#06271E" }}>
-                📂 Pengimpor Data Santri Cerdas (CSV)
+                Pengimpor Data Santri Cerdas (CSV)
               </div>
               <button onClick={() => setIsCsvModalOpen(false)} style={{ background: "#F3F4F6", border: "none", borderRadius: "50%", width: "26px", height: "26px", cursor: "pointer" }}>
                 ✕

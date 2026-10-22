@@ -148,7 +148,7 @@ export default function LoginView({ onLoginSuccess, currentTenant = INITIAL_TENA
               textAlign: "left",
             }}
           >
-            ⚠️ {errorMessage}
+            {errorMessage}
           </div>
         )}
 
@@ -228,7 +228,7 @@ export default function LoginView({ onLoginSuccess, currentTenant = INITIAL_TENA
         {/* Quick Demo Login Grid for Testing */}
         <div style={{ borderTop: "1px dashed #E2EFE9", paddingTop: "16px" }}>
           <div style={{ fontSize: "11.5px", fontWeight: 800, color: "#06271E", marginBottom: "10px", textAlign: "left" }}>
-            ⚡ Akses Cepat Akun Demo (Pilih Peran Langsung):
+            Akses Cepat Akun Demo (Pilih Peran Langsung):
           </div>
 
           <div
