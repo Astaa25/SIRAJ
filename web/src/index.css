@@ -386,11 +386,39 @@ button:active {
 }
 
 .rotate-slow {
-  animation: rotateClockwise 20s linear infinite;
+  animation: rotateClockwise 10s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.rotate-medium {
+  animation: rotateClockwise 5s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.rotate-fast {
+  animation: rotateClockwise 2.8s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
 }
 
 .rotate-reverse-slow {
-  animation: rotateCounter 25s linear infinite;
+  animation: rotateCounter 12s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.rotate-reverse-medium {
+  animation: rotateCounter 6s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.rotate-reverse-fast {
+  animation: rotateCounter 3.2s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
 }
 
 /* Breathing Gate Pass Ring */

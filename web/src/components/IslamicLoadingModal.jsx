@@ -134,7 +134,7 @@ export default function IslamicLoadingModal({ isOpen, message, onComplete }) {
           >
             {/* Outer Rotating 8-Point Star Ring */}
             <div
-              className="rotate-slow"
+              className="rotate-fast"
               style={{
                 position: "absolute",
                 inset: 0,
@@ -143,18 +143,19 @@ export default function IslamicLoadingModal({ isOpen, message, onComplete }) {
               }}
             >
               <svg viewBox="0 0 100 100" width="100" height="100" fill="none">
-                <circle cx="50" cy="50" r="46" stroke="rgba(232, 182, 90, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
+                <circle cx="50" cy="50" r="46" stroke="rgba(232, 182, 90, 0.55)" strokeWidth="1.8" strokeDasharray="4 4" />
                 <path
                   d="M50 4 L63 37 L96 50 L63 63 L50 96 L37 63 L4 50 L37 37 Z"
-                  stroke="rgba(232, 182, 90, 0.7)"
-                  strokeWidth="1.5"
+                  stroke="#FFE49A"
+                  strokeWidth="2.2"
+                  style={{ filter: "drop-shadow(0 0 8px rgba(232, 182, 90, 0.6))" }}
                 />
               </svg>
             </div>
 
             {/* Inner Counter-Rotating Ring */}
             <div
-              className="rotate-reverse-slow"
+              className="rotate-reverse-fast"
               style={{
                 position: "absolute",
                 inset: "10px",
@@ -165,10 +166,11 @@ export default function IslamicLoadingModal({ isOpen, message, onComplete }) {
               <svg viewBox="0 0 100 100" width="80" height="80" fill="none">
                 <path
                   d="M50 5 L85 50 L50 95 L15 50 Z"
-                  stroke="rgba(16, 185, 129, 0.55)"
-                  strokeWidth="1.5"
+                  stroke="#34D399"
+                  strokeWidth="2.2"
+                  style={{ filter: "drop-shadow(0 0 6px rgba(16, 185, 129, 0.6))" }}
                 />
-                <circle cx="50" cy="50" r="32" stroke="rgba(16, 185, 129, 0.25)" strokeWidth="1" />
+                <circle cx="50" cy="50" r="32" stroke="rgba(16, 185, 129, 0.5)" strokeWidth="1.2" strokeDasharray="3 3" />
               </svg>
             </div>
 

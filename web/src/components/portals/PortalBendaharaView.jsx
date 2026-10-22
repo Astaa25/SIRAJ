@@ -141,8 +141,15 @@ export default function PortalBendaharaView({
       receiver: bendaharaName,
       status: student.syahriyyahStatus || "Lunas",
     };
-    setSelectedReceipt(receiptData);
-    setIsReceiptModalOpen(true);
+    if (onTriggerLoader) {
+      onTriggerLoader(`Menerbitkan Kuitansi Resmi ${student.name}...`, () => {
+        setSelectedReceipt(receiptData);
+        setIsReceiptModalOpen(true);
+      });
+    } else {
+      setSelectedReceipt(receiptData);
+      setIsReceiptModalOpen(true);
+    }
   };
 
   // Handler Simpan Pengaturan SPP
@@ -211,24 +218,58 @@ export default function PortalBendaharaView({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          {/* Animated Rotating Islamic Star Mandala around Rp Badge */}
           <div
             style={{
-              width: "48px",
-              height: "48px",
-              borderRadius: "14px",
-              background: "rgba(232, 182, 90, 0.2)",
-              border: "1.5px solid #FFE49A",
+              position: "relative",
+              width: "52px",
+              height: "52px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "18px",
-              fontWeight: 900,
-              color: "#FFE49A",
-              boxShadow: "0 0 16px rgba(232, 182, 90, 0.3)",
+              flexShrink: 0,
             }}
           >
-            Rp
+            <div
+              className="rotate-medium"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "52px",
+                height: "52px",
+                pointerEvents: "none",
+              }}
+            >
+              <svg viewBox="0 0 100 100" width="52" height="52" fill="none">
+                <circle cx="50" cy="50" r="47" stroke="rgba(232, 182, 90, 0.45)" strokeWidth="2" strokeDasharray="5 5" />
+                <path
+                  d="M50 3 L63 37 L97 50 L63 63 L50 97 L37 63 L3 50 L37 37 Z"
+                  stroke="#FFE49A"
+                  strokeWidth="2.2"
+                />
+              </svg>
+            </div>
+            <div
+              style={{
+                width: "38px",
+                height: "38px",
+                borderRadius: "11px",
+                background: "rgba(232, 182, 90, 0.25)",
+                border: "1.5px solid #FFE49A",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "16px",
+                fontWeight: 900,
+                color: "#FFE49A",
+                boxShadow: "0 0 16px rgba(232, 182, 90, 0.35)",
+                zIndex: 2,
+              }}
+            >
+              Rp
+            </div>
           </div>
+
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <h1 style={{ fontSize: "18px", fontWeight: 800, color: "#FFFFFF" }}>
@@ -242,8 +283,16 @@ export default function PortalBendaharaView({
                   borderRadius: "6px",
                   fontSize: "11px",
                   fontWeight: 800,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
                 }}
               >
+                <span className="rotate-fast" style={{ display: "inline-block", width: "7px", height: "7px" }}>
+                  <svg viewBox="0 0 24 24" width="7" height="7" fill="#065F46">
+                    <circle cx="12" cy="12" r="8" fill="none" stroke="#065F46" strokeWidth="3" strokeDasharray="4 4" />
+                  </svg>
+                </span>
                 Pencatatan Manual Bebas Repot
               </span>
             </div>
@@ -260,7 +309,11 @@ export default function PortalBendaharaView({
           <button
             onClick={() => {
               playSoftClick();
-              setActiveTab("pengaturan");
+              if (onTriggerLoader && activeTab !== "pengaturan") {
+                onTriggerLoader("Membuka Pengaturan Tarif & Rekening...", () => setActiveTab("pengaturan"));
+              } else {
+                setActiveTab("pengaturan");
+              }
             }}
             style={{
               background: "rgba(255, 255, 255, 0.12)",
@@ -400,7 +453,14 @@ export default function PortalBendaharaView({
             key={tab.id}
             onClick={() => {
               playSoftClick();
-              setActiveTab(tab.id);
+              if (activeTab === tab.id) return;
+              if (onTriggerLoader) {
+                onTriggerLoader(`Membuka ${tab.label.split("(")[0].trim()}...`, () => {
+                  setActiveTab(tab.id);
+                });
+              } else {
+                setActiveTab(tab.id);
+              }
             }}
             style={{
               flex: "1 1 auto",

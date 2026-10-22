@@ -68,19 +68,80 @@ export default function ShowcaseHeader({
           borderBottom: "1px solid rgba(16, 185, 129, 0.15)",
         }}
       >
-        {/* Left: Branding & Current Pesantren */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <img
-            src="/logo_tile_1024.png"
-            alt="SIRAJ"
+        {/* Left: Branding & Current Pesantren with Permanent Rotating Sacred Mandala */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {/* Permanent Rotating Sacred Islamic Mandala Ring */}
+          <div
             style={{
-              width: "38px",
-              height: "38px",
-              borderRadius: "10px",
-              border: "1.5px solid #FFE49A",
-              boxShadow: "0 0 14px rgba(232, 182, 90, 0.35)",
+              position: "relative",
+              width: "48px",
+              height: "48px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
             }}
-          />
+            title="SIRAJ · Smart Islamic Routine & Attendance Journey (Animasi Putar Selalu Aktif)"
+          >
+            {/* Outer Continuous Rotating Rub el Hizb 8-Point Star Ring */}
+            <div
+              className="rotate-medium"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "48px",
+                height: "48px",
+                pointerEvents: "none",
+              }}
+            >
+              <svg viewBox="0 0 100 100" width="48" height="48" fill="none">
+                <circle cx="50" cy="50" r="47" stroke={theme === "dark" ? "rgba(232, 182, 90, 0.55)" : "rgba(217, 119, 6, 0.45)"} strokeWidth="2" strokeDasharray="5 5" />
+                <path
+                  d="M50 3 L63 37 L97 50 L63 63 L50 97 L37 63 L3 50 L37 37 Z"
+                  stroke={theme === "dark" ? "#FFE49A" : "#D97706"}
+                  strokeWidth="2.2"
+                />
+              </svg>
+            </div>
+
+            {/* Inner Counter-Rotating Emerald Geometric Star */}
+            <div
+              className="rotate-reverse-medium"
+              style={{
+                position: "absolute",
+                inset: "4px",
+                width: "40px",
+                height: "40px",
+                pointerEvents: "none",
+              }}
+            >
+              <svg viewBox="0 0 100 100" width="40" height="40" fill="none">
+                <path
+                  d="M50 5 L85 50 L50 95 L15 50 Z"
+                  stroke="#10B981"
+                  strokeWidth="2.4"
+                  opacity="0.85"
+                />
+                <circle cx="50" cy="50" r="32" stroke="rgba(16, 185, 129, 0.6)" strokeWidth="1.5" strokeDasharray="3 3" />
+              </svg>
+            </div>
+
+            {/* Core SIRAJ Logo Tile */}
+            <img
+              src="/logo_tile_1024.png"
+              alt="SIRAJ"
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "9px",
+                border: "1.5px solid #FFE49A",
+                boxShadow: "0 0 14px rgba(232, 182, 90, 0.4)",
+                zIndex: 2,
+                position: "relative",
+              }}
+            />
+          </div>
+
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span style={{ fontSize: "17px", fontWeight: 800, color: "var(--theme-header-text)", letterSpacing: "0.05em" }}>
@@ -95,8 +156,16 @@ export default function ShowcaseHeader({
                   padding: "1px 6px",
                   borderRadius: "10px",
                   fontWeight: 700,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
                 }}
               >
+                <span className="rotate-fast" style={{ display: "inline-block", width: "8px", height: "8px" }}>
+                  <svg viewBox="0 0 24 24" width="8" height="8" fill="#34D399">
+                    <circle cx="12" cy="12" r="8" fill="none" stroke="#34D399" strokeWidth="3" strokeDasharray="4 4" />
+                  </svg>
+                </span>
                 v1.0 Production
               </span>
             </div>
@@ -301,28 +370,56 @@ export default function ShowcaseHeader({
             <span>{theme === "dark" ? "Tema Gelap" : "Tema Terang"}</span>
           </button>
 
-          {/* 2-Second Loading Toggle */}
+          {/* 2-Second Loading Toggle with Rotating Star Indicator */}
           <button
             onClick={() => {
               playSoftClick();
               setIs2sLoaderEnabled(!is2sLoaderEnabled);
             }}
             style={{
-              background: is2sLoaderEnabled ? "#0D4332" : "rgba(255, 255, 255, 0.08)",
-              border: is2sLoaderEnabled ? "1px solid #FFE49A" : "1px solid rgba(255, 255, 255, 0.2)",
-              color: is2sLoaderEnabled ? "#FFE49A" : "#8AA49B",
+              background: is2sLoaderEnabled
+                ? (theme === "dark" ? "linear-gradient(135deg, #0D4332 0%, #06271E 100%)" : "linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)")
+                : (theme === "dark" ? "rgba(255, 255, 255, 0.08)" : "#F1F5F9"),
+              border: is2sLoaderEnabled
+                ? "1.5px solid #E8B65A"
+                : (theme === "dark" ? "1px solid rgba(255, 255, 255, 0.2)" : "1px solid #CBD5E1"),
+              color: is2sLoaderEnabled
+                ? (theme === "dark" ? "#FFE49A" : "#065F46")
+                : (theme === "dark" ? "#8AA49B" : "#64748B"),
               borderRadius: "10px",
-              padding: "6px 10px",
+              padding: "6px 12px",
               fontSize: "11px",
-              fontWeight: 700,
+              fontWeight: 800,
               display: "flex",
               alignItems: "center",
-              gap: "5px",
+              gap: "6px",
               cursor: "pointer",
+              boxShadow: is2sLoaderEnabled ? "0 0 12px rgba(232, 182, 90, 0.3)" : "none",
+              transition: "all 0.2s ease",
             }}
-            title="Animasi loading Rub el Hizb 2 detik"
+            title="Animasi Putar Rub el Hizb 2 Detik saat Transisi & Aksi Dashboard"
           >
-            <span>2s Loader: {is2sLoaderEnabled ? "AKTIF" : "CEPAT"}</span>
+            {/* Spinning Islamic 8-Point Star Icon */}
+            <span
+              className={is2sLoaderEnabled ? "rotate-fast" : ""}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "15px",
+                height: "15px",
+              }}
+            >
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none">
+                <path
+                  d="M12 2 L14.8 8.2 L21.6 9.2 L16.7 14 L17.8 20.8 L12 17.7 L6.2 20.8 L7.3 14 L2.4 9.2 L9.2 8.2 Z"
+                  stroke={is2sLoaderEnabled ? (theme === "dark" ? "#FFE49A" : "#D97706") : "#94A3B8"}
+                  strokeWidth="2"
+                  fill={is2sLoaderEnabled ? "rgba(232, 182, 90, 0.25)" : "none"}
+                />
+              </svg>
+            </span>
+            <span>Animasi Putar: {is2sLoaderEnabled ? "AKTIF (2s)" : "CEPAT"}</span>
           </button>
 
           {/* Audio Mute Toggle */}

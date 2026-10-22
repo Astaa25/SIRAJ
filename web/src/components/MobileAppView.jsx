@@ -360,6 +360,16 @@ export default function MobileAppView({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span className="rotate-medium" style={{ display: "inline-flex", width: "13px", height: "13px" }}>
+              <svg viewBox="0 0 100 100" width="13" height="13" fill="none">
+                <circle cx="50" cy="50" r="47" stroke="rgba(232, 182, 90, 0.5)" strokeWidth="4" strokeDasharray="10 10" />
+                <path
+                  d="M50 4 L63 37 L96 50 L63 63 L50 96 L37 63 L4 50 L37 37 Z"
+                  stroke="#FFE49A"
+                  strokeWidth="5"
+                />
+              </svg>
+            </span>
             <span style={{ fontSize: "11px", color: "#FFE49A", fontWeight: 600 }}>Peran Aktif:</span>
             <select
               value={activePersona}
