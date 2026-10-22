@@ -1,0 +1,944 @@
+# Dokumen Konsep Lengkap Aplikasi Pesantren — SIRAJ
+
+Versi 1.0 · Dokumen Konsep Produk dan Spesifikasi Awal · 22 Oktober 2026
+
+Kita akan merancang sebuah aplikasi untuk mengelola kehadiran, mencatat keseharian santri, memantau kegiatan pembelajaran dan ibadah, serta menghubungkan pihak pesantren dengan orang tua. Aplikasi ini bukan sekadar aplikasi absensi QR Code, melainkan sistem informasi pesantren yang modular, terintegrasi, dan bisa disesuaikan dengan aturan masing-masing pesantren.
+
+Nama sementara yang kita gunakan adalah SIRAJ — Smart Islamic Routine & Attendance Journey. Nama tersebut belum ditetapkan sebagai nama final.
+
+[PONDOK PESANTREN DARUSSALAM RAJAPOLAH TASIKMALAYA](https://images.openai.com/static-rsc-4/apKXola5a5wfFrU6ZbYL-I2clMGruK6vVv0s6vQjubRtLDpT2zo9n2PVepIRAebYOBotd9lvw0YaI6ulG1PDg6pWUNYX_NPMxb2QgEpS21lDVVh0uVPozjiXQQ4EBzKMgZ--Gf2w6zOAQ1VDnMkkH3rTv9PaKRVhm1cbtKzTX4o?purpose=inline)
+
+[psb.darussalam-tasik.or.id](https://psb.darussalam-tasik.or.id/?utm_source=chatgpt.com)
+
+# Visi Produk
+
+Membangun sistem digital yang membantu pesantren mencatat aktivitas santri secara akurat dan membantu orang tua memahami keseharian anaknya, meskipun berada jauh dari lingkungan pesantren.
+
+Absensi praktis
+
+Santri tidak perlu membawa HP.
+
+Jurnal harian
+
+Kegiatan dicatat per kategori dan sesi.
+
+Kolaborasi
+
+Admin, guru, musyrif, dan orang tua.
+
+Fleksibel
+
+Modul mengikuti kebutuhan pesantren.
+
+# 1. Masalah yang ingin diselesaikan
+
+Sistem ini dirancang untuk menyelesaikan beberapa masalah yang umum muncul dalam pengelolaan kegiatan pesantren.
+
+1. Absensi masih tersebar. Kehadiran kelas, salat berjamaah, tahfidz, dan kegiatan malam bisa dicatat menggunakan buku atau metode berbeda.
+2. Orang tua kesulitan memantau keseharian anak. Informasi biasanya hanya diketahui ketika menerima laporan dari pesantren atau ketika ada masalah.
+3. Jam kehadiran kurang terperinci. Status hadir saja tidak cukup untuk mengetahui kapan santri hadir dan apakah ia terlambat.
+4. Kondisi khusus sulit dicatat secara konsisten. Santri yang sakit, izin, atau pulang perlu dicatat tanpa harus diperlakukan seperti santri yang alpa.
+5. Setiap pesantren memiliki aturan berbeda. Ada pesantren yang menggunakan kelas pagi dan malam, ada yang memiliki program tahfidz intensif, dan ada yang menerapkan kegiatan tambahan.
+6. Pergantian petugas perlu dapat dipertanggungjawabkan. Jika musyrif utama tidak hadir dan digantikan petugas lain, sistem harus mencatat siapa yang bertugas dan siapa yang benar-benar melakukan absensi.
+7. Data kegiatan perlu tersimpan dalam satu tempat. Riwayat kehadiran dan perkembangan santri harus bisa ditelusuri berdasarkan tanggal, kategori, kelas, dan petugas.
+
+Solusinya adalah sistem terpusat yang mencatat setiap kegiatan sebagai data tersendiri, bukan sekadar menyimpan satu status kehadiran untuk satu hari penuh.
+
+# 2. Prinsip utama sistem
+
+Ada beberapa keputusan desain yang harus menjadi fondasi pengembangan.
+
+- Santri menggunakan kartu identitas ber-QR Code, bukan smartphone untuk melakukan absensi.
+- Petugas melakukan pemindaian melalui aplikasi atau perangkat yang mendapat izin.
+- Setiap kegiatan dan setiap sesi memiliki catatan kehadiran masing-masing.
+- Jam aktual pemindaian disimpan bersama status kehadiran.
+- Dashboard orang tua berfokus pada keseharian santri sepanjang hari, bukan sekadar aktivitas yang sedang berlangsung saat itu.
+- Tab kategori hanya muncul jika modul tersebut diaktifkan oleh pengelola pesantren.
+- Status sakit, izin, dan pulang bisa dicatat oleh petugas yang berwenang tanpa memindai QR Code.
+- Status belum dicatat tidak otomatis dianggap alpa.
+- Perubahan data penting harus memiliki riwayat audit.
+- Orang tua hanya boleh melihat data anak yang terhubung secara sah ke akunnya.
+
+Dengan prinsip ini, SIRAJ akan memiliki struktur yang konsisten meskipun digunakan oleh pesantren dengan kebijakan dan jadwal berbeda.
+
+# 3. Jenis pengguna dan hak akses
+
+Sistem memiliki empat peran utama.
+
+[SDIT - SIT Al Kamil](https://images.openai.com/static-rsc-4/cpI4Yveez45litdaUZfSyVvLt_4Cw39HTfnsXYvOtC2KPRRpO-VI7JekTxbg7pmXNOYgxLzD0cQxnPDvVxOwmC_w8ST27Jek_7LhKU9fL0GBYv__tCyH0lU5M7hb09DwY4vgwIRtY_zzODrKH8YES09EpasqUxlySW7zuivijvY?purpose=inline)
+
+## 3.1. Admin pesantren
+
+Bertanggung jawab atas pengelolaan sistem secara keseluruhan.
+
+- Mengelola data santri, wali, guru, musyrif, kelas, kamar, dan komplek.
+- Mengaktifkan atau menonaktifkan modul kegiatan.
+- Menentukan jadwal, mata pelajaran, waktu toleransi, dan aturan kehadiran.
+- Mengatur akun serta hak akses petugas.
+- Meninjau catatan sakit, izin, dan pulang sesuai kewenangan.
+- Melihat laporan keseluruhan dan mengekspor rekap.
+- Melihat log aktivitas untuk audit.
+
+[Tak Lagi Sekadar Honorer? Guru Madrasah Bisa Diangkat PPPK, Segini Gaji dan Tunjangannya - Pojok Satu](https://images.openai.com/static-rsc-4/Sa9kJOXePQlMHBdJQJxDmxggBgtKvwmmvYBXCacFvc3mJoTn5vsj9fmD_AlsRu5zxA4pn5sCp5UraAyG5xh9C_ShDQLUFsdNOvtBTN0gNHAHqrKNQBLz-b5C2hT_K7PW96T2npBkm9fW4y_WCUTB3xIIO8Ll1uM7y5XmXwdICFE?purpose=inline)
+
+## 3.2. Guru
+
+Bertanggung jawab atas kegiatan pembelajaran yang ditugaskan kepadanya.
+
+- Melihat jadwal dan kelas yang menjadi tanggung jawabnya.
+- Membuka sesi pelajaran.
+- Memindai QR Code santri untuk absensi.
+- Mencatat kehadiran, keterlambatan, izin, atau sakit sesuai kewenangan.
+- Memperbaiki catatan yang keliru melalui prosedur koreksi.
+- Mengisi data setoran dan murajaah jika memiliki izin mengelola tahfidz.
+- Melihat rekap kegiatan yang diajarnya.
+
+[SRMP 14 Kota Batu Tambah Dua Personel untuk Penuhi Kekurangan Wali Asuh](https://images.openai.com/static-rsc-4/CzsrRmAAuzG_HK0Tje-0J6X9sJXhrLfuA1n7ntrO_lku1P1HFFu-ncmkWqo9RABP_A5rEx2mhOjpkUANknUVxbRAGtaMWyF3-BVyCosbIa0I0p2OUwO1NkBtvffqdKbxAw0uAEDXenbuJXH2sozJIgXL5GJfoy5N63atl2Gqu6U?purpose=inline)
+
+## 3.3. Musyrif atau petugas asrama
+
+Bertanggung jawab atas kegiatan santri dalam komplek atau kamar yang ditugaskan.
+
+- Memindai QR Code santri untuk kehadiran salat berjamaah.
+- Mencatat kondisi sakit, izin, atau pulang.
+- Mengelola absensi kegiatan asrama yang menjadi tanggung jawabnya.
+- Melihat daftar santri di wilayah tugasnya.
+- Melakukan serah terima tugas atau menerima delegasi dari petugas lain.
+- Menambahkan keterangan yang diperlukan sesuai kewenangan.
+
+[Mengapa Orang Tua Santri Butuh Aplikasi Monitoring: Transparansi yang Membangun Kepercayaan | Cazh Cards](https://images.openai.com/static-rsc-4/wXQw6gbpMU7AENNwBzpegvwFsYGzH8IRTdGfI95zx20mgDEwMl52wQl-SGlqVjTDxYIZe4lDFmYVHOp0iZJB9DKlF6yxA1eNXjBVxkeyn2hbkEy-O14WGwFlOcExSJoV7Qpov1giKOTzBh3ljYdfRfZke5PLD-77gGd9XH21EJ0?purpose=inline)
+
+## 3.4. Orang tua atau wali santri
+
+Berfungsi sebagai pengguna pemantauan, bukan petugas absensi.
+
+- Melihat dashboard keseharian anak.
+- Melihat detail kehadiran berdasarkan kategori dan tanggal.
+- Mengetahui jam kehadiran dan keterlambatan.
+- Melihat status sakit, izin, atau pulang yang telah dicatat.
+- Melihat perkembangan tahfidz jika modul tersedia.
+- Melihat riwayat kegiatan sebelumnya.
+- Menerima pemberitahuan tentang kondisi atau kejadian penting.
+- Mengakses kartu QR anak sendiri jika fitur tersebut diizinkan pesantren.
+
+Prinsip keamanan: seorang guru tidak otomatis boleh mengelola semua santri. Guru hanya mengakses kelas dan sesi yang ditugaskan. Musyrif dibatasi pada wilayah tanggung jawabnya. Orang tua hanya melihat anak yang sudah terhubung ke akunnya.
+
+# 4. Struktur aplikasi dan navigasi
+
+Kita membedakan aplikasi menjadi dua sisi utama.
+
+Aplikasi mobile
+
+Untuk guru, musyrif, dan orang tua. Petugas melakukan absensi; orang tua memantau kegiatan.
+
+Dashboard web admin
+
+Untuk pengelolaan data utama, konfigurasi modul, jadwal, pengguna, laporan, dan audit.
+
+Satu backend dan basis data digunakan bersama sehingga data yang dimasukkan petugas dapat ditampilkan pada akun orang tua yang berhak melihatnya.
+
+# 5. Dashboard orang tua: Keseharian Santri
+
+Ini merupakan bagian paling penting dari pengalaman pengguna. Halaman awal tidak menanyakan “anak sedang melakukan apa sekarang?”, melainkan langsung menyajikan rekap dan detail aktivitas pada tanggal yang dipilih.
+
+## 5.1. Susunan dashboard
+
+Urutan yang direkomendasikan:
+
+1. Identitas santri dan pilihan anak jika satu akun memiliki beberapa anak.
+2. Pemilih tanggal, dengan hari ini sebagai pilihan awal.
+3. Kartu ringkasan kehadiran.
+4. Tab kategori kegiatan yang aktif.
+5. Daftar kegiatan dalam kategori terpilih.
+6. Detail waktu, status, petugas, dan keterangan.
+7. Informasi kapan data terakhir diperbarui.
+
+Contoh struktur tampilan:
+
+## Ahmad Fauzan
+
+Komplek A · Kamar 03 · Kelas 7
+
+Kamis, 22 Oktober 2026
+
+Hadir
+
+# 8
+
+Terlambat
+
+# 1
+
+Izin / Sakit
+
+# 1
+
+Belum dicatat
+
+# 2
+
+Kelas Pagi
+
+Salat
+
+Tahfidz
+
+Kelas Malam
+
+Bahasa Indonesia
+
+07.55 · Ustaz Ahmad
+
+Hadir
+
+Matematika
+
+07.50 · Ustaz Budi
+
+Terlambat 5 menit
+
+Contoh desain dan data ilustratif. Jumlah pada ringkasan harus dihitung dari sesi yang benar-benar dijadwalkan dan statusnya tercatat.
+
+## 5.2. Setiap mata pelajaran memiliki catatan sendiri
+
+Misalnya, kelas pagi terdiri dari:
+
+- Bahasa Indonesia — hadir pukul 07.55.
+- Matematika — terlambat, tercatat pukul 07.50.
+- Bahasa Inggris — sakit dengan keterangan petugas.
+- Fikih — belum dicatat.
+
+Keempat catatan itu tidak digabung menjadi satu status “Kelas Pagi: Hadir”. Status harus disimpan per mata pelajaran atau sesi. Jika santri hadir di Bahasa Indonesia, sistem tidak boleh mengasumsikan bahwa ia hadir di Matematika.
+
+Jam yang ditampilkan adalah waktu aktual yang direkam sistem. Apakah pukul 07.50 tergolong terlambat bergantung pada jadwal resmi sesi Matematika, bukan semata-mata angka jam tersebut.
+
+## 5.3. Tab bersifat dinamis
+
+Tab kategori tidak boleh ditulis permanen di dalam aplikasi. Tab dibuat berdasarkan konfigurasi pesantren.
+
+- Jika Kelas Pagi aktif, tab Kelas Pagi muncul.
+- Jika Salat aktif, tab Salat muncul.
+- Jika Tahfidz nonaktif, tab Tahfidz tidak ditampilkan.
+- Jika Kelas Malam aktif, tab Kelas Malam muncul.
+- Jika pesantren menambahkan kegiatan baru, kategori tersebut dapat ditampilkan sesuai konfigurasi.
+
+Menonaktifkan modul tidak boleh menghapus riwayat lama. Data historis tetap tersimpan dan hanya dapat diakses sesuai kebijakan serta hak akses.
+
+## 5.4. Ringkasan dan riwayat
+
+Ringkasan dashboard dihitung berdasarkan sesi yang berlaku pada tanggal terpilih. Kategori yang memiliki banyak mata pelajaran tidak boleh hanya dihitung sebagai satu sesi jika laporan membutuhkan jumlah kehadiran per pelajaran.
+
+Orang tua dapat berpindah tanggal, membuka kategori tertentu, dan melihat detail setiap catatan. Data hari sebelumnya tidak boleh berubah hanya karena jadwal atau aturan pesantren diubah hari ini. Oleh karena itu, sistem perlu menyimpan konteks jadwal dan status yang berlaku pada waktu kejadian.
+
+# 6. Sistem QR Code dan pencatatan kehadiran
+
+QR Code menjadi identitas untuk menemukan data santri, bukan bukti otomatis bahwa santri benar-benar hadir. Karena santri tidak membawa HP, kartu santri menjadi media identifikasi utama.
+
+## 6.1. Pembuatan kartu QR
+
+Ketika data santri didaftarkan, sistem menyiapkan identitas dan QR Code yang terhubung ke catatan santri tersebut.
+
+Data yang perlu dicatat:
+
+- Nama lengkap dan nomor induk santri.
+- Foto santri jika kebijakan pesantren menggunakannya.
+- Komplek, kamar, kelas, atau kelompok.
+- Status aktif, nonaktif, atau sudah keluar.
+- Token QR unik.
+- Riwayat penerbitan dan penggantian kartu.
+
+QR sebaiknya berisi token acak atau referensi yang tidak mengungkapkan informasi pribadi secara langsung. Nama, nomor telepon, dan data sensitif tidak boleh ditanam langsung ke QR dalam bentuk teks biasa.
+
+Jika kartu hilang, admin dapat mencabut QR lama dan menerbitkan yang baru. QR lama tidak boleh tetap berlaku tanpa batas setelah dicabut.
+
+## 6.2. Alur absensi petugas
+
+1
+
+Petugas login
+
+Akun guru atau musyrif terverifikasi.
+
+2
+
+Pilih kegiatan dan sesi
+
+Misalnya Matematika, Subuh, atau setoran Tahfidz.
+
+3
+
+Mulai pemindaian
+
+Aplikasi membuka kamera untuk membaca QR.
+
+4
+
+Validasi santri
+
+Sistem memeriksa identitas, sesi, izin, dan duplikasi.
+
+5
+
+Simpan kehadiran
+
+Waktu, status, petugas, dan kegiatan direkam.
+
+6
+
+Perbarui dashboard
+
+Data muncul pada akun orang tua yang berhak.
+
+Aplikasi harus mencegah pemindaian berulang menghasilkan beberapa catatan hadir untuk santri yang sama pada sesi yang sama. Jika pemindaian ulang memang diperlukan, petugas harus mendapat pesan yang jelas dan menggunakan prosedur koreksi atau penggantian catatan.
+
+## 6.3. Waktu dan validitas pencatatan
+
+Setiap catatan minimal menyimpan:
+
+- Santri yang dicatat.
+- Kegiatan dan sesi.
+- Waktu aktual kejadian atau pemindaian.
+- Waktu data diterima server.
+- Petugas yang melakukan pencatatan.
+- Perangkat atau sumber pencatatan jika diperlukan untuk audit.
+- Status kehadiran.
+- Catatan tambahan.
+- Riwayat koreksi.
+
+Ketika perangkat terhubung ke internet, waktu dari server menjadi acuan utama. Jika absensi dilakukan saat offline, sistem menyimpan waktu perangkat dan waktu sinkronisasi secara terpisah, serta menandai catatan untuk validasi sesuai kebijakan pesantren. Waktu perangkat yang salah tidak boleh diam-diam dianggap sebagai waktu server yang terverifikasi.
+
+## 6.4. Perlindungan dari titip absen
+
+Karena kartu bisa dipinjamkan, QR saja tidak cukup. Petugas tetap perlu memastikan orang yang membawa kartu sesuai dengan identitas santri, misalnya melalui foto pada layar petugas atau pemeriksaan visual. Sistem juga dapat memberi peringatan apabila kartu digunakan berulang kali dalam pola yang tidak wajar.
+
+# 7. Standar status kehadiran
+
+Kita perlu membedakan status kehadiran, kondisi santri, dan status proses pencatatan.
+
+| Status        | Makna                                                                                 | Perlakuan sistem                                                                            |
+| ------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Hadir         | Santri tercatat mengikuti kegiatan sesuai ketentuan.                                  | Simpan waktu dan petugas.                                                                   |
+| Terlambat     | Santri hadir setelah batas waktu yang berlaku.                                        | Simpan waktu hadir dan selisih keterlambatan.                                               |
+| Izin          | Ketidakhadiran disetujui sesuai aturan.                                               | Simpan alasan, periode, dan pihak yang menyetujui.                                          |
+| Sakit         | Santri sedang sakit.                                                                  | Simpan periode dan keterangan yang diizinkan.                                               |
+| Alpa          | Santri tidak hadir tanpa keterangan yang diterima setelah verifikasi.                 | Ditetapkan sesuai aturan setelah sesi berakhir.                                             |
+| Belum dicatat | Status kehadiran belum dikonfirmasi.                                                  | Tidak boleh otomatis dianggap alpa.                                                         |
+| Pulang        | Santri tercatat meninggalkan pesantren dengan izin.                                   | Simpan persetujuan dan waktu keluar/masuk jika relevan.                                     |
+| Masbuk        | Santri terlambat mengikuti salat berjamaah dan kondisi tersebut dikonfirmasi petugas. | Catat terpisah dari perhitungan keterlambatan biasa jika kebijakan pesantren membedakannya. |
+
+Status khusus seperti sakit atau pulang bisa memengaruhi banyak sesi dalam satu hari. Namun, sistem sebaiknya tidak menyalin status tersebut menjadi puluhan catatan kehadiran tanpa konteks. Simpan satu catatan kondisi dengan periode berlaku, kemudian tampilkan dampaknya pada sesi yang relevan.
+
+## 7.1. Koreksi data
+
+Petugas yang berwenang perlu dapat memperbaiki kesalahan, misalnya salah memilih sesi atau salah mencatat status. Tetapi catatan lama tidak boleh dihapus begitu saja tanpa jejak.
+
+Audit koreksi menyimpan nilai sebelum dan sesudah, alasan perubahan, pengguna yang mengubah, serta waktu perubahan. Untuk perubahan yang berdampak pada laporan resmi, pesantren dapat menerapkan persetujuan admin.
+
+# 8. Fitur Kelas Pagi
+
+Kelas Pagi adalah modul pencatatan kehadiran untuk kegiatan pembelajaran pada sesi pagi. Modul ini mendukung lebih dari satu mata pelajaran dalam satu hari.
+
+## 8.1. Pengaturan oleh admin
+
+Admin dapat mengelola:
+
+- Nama kelas dan kelompok belajar.
+- Daftar mata pelajaran.
+- Guru pengampu.
+- Hari dan jam pelajaran.
+- Ruang atau lokasi pembelajaran jika diperlukan.
+- Batas waktu hadir dan toleransi keterlambatan.
+- Jadwal khusus, libur, atau perubahan jadwal.
+- Guru pengganti untuk sesi tertentu.
+
+Jadwal harus mengacu pada sesi yang sebenarnya. Jika jadwal berubah pada hari tertentu, perubahan tersebut perlu dicatat sebagai pengecualian, bukan mengganti seluruh riwayat jadwal.
+
+## 8.2. Pengalaman guru
+
+Guru membuka daftar sesi sesuai jadwalnya, memilih mata pelajaran, kemudian melakukan pemindaian QR. Guru juga dapat melihat daftar santri dan status sementara untuk memeriksa siapa yang belum dicatat.
+
+Pada akhir sesi, guru memeriksa catatan yang belum lengkap. Sistem dapat membantu menandai santri yang belum memiliki status, tetapi tidak langsung menyimpulkan bahwa mereka alpa tanpa proses verifikasi.
+
+## 8.3. Informasi untuk orang tua
+
+Di tab Kelas Pagi, setiap mata pelajaran tampil sebagai item tersendiri, dengan nama pelajaran, jam kehadiran, status, dan nama guru jika sesuai kebijakan privasi.
+
+Orang tua dapat melihat rincian keterlambatan untuk mata pelajaran tertentu, bukan hanya jumlah terlambat sepanjang hari.
+
+# 9. Fitur Salat Lima Waktu Berjamaah
+
+Modul ini mencatat kegiatan Subuh, Zuhur, Asar, Magrib, dan Isya secara terpisah. Pengaturan waktunya harus sesuai lokasi dan kebijakan pesantren.
+
+## 9.1. Konfigurasi waktu salat
+
+Saat pesantren pertama kali disiapkan, admin memasukkan lokasi pesantren, idealnya dengan memilih lokasi pada peta atau memasukkan koordinat. Lokasi ini digunakan sebagai referensi waktu salat, bukan lokasi HP orang tua.
+
+Admin kemudian mengatur:
+
+- Zona waktu pesantren.
+- Metode atau sumber perhitungan jadwal salat.
+- Penyesuaian lokal jika diperlukan.
+- Jadwal adzan.
+- Jadwal iqamah.
+- Waktu toleransi atau batas keterlambatan.
+- Jadwal khusus selama Ramadan atau perubahan kebijakan.
+- Petugas utama dan petugas pengganti.
+
+Contoh konfigurasi hipotetis:
+
+| Parameter                        | Contoh   |
+| -------------------------------- | -------- |
+| Waktu adzan Zuhur                | 11.52    |
+| Waktu iqamah                     | 11.59    |
+| Toleransi setelah iqamah         | 10 menit |
+| Batas waktu sesuai aturan contoh | 12.09    |
+
+Angka tersebut hanya contoh pengaturan. Batas keterlambatan sebenarnya harus ditetapkan oleh pesantren.
+
+## 9.2. Pembedaan terlambat dan masbuk
+
+Sistem tidak boleh menyimpulkan bahwa santri masbuk hanya berdasarkan waktu pemindaian QR.
+
+- Terlambat: ditentukan berdasarkan aturan waktu yang ditetapkan pesantren.
+- Masbuk: kondisi santri terlambat bergabung dalam salat berjamaah, yang harus dikonfirmasi petugas sesuai aturan pesantren.
+- Belum dicatat: petugas belum menyelesaikan pencatatan.
+- Izin atau sakit: kondisi khusus yang dicatat berdasarkan keterangan yang berlaku.
+
+Pencatatan QR pada pukul 12.10, misalnya, tidak otomatis membuktikan apakah santri datang ketika salat sudah berlangsung, mengikuti salat di tempat lain, atau baru dicatat setelahnya. Sistem harus mempertahankan fakta yang diketahui dan meminta konfirmasi untuk hal yang belum diketahui.
+
+## 9.3. Pergantian musyrif
+
+Musyrif utama dapat ditetapkan per komplek atau kelompok santri. Jika tidak hadir, admin atau mekanisme delegasi yang disetujui dapat menetapkan pengganti.
+
+Sistem menyimpan petugas yang semestinya bertanggung jawab, petugas yang benar-benar melakukan pemindaian, siapa yang memberikan delegasi, serta waktu berlakunya delegasi. Dengan demikian, pergantian tugas tidak menghilangkan akuntabilitas.
+
+## 9.4. Tampilan untuk orang tua
+
+Tab Salat menampilkan lima waktu salat secara terpisah. Setiap item menunjukkan waktu pencatatan, status, dan keterangan yang diizinkan.
+
+Rekap dapat menampilkan jumlah hadir, terlambat, izin/sakit, dan belum dicatat pada tanggal tersebut. Kategori ini harus tetap mengikuti aturan pesantren dan tidak mencampurkan kondisi masbuk dengan terlambat biasa tanpa definisi yang jelas.
+
+# 10. Fitur Kelas Tahfidz
+
+Tahfidz bukan hanya absensi kelas, tetapi juga pencatatan perkembangan setoran hafalan dan murajaah.
+
+## 10.1. Data setoran
+
+Setiap sesi dapat menyimpan:
+
+- Nama santri.
+- Nama guru atau ustaz pembimbing.
+- Tanggal dan waktu setoran.
+- Jenis kegiatan: hafalan baru, murajaah, atau kategori tambahan.
+- Nama surah.
+- Ayat awal dan ayat akhir.
+- Penilaian kualitas bacaan atau hafalan.
+- Catatan koreksi guru.
+- Status setoran: diterima, perlu diulang, atau status lain yang ditentukan pesantren.
+
+## 10.2. Pemilihan surah dan ayat
+
+Guru memilih surah dari daftar Al-Qur'an yang terstruktur, kemudian memilih rentang ayat. Contohnya:
+
+- Surah Al-Baqarah.
+- Ayat awal 79.
+- Ayat akhir 102.
+- Jenis: hafalan baru.
+- Penilaian: baik.
+- Catatan: beberapa ayat perlu diulang.
+
+Rentang ayat harus divalidasi agar ayat awal tidak melebihi ayat akhir dan nomor ayat berada dalam batas surah. Nama surah, penomoran ayat, dan teks Al-Qur'an perlu menggunakan sumber data terstruktur yang tepercaya, lalu diverifikasi sebelum digunakan.
+
+## 10.3. Rekap perkembangan
+
+Orang tua dapat melihat riwayat setoran berdasarkan tanggal dan surah. Sistem juga dapat menyajikan ringkasan kemajuan hafalan, tetapi tidak boleh menganggap setiap setoran sebagai hafalan yang sudah dikuasai secara permanen. Riwayat murajaah, penilaian guru, dan setoran yang perlu diulang harus tetap dipertahankan.
+
+## 10.4. Jika modul Tahfidz dimatikan
+
+Tab Tahfidz tidak muncul dalam navigasi orang tua dan alur pencatatan baru dinonaktifkan. Data lama tetap disimpan agar riwayat santri tidak hilang apabila modul diaktifkan kembali.
+
+# 11. Fitur Kelas Malam
+
+Kelas Malam memakai prinsip dasar yang sama dengan Kelas Pagi, tetapi memiliki jadwal, mata pelajaran, guru, dan aturan tersendiri.
+
+Contoh kegiatannya dapat berupa pembelajaran malam, kajian kitab, penguatan pelajaran sekolah, atau aktivitas pendidikan yang ditentukan pesantren.
+
+Admin dapat menyesuaikan isi modul tanpa perlu mengubah struktur aplikasi. Jika ada beberapa sesi dalam satu malam, setiap sesi tetap memiliki catatan kehadiran sendiri. Dengan begitu, hadir pada satu sesi tidak otomatis berarti hadir pada seluruh kegiatan malam.
+
+# 12. Kegiatan tambahan yang dapat dibuat admin
+
+Empat modul inti tidak harus menjadi batas sistem. Admin perlu dapat membuat kegiatan khusus, misalnya:
+
+- Muhadharah.
+- Kajian kitab.
+- Apel.
+- Piket kebersihan.
+- Kegiatan olahraga.
+- Pertemuan atau pembinaan.
+- Kegiatan lain yang dibutuhkan pesantren.
+
+Setiap kegiatan kustom mempunyai nama, kategori, jadwal, lokasi jika perlu, kelompok peserta, petugas, metode pencatatan, aturan keterlambatan, serta status yang diizinkan.
+
+Kegiatan tambahan menggunakan mekanisme absensi dan audit yang sama. Sistem tidak perlu membuat kode program baru untuk setiap jenis kegiatan biasa, selama format dan aturan kegiatan masih didukung oleh konfigurasi yang tersedia.
+
+Kegiatan dengan alur khusus yang lebih kompleks tetap dapat memerlukan pengembangan tambahan. Karena itu, fitur kustom perlu dirancang fleksibel, tetapi tidak menjanjikan bahwa semua jenis aktivitas bisa dibuat tanpa batas.
+
+# 13. Pencatatan sakit, izin, dan pulang tanpa QR Code
+
+Ini fitur penting karena tidak semua kondisi santri dapat dicatat melalui pemindaian kartu.
+
+Musyrif atau petugas yang memiliki izin dapat membuka profil santri dan membuat catatan kondisi tanpa memindai QR Code.
+
+## 13.1. Formulir kondisi santri
+
+Data yang disimpan meliputi:
+
+- Nama santri.
+- Jenis kondisi: sakit, izin, atau pulang.
+- Tanggal dan waktu mulai.
+- Perkiraan atau tanggal berakhir.
+- Keterangan yang diperlukan.
+- Petugas yang memasukkan catatan.
+- Pihak yang menyetujui jika diperlukan.
+- Status persetujuan.
+- Apakah orang tua perlu diberi pemberitahuan.
+
+Keterangan medis harus dibatasi pada informasi yang diperlukan. Akses ke informasi kesehatan santri hanya diberikan kepada pihak yang berwenang.
+
+## 13.2. Alur pencatatan sakit
+
+1. Musyrif mencari santri berdasarkan nama, nomor induk, kamar, atau komplek.
+2. Musyrif memilih status Sakit.
+3. Musyrif mengisi periode dan keterangan yang diperlukan.
+4. Jika kebijakan pesantren mewajibkan persetujuan, catatan menunggu persetujuan pihak berwenang.
+5. Sistem memperhitungkan dampak kondisi tersebut pada kegiatan yang berlangsung dalam periode sakit.
+6. Orang tua menerima informasi sesuai pengaturan pemberitahuan.
+7. Setelah kondisi berakhir, catatan ditutup atau diperbarui oleh petugas yang berwenang.
+
+## 13.3. Alur pencatatan pulang
+
+Status Pulang harus lebih ketat daripada sekadar catatan ketidakhadiran. Sistem perlu mencatat waktu keluar, alasan, persetujuan, petugas yang menyerahkan santri jika relevan, serta status kembali ke pesantren.
+
+Jika santri belum kembali sesuai tanggal yang ditentukan, sistem dapat menandai catatan untuk ditindaklanjuti. Namun, sistem tidak boleh otomatis menganggap santri telah kembali hanya karena tanggal izin berakhir.
+
+## 13.4. Dampaknya terhadap absensi
+
+Misalnya, seorang santri sakit selama dua hari. Dalam periode tersebut terdapat beberapa pelajaran dan waktu salat.
+
+Sistem menyimpan satu catatan kondisi sakit dengan periode berlaku. Pada daftar kegiatan yang terdampak, orang tua melihat keterangan bahwa santri sedang sakit, bukan mengira bahwa semua sesi itu merupakan alpa.
+
+Jika santri mengikuti kegiatan tertentu meskipun masih memiliki catatan sakit, petugas harus dapat memperbarui kondisi atau mencatat kehadiran yang benar sesuai kebijakan pesantren.
+
+# 14. Sistem pendaftaran santri dan akun orang tua
+
+Data santri harus dibuat satu kali dan digunakan bersama oleh seluruh modul. Jangan membuat data santri terpisah untuk kelas, salat, tahfidz, dan asrama.
+
+## 14.1. Pendaftaran oleh admin
+
+Admin memasukkan identitas dasar santri, nomor induk, kelas, komplek, kamar, status, serta informasi wali yang diperlukan. Sistem kemudian membuat profil santri dan referensi QR Code.
+
+Admin juga menetapkan hubungan wali dengan santri. Jika ada beberapa wali atau satu wali memiliki beberapa anak, relasi tersebut perlu didukung dengan benar.
+
+## 14.2. Aktivasi akun orang tua
+
+Alur yang direkomendasikan:
+
+1. Admin memasukkan data kontak wali.
+2. Sistem menyiapkan undangan aktivasi.
+3. Wali membuka tautan aktivasi.
+4. Wali memverifikasi email atau nomor telepon sesuai metode yang digunakan.
+5. Sistem memastikan akun tersebut memiliki hubungan wali-santri yang sah.
+6. Setelah validasi, wali dapat masuk dan melihat data anak yang terhubung.
+
+Akun tidak boleh otomatis memperoleh akses hanya karena seseorang mengetahui nama atau nomor induk santri. Hubungan akun dengan anak harus diverifikasi.
+
+## 14.3. Pengelolaan kartu QR
+
+Admin atau wali yang berwenang dapat mencetak kartu QR. Wali hanya dapat mengakses kartu milik anak yang terhubung ke akunnya.
+
+Jika QR hilang, admin dapat menonaktifkan token lama dan menerbitkan pengganti. Proses penerbitan ulang dicatat untuk mencegah penyalahgunaan kartu lama.
+
+# 15. Notifikasi kepada orang tua
+
+Notifikasi membantu orang tua mengetahui informasi penting tanpa harus terus membuka aplikasi.
+
+Jenis notifikasi yang dapat dirancang:
+
+- Konfirmasi aktivasi akun.
+- Catatan sakit atau izin yang baru dibuat.
+- Persetujuan atau perubahan status pulang.
+- Ringkasan harian ketika pencatatan selesai.
+- Setoran tahfidz baru, jika modul aktif.
+- Informasi kegiatan khusus dari pesantren.
+- Pemberitahuan penting terkait perubahan jadwal atau kondisi santri.
+
+Tidak semua hasil pemindaian harus mengirim notifikasi satu per satu karena dapat menimbulkan terlalu banyak pesan. Lebih baik menyediakan pilihan seperti notifikasi untuk kejadian penting, ringkasan harian, dan pengaturan kategori.
+
+Pesan yang dikirim tidak boleh menampilkan informasi sensitif secara berlebihan pada layar kunci. Isi lengkap dapat dilihat setelah orang tua membuka aplikasi dan terautentikasi.
+
+# 16. Dashboard web admin
+
+Dashboard admin menjadi pusat pengaturan dan pemantauan sistem.
+
+## 16.1. Halaman utama admin
+
+Menampilkan statistik yang relevan pada hari atau periode yang dipilih:
+
+- Jumlah santri aktif.
+- Jumlah sesi yang dijadwalkan.
+- Catatan kehadiran yang sudah masuk.
+- Keterlambatan.
+- Kondisi sakit dan izin.
+- Sesi yang belum selesai dicatat.
+- Aktivitas petugas dan catatan yang membutuhkan tindak lanjut.
+
+Statistik tidak boleh mencampur jumlah santri dengan jumlah catatan kehadiran. Satu santri dapat mempunyai banyak catatan pada satu hari.
+
+## 16.2. Manajemen data
+
+Admin memiliki halaman untuk mengelola:
+
+- Santri dan wali.
+- Guru dan musyrif.
+- Kelas, kamar, komplek, serta kelompok.
+- Mata pelajaran dan jadwal.
+- Kegiatan tambahan.
+- Pengaturan salat.
+- Data tahfidz dan guru pembimbing.
+- Akun, peran, dan izin pengguna.
+- Status santri aktif, cuti, atau keluar.
+
+## 16.3. Manajemen sesi
+
+Sesi adalah kejadian terjadwal yang menjadi tempat absensi dicatat. Contohnya, Matematika kelas 7 pukul 07.45 pada 22 Oktober, atau salat Subuh pada tanggal yang sama.
+
+Setiap sesi perlu memiliki identitas sendiri, jadwal, kelompok peserta, petugas yang ditugaskan, aturan kehadiran, serta status proses pencatatan.
+
+Konsep sesi ini penting untuk mencegah absensi tercampur antarhari atau antarmata pelajaran.
+
+## 16.4. Laporan dan ekspor
+
+Admin dapat menyaring laporan berdasarkan:
+
+- Tanggal atau rentang tanggal.
+- Santri.
+- Kelas atau kelompok.
+- Kamar dan komplek.
+- Kategori kegiatan.
+- Mata pelajaran.
+- Guru atau musyrif.
+- Status kehadiran.
+
+Laporan dapat disediakan dalam format Excel atau CSV untuk pengolahan lebih lanjut. PDF dapat ditambahkan untuk laporan formal. Hak akses ekspor perlu dibatasi karena laporan bisa memuat informasi pribadi santri.
+
+# 17. Arsitektur teknis yang direncanakan
+
+Untuk mengembangkan aplikasi ini, kita membutuhkan aplikasi mobile, dashboard web, backend, autentikasi, dan basis data terpusat.
+
+Aplikasi mobile Flutter
+
+Guru, musyrif, dan orang tua
+
+Autentikasi dan aturan akses
+
+Validasi akun, peran, izin, dan hubungan wali-santri
+
+Backend dan PostgreSQL
+
+Data terpusat, validasi, catatan kehadiran, dan audit
+
+Dashboard web admin
+
+Konfigurasi pesantren, jadwal, laporan, dan pengawasan
+
+### 17.1. Teknologi yang direkomendasikan
+
+| Komponen           | Pilihan awal                                    | Fungsi                                             |
+| ------------------ | ----------------------------------------------- | -------------------------------------------------- |
+| Aplikasi mobile    | Flutter / Dart                                  | Antarmuka guru, musyrif, dan wali.                 |
+| Dashboard admin    | Web responsif                                   | Manajemen data, konfigurasi, dan laporan.          |
+| Backend            | Supabase                                        | Autentikasi, API, penyimpanan, dan layanan data.   |
+| Basis data         | PostgreSQL                                      | Penyimpanan data relasional.                       |
+| Hak akses data     | Row Level Security (RLS) dan pemeriksaan server | Membatasi data berdasarkan pengguna dan pesantren. |
+| QR scanner         | Kamera perangkat dengan pustaka pemindai QR     | Identifikasi santri.                               |
+| Notifikasi         | Layanan push notification                       | Pemberitahuan kepada pengguna.                     |
+| Penyimpanan berkas | Penyimpanan objek dengan akses terkontrol       | Foto profil atau dokumen yang memang dibutuhkan.   |
+
+Pilihan tersebut adalah rancangan awal, bukan keputusan yang tidak dapat diubah. Yang paling penting adalah pemisahan hak akses, konsistensi data, keamanan, dan kemudahan pemeliharaan.
+
+## 17.2. Model multi-pesantren
+
+Jika aplikasi nantinya digunakan oleh lebih dari satu pesantren, data setiap pesantren harus dipisahkan secara logis.
+
+Setiap data penting memiliki identitas pesantren, dan seluruh permintaan data memeriksa apakah pengguna memang memiliki hak akses ke pesantren tersebut. RLS menjadi lapisan perlindungan tambahan, bukan satu-satunya pemeriksaan.
+
+Admin Pesantren A tidak boleh dapat membaca data santri Pesantren B hanya dengan mengubah ID pada permintaan aplikasi.
+
+## 17.3. Sinkronisasi data
+
+Ketika petugas melakukan absensi dan internet tersedia, data dikirim ke backend lalu tersedia bagi pengguna yang berwenang.
+
+Jika internet tidak tersedia, aplikasi dapat menyimpan catatan sementara pada perangkat petugas. Ketika tersambung kembali, catatan dikirim dan divalidasi. Sistem harus menangani duplikasi, konflik perubahan, dan waktu yang tidak konsisten secara eksplisit.
+
+Data offline tidak boleh langsung ditampilkan sebagai data terverifikasi tanpa menunjukkan bahwa sinkronisasi atau validasinya belum selesai.
+
+# 18. Rancangan struktur basis data
+
+Basis data harus dirancang sejak awal supaya sistem tetap terkelola ketika jumlah santri, kelas, dan kegiatan bertambah.
+
+Berikut rancangan entitas utama.
+
+| Entitas               | Fungsi                                                        |
+| --------------------- | ------------------------------------------------------------- |
+| `pesantren`           | Identitas setiap pesantren dan pengaturan umum.               |
+| `users`               | Akun pengguna yang dapat login.                               |
+| `user_roles`          | Peran pengguna dan pesantren tempat peran itu berlaku.        |
+| `students`            | Profil utama setiap santri.                                   |
+| `guardians`           | Informasi wali yang dibutuhkan.                               |
+| `student_guardians`   | Relasi wali dengan satu atau beberapa santri.                 |
+| `student_qr_tokens`   | Token QR, status aktif, pencabutan, dan penerbitan ulang.     |
+| `classes`             | Kelas atau kelompok pembelajaran.                             |
+| `dormitories`         | Komplek, kamar, dan struktur asrama.                          |
+| `subjects`            | Mata pelajaran atau jenis pembelajaran.                       |
+| `modules`             | Daftar modul yang dapat diaktifkan atau dinonaktifkan.        |
+| `activities`          | Definisi kegiatan, termasuk kegiatan tambahan.                |
+| `schedules`           | Jadwal berulang dan aturan kegiatan.                          |
+| `sessions`            | Satu kejadian kegiatan pada tanggal dan waktu tertentu.       |
+| `session_assignments` | Penugasan guru, musyrif, dan petugas pengganti.               |
+| `attendance_records`  | Catatan kehadiran setiap santri pada suatu sesi.              |
+| `student_conditions`  | Catatan sakit, izin, pulang, serta periode berlakunya.        |
+| `tahfidz_records`     | Setoran, murajaah, rentang ayat, penilaian, dan catatan guru. |
+| `prayer_settings`     | Lokasi, zona waktu, jadwal, iqamah, dan aturan salat.         |
+| `notifications`       | Informasi pemberitahuan untuk pengguna.                       |
+| `audit_logs`          | Riwayat perubahan data penting.                               |
+
+Hubungan utamanya adalah satu santri dapat mempunyai banyak catatan kehadiran, satu sesi dapat mempunyai banyak peserta, satu wali dapat terhubung dengan beberapa santri, dan satu kegiatan dapat memiliki banyak sesi.
+
+Keputusan desain yang penting: jadwal berulang dan sesi aktual harus dipisahkan. Jadwal menentukan kegiatan yang seharusnya berlangsung, sedangkan sesi merepresentasikan kegiatan pada tanggal tertentu. Catatan kehadiran selalu mengacu pada sesi, bukan sekadar nama mata pelajaran.
+
+Dengan model ini, perubahan jadwal minggu depan tidak merusak riwayat kehadiran minggu sebelumnya.
+
+# 19. Keamanan dan privasi data santri
+
+Karena aplikasi menyimpan data anak, informasi keluarga, kehadiran, dan kemungkinan kondisi kesehatan, keamanan harus menjadi bagian dari rancangan awal.
+
+## 19.1. Autentikasi dan otorisasi
+
+- Setiap petugas menggunakan akun masing-masing.
+- Akun tidak boleh digunakan bersama oleh banyak petugas.
+- Hak akses ditetapkan berdasarkan peran, pesantren, dan penugasan.
+- Wali hanya melihat santri yang terhubung secara sah.
+- Perubahan peran dan penugasan dicatat.
+- Akun yang tidak lagi berwenang dapat dinonaktifkan tanpa menghapus riwayat aktivitasnya.
+
+## 19.2. Perlindungan data
+
+- Gunakan koneksi terenkripsi.
+- Jangan menanam kredensial administratif atau `service_role` Supabase di aplikasi mobile.
+- Terapkan RLS dan validasi backend.
+- Batasi akses terhadap foto, catatan kesehatan, dan informasi keluarga.
+- Simpan hanya data yang diperlukan.
+- Atur masa retensi dan prosedur penghapusan sesuai kebijakan serta kewajiban hukum.
+- Siapkan mekanisme pencadangan dan pemulihan data.
+
+## 19.3. Audit
+
+Audit diperlukan untuk melacak siapa yang membuat, mengubah, menyetujui, atau membatalkan suatu catatan. Catatan audit harus terlindungi dari perubahan oleh pengguna biasa.
+
+Contohnya, jika status Matematika berubah dari Terlambat menjadi Izin, sistem harus dapat menunjukkan nilai sebelumnya, nilai baru, petugas yang mengubah, waktu perubahan, dan alasan perubahan.
+
+## 19.4. Penanganan insiden
+
+Sistem perlu mempunyai prosedur untuk menonaktifkan akun yang dicurigai disalahgunakan, mencabut QR yang hilang, menyelidiki perubahan tidak wajar, memulihkan data, dan memberi tahu pihak yang relevan jika terjadi insiden sesuai ketentuan yang berlaku.
+
+# 20. Desain antarmuka dan pengalaman pengguna
+
+Aplikasi ini akan digunakan oleh beberapa kelompok pengguna dengan kebutuhan berbeda. Karena itu, antarmuka tidak boleh dibuat seragam tanpa mempertimbangkan tugas masing-masing.
+
+## 20.1. Aplikasi orang tua
+
+Prioritas desainnya adalah kemudahan membaca.
+
+- Dashboard langsung menunjukkan keseharian santri.
+- Tab kategori mudah dikenali.
+- Status hadir, terlambat, izin, sakit, dan belum dicatat dibedakan dengan jelas.
+- Jam kehadiran mudah ditemukan.
+- Detail kegiatan tidak terlalu padat.
+- Pemilih tanggal mudah digunakan.
+- Terdapat indikator sinkronisasi atau waktu pembaruan data.
+- Tidak ada fitur administratif yang tidak dibutuhkan wali.
+
+## 20.2. Aplikasi petugas
+
+Prioritasnya adalah kecepatan dan akurasi pencatatan.
+
+- Sesi yang menjadi tanggung jawab petugas terlihat jelas.
+- Pemindaian QR dapat dilakukan dengan cepat.
+- Hasil scan memberikan konfirmasi yang mudah dipahami.
+- Duplikasi memberikan peringatan, bukan menciptakan catatan baru.
+- Daftar santri dan status yang belum dicatat mudah diperiksa.
+- Formulir sakit, izin, dan pulang dapat dibuka tanpa QR.
+- Petugas dapat mengetahui apakah data sudah tersinkronisasi.
+
+## 20.3. Dashboard admin
+
+Prioritasnya adalah pengelolaan dan pengawasan.
+
+- Navigasi data santri dan pengguna.
+- Pengaturan modul dan kegiatan.
+- Kalender jadwal.
+- Penugasan petugas.
+- Laporan dan ekspor.
+- Persetujuan kondisi khusus jika diwajibkan.
+- Log audit dan status sinkronisasi.
+
+## 20.4. Sistem desain
+
+Untuk implementasi awal, kita dapat menggunakan antarmuka yang bersih, konsisten, dan mudah dibaca dengan tipografi modern seperti Plus Jakarta Sans. Warna, ikon, kartu, jarak antarelemen, status, dan komponen formulir perlu memiliki standar yang sama di seluruh halaman.
+
+Animasi boleh digunakan untuk transisi, konfirmasi scan, pemuatan data, dan perubahan halaman, tetapi tidak boleh memperlambat alur absensi atau menutupi informasi penting.
+
+# 21. Perhitungan kehadiran dan keterlambatan
+
+Aturan perhitungan perlu ditentukan secara konsisten agar laporan tidak menyesatkan.
+
+Misalnya, suatu sesi dijadwalkan mulai pukul 07.45 dengan toleransi keterlambatan nol menit. Jika aturan tersebut berlaku dan santri tercatat pukul 07.50, sistem dapat menandai terlambat lima menit.
+
+Namun, jika pesantren menetapkan toleransi lima menit, status bisa berbeda. Oleh karena itu, setiap sesi harus mempunyai aturan yang jelas.
+
+Sistem perlu menyimpan setidaknya:
+
+- Waktu mulai resmi.
+- Batas waktu hadir atau toleransi.
+- Waktu aktual pencatatan.
+- Status akhir yang ditetapkan.
+- Selisih keterlambatan, jika relevan.
+- Versi aturan yang berlaku pada sesi tersebut.
+
+Keterlambatan tidak boleh dihitung dari jam perangkat yang belum tervalidasi tanpa penanda. Jika terdapat koreksi manual, alasan dan identitas petugas harus tersimpan.
+
+Laporan persentase kehadiran juga harus mendefinisikan penyebutnya. Contohnya, jumlah sesi yang wajib diikuti dan memenuhi syarat untuk dihitung, bukan seluruh kegiatan yang kebetulan ada dalam sistem.
+
+# 22. Fitur yang sebaiknya masuk versi pertama
+
+Kita sebaiknya tidak langsung membangun seluruh kemungkinan fitur sekaligus. Berikut prioritas yang masuk akal untuk versi awal.
+
+Prioritas 1
+
+## Fondasi sistem
+
+- Autentikasi dan hak akses.
+- Data pesantren, santri, wali, guru, dan musyrif.
+- Relasi wali dengan santri.
+- Pembuatan dan pencabutan QR.
+- Konfigurasi modul aktif/nonaktif.
+- Struktur jadwal dan sesi.
+- Audit perubahan penting.
+
+Prioritas 2
+
+## Operasional kehadiran
+
+- QR scanning.
+- Kelas Pagi per mata pelajaran.
+- Salat Lima Waktu.
+- Kelas Malam.
+- Pencatatan manual sakit, izin, dan pulang.
+- Pencegahan scan ganda.
+- Pengelolaan petugas pengganti.
+
+Prioritas 3
+
+## Pemantauan orang tua
+
+- Dashboard jurnal harian.
+- Tab kategori dinamis.
+- Detail status dan waktu.
+- Riwayat tanggal sebelumnya.
+- Ringkasan kehadiran.
+- Aktivasi akun wali.
+- Notifikasi penting.
+
+Prioritas 4
+
+## Pengembangan lanjutan
+
+- Tahfidz dengan data surah dan ayat.
+- Kegiatan tambahan yang dikonfigurasi admin.
+- Mode offline dan sinkronisasi yang lebih matang.
+- Laporan lanjutan dan ekspor.
+- Analitik kedisiplinan.
+- Notifikasi terjadwal dan fitur pendukung lainnya.
+
+Urutan ini bukan berarti fitur Tahfidz tidak penting. Tujuannya adalah memastikan fondasi data, hak akses, dan pencatatan sesi benar sebelum semua modul diperluas.
+
+# 23. Skenario penggunaan dari awal hingga akhir
+
+Bayangkan sebuah pesantren mulai menggunakan SIRAJ.
+
+1. Admin melakukan konfigurasi. Admin memasukkan profil pesantren, lokasi, zona waktu, data santri, guru, musyrif, kelas, kamar, dan wali.
+2. Admin mengaktifkan modul. Kelas Pagi, Salat, Tahfidz, dan Kelas Malam diatur sesuai program pesantren. Jadwal dan petugas ditentukan.
+3. Wali mengaktifkan akun. Wali memverifikasi identitas akun dan memperoleh akses ke anak yang terhubung secara sah.
+4. Guru membuka sesi pembelajaran. Guru memilih Bahasa Indonesia, kemudian memindai QR santri yang hadir.
+5. Sistem menyimpan hasil. Catatan dikaitkan dengan santri, sesi, waktu, petugas, dan status yang berlaku.
+6. Musyrif mencatat kegiatan salat. Ia memilih waktu salat yang sesuai dan melakukan pemindaian. Jika ada santri sakit, musyrif mencatat kondisi tersebut sesuai kewenangan.
+7. Guru tahfidz mengisi setoran. Guru mencatat surah, rentang ayat, jenis setoran, penilaian, dan keterangan.
+8. Orang tua memantau dashboard. Orang tua membuka tanggal hari ini, memilih tab, melihat kegiatan per sesi, dan membaca catatan yang tersedia.
+9. Admin melakukan evaluasi. Admin memeriksa sesi yang belum lengkap, meninjau catatan kondisi khusus, dan menyusun laporan sesuai periode.
+
+# 24. Kriteria keberhasilan dan pengujian
+
+Sebelum aplikasi digunakan sungguhan, kita harus memastikan bukan hanya tampilan yang berfungsi, tetapi juga logika data dan keamanan.
+
+| Area pengujian  | Kriteria keberhasilan                                                       |
+| --------------- | --------------------------------------------------------------------------- |
+| QR Code         | Santri dikenali dengan benar; QR dicabut tidak bisa dipakai.                |
+| Duplikasi       | Scan ulang tidak membuat absensi ganda.                                     |
+| Waktu           | Timestamp dan selisih keterlambatan mengikuti aturan yang benar.            |
+| Status          | Belum dicatat tidak otomatis menjadi alpa.                                  |
+| Sakit dan izin  | Kondisi berlaku pada sesi yang tepat dan tidak menghapus riwayat.           |
+| Delegasi        | Petugas pengganti tercatat dengan benar.                                    |
+| Dashboard       | Data per mata pelajaran dan per waktu salat tidak tercampur.                |
+| Modul dinamis   | Tab mengikuti konfigurasi tanpa menghilangkan data historis.                |
+| Tahfidz         | Surah dan rentang ayat tervalidasi; penilaian dan murajaah tersimpan.       |
+| Wali            | Akun tidak dapat mengakses data anak yang tidak terhubung.                  |
+| Multi-pesantren | Data satu pesantren tidak dapat diakses pengguna pesantren lain tanpa izin. |
+| Offline         | Data pending ditandai dengan benar dan tidak digandakan saat sinkronisasi.  |
+| Audit           | Perubahan penting memiliki jejak yang dapat ditelusuri.                     |
+| Pemulihan       | Cadangan data dapat dipulihkan melalui prosedur yang diuji.                 |
+
+Pengujian harus mencakup kasus normal, kasus salah input, kondisi jaringan terputus, pergantian petugas, dan percobaan akses yang tidak diizinkan.
+
+# 25. Batasan yang perlu ditetapkan sejak awal
+
+Ada beberapa hal yang tidak boleh diasumsikan oleh sistem.
+
+- QR bukan bukti mutlak keberadaan fisik. Petugas tetap perlu memverifikasi santri.
+- Scan terlambat tidak membuktikan masbuk. Status masbuk memerlukan konfirmasi sesuai kebijakan.
+- Tidak ada catatan bukan berarti alpa. Sesi yang belum diverifikasi harus tetap berstatus belum dicatat.
+- Tanggal izin berakhir tidak membuktikan santri sudah kembali. Status kembali harus dicatat.
+- Sakit tidak otomatis berarti seluruh kegiatan tidak diikuti. Kondisi harus dievaluasi berdasarkan periode dan catatan aktual.
+- Setoran tahfidz tidak selalu berarti hafalan sudah dikuasai. Catatan penilaian dan murajaah tetap penting.
+- Notifikasi bukan pengganti data resmi. Catatan pada sistem tetap menjadi sumber data utama.
+- Akses orang tua harus diverifikasi. Informasi santri tidak boleh tersedia hanya melalui tautan yang mudah ditebak.
+
+## Kesimpulan
+
+SIRAJ dirancang sebagai sistem pengelolaan keseharian santri yang modular. Pusat pengalaman orang tua adalah jurnal harian yang menunjukkan setiap mata pelajaran, waktu salat, sesi tahfidz, dan kegiatan malam secara terpisah. Pusat operasional petugas adalah pemindaian QR, pencatatan kondisi khusus, serta pengelolaan sesi. Pusat pengendalian admin adalah data, konfigurasi modul, jadwal, hak akses, laporan, dan audit.
+
+Fondasi terpentingnya adalah satu sumber data yang konsisten, pencatatan per sesi, waktu yang dapat dipertanggungjawabkan, dan akses yang aman. Jika fondasi tersebut benar, modul baru bisa ditambahkan tanpa harus membangun ulang keseluruhan sistem.
+
+Baik, keputusan ini sudah cukup untuk menetapkan arah awal SIRAJ. Aku akan menjadikannya dasar spesifikasi produk, terutama untuk arsitektur multi-pesantren, alur absensi online, pengelolaan kondisi santri, dan dashboard orang tua.
+
+## Keputusan pengembangan yang ditetapkan
+
+| Aspek               | Keputusan                                                                              |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| Platform            | Aplikasi mobile Flutter + dashboard web admin                                                               |
+| Koneksi             | Versi pertama online; dukungan offline pada tahap lanjutan                             |
+| Cakupan             | Multi-pesantren, dengan data dan konfigurasi terpisah                                  |
+| Sakit, izin, pulang | Musyrif dapat mencatat langsung sesuai hak akses                                       |
+| Dashboard orang tua | Ringkasan mingguan sebagai halaman awal; jurnal harian dan tab kategori sebagai detail |
+| Gaya visual         | Modern, bersih, sederhana, mudah dibaca, dengan identitas visual Islami yang kuat      |
+
+Ada satu konsekuensi teknis penting: meskipun platform awal adalah Flutter, dashboard web admin tetap perlu dipertimbangkan sebagai antarmuka pengelolaan. Jadi, produk awal dapat terdiri dari aplikasi Flutter untuk pengguna mobile dan dashboard web untuk admin, dengan backend serta basis data yang sama. Jika yang dimaksud adalah seluruh fungsi harus tersedia hanya di aplikasi mobile, rancangan admin bisa disesuaikan.

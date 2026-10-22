@@ -1,0 +1,23 @@
+{
+  "name": "SIRAJ — Smart Islamic Routine & Attendance Journey",
+  "short_name": "SIRAJ",
+  "description": "Ekosistem Presensi & Mutaba'ah Cerdas Pondok Pesantren Darussalam Rajapolah Tasikmalaya",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06271E",
+  "theme_color": "#065F46",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo_tile_1024.png",
+      "sizes": "192x192 512x512 1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

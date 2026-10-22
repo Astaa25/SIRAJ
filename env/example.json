@@ -1,0 +1,8 @@
+{
+  "APP_ENV": "dev",
+  "SUPABASE_URL": "https://example-project.supabase.co",
+  "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example",
+  "QR_PUBLIC_KEY_B64": "MCowBQYDK2VwAyEAexamplePublicKeyEd25519==",
+  "QR_KEY_ID": "kid-2026-v1",
+  "SENTRY_DSN": "https://example@sentry.io/1234567"
+}

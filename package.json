@@ -1,0 +1,13 @@
+{
+  "name": "siraj-suite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SIRAJ — Smart Islamic Routine & Attendance Journey",
+  "scripts": {
+    "dev": "npm --prefix web run dev",
+    "web:port": "npm --prefix web run dev -- --port 5173",
+    "testing:port": "npm --prefix web run dev -- --port 5174",
+    "build": "npm --prefix web run build",
+    "preview": "npm --prefix web run preview"
+  }
+}

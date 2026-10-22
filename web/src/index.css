@@ -1,0 +1,454 @@
+/* =====================================================================
+   SIRAJ DESIGN SYSTEM — INDEX.CSS
+   In accordance with StyleGuide.md, leonxlnx/taste-skill, emilkowalski/skills,
+   educlopez/ui-craft, and pbakaus/impeccable.
+   ===================================================================== */
+
+:root {
+  /* Surface & Background */
+  --color-white: #FFFFFF;
+  --color-mint: #F4FBF7;
+  --color-mint-subtle: #ECFDF5;
+  --color-deep-forest: #06271E;
+  --color-forest: #0D4332;
+  --color-forest-surface: #113B2E;
+
+  /* Emerald Tones */
+  --color-emerald-800: #065F46;
+  --color-emerald-700: #047857;
+  --color-emerald-600: #059669;
+  --color-emerald-500: #10B981;
+  --color-emerald-400: #34D399;
+  --color-emerald-100: #D1FAE5;
+  --color-emerald-50: #ECFDF5;
+
+  /* Radiant Gold Accents */
+  --color-gold-light: #FFE49A;
+  --color-gold: #E8B65A;
+  --color-gold-dark: #C98A3C;
+  --color-gold-amber: #D97706;
+
+  /* Status Colors */
+  --status-hadir-bg: #D1FAE5;
+  --status-hadir-text: #065F46;
+  --status-terlambat-bg: #FFF1D6;
+  --status-terlambat-text: #9A6212;
+  --status-sakit-bg: #E0F2FE;
+  --status-sakit-text: #0369A1;
+  --status-izin-bg: #F3E8FF;
+  --status-izin-text: #6D28D9;
+  --status-alpa-bg: #FDE8E8;
+  --status-alpa-text: #B42318;
+  --status-masbuk-bg: #FEF3C7;
+  --status-masbuk-text: #B45309;
+
+  /* Text & Border */
+  --color-text-primary: #06271E;
+  --color-text-secondary: #5B7A70;
+  --color-text-tertiary: #8AA49B;
+  --color-text-light: #E3EEE9;
+  --color-border-subtle: #E2EFE9;
+  --color-border-emerald: #A7F3D0;
+  --color-border-gold: rgba(232, 182, 90, 0.35);
+
+  /* Gradients */
+  --gradient-emerald: linear-gradient(135deg, #065F46 0%, #059669 50%, #10B981 100%);
+  --gradient-emerald-subtle: linear-gradient(180deg, #F4FBF7 0%, #FFFFFF 100%);
+  --gradient-deep-forest: linear-gradient(180deg, #06271E 0%, #0D4332 100%);
+  --gradient-gold: linear-gradient(135deg, #FFE49A 0%, #E8B65A 60%, #C98A3C 100%);
+  --gradient-gold-radial: radial-gradient(circle, #FFE49A 0%, #E8B65A 50%, #C98A3C 100%);
+  --gradient-card-dark: linear-gradient(145deg, #0D4332 0%, #06271E 100%);
+
+  /* Shadows (Tuned softly, avoid harsh black) */
+  --shadow-xs: 0 1px 3px rgba(6, 95, 70, 0.05);
+  --shadow-sm: 0 4px 12px -2px rgba(6, 95, 70, 0.06), 0 2px 4px -1px rgba(6, 95, 70, 0.03);
+  --shadow-md: 0 10px 25px -4px rgba(6, 95, 70, 0.08), 0 4px 8px -2px rgba(6, 95, 70, 0.04);
+  --shadow-lg: 0 20px 35px -6px rgba(6, 39, 30, 0.12), 0 8px 16px -3px rgba(6, 39, 30, 0.06);
+  --shadow-glow-emerald: 0 0 24px rgba(16, 185, 129, 0.35);
+  --shadow-glow-gold: 0 0 20px rgba(232, 182, 90, 0.4);
+
+  /* Radius Tokens */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-full: 9999px;
+
+  /* Motion Tokens (SirajMotion) */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --duration-micro: 120ms;
+  --duration-short: 200ms;
+  --duration-medium: 320ms;
+  --duration-long: 500ms;
+}
+
+/* Base Reset & Typography */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--color-text-primary);
+  background-color: #03140F;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.arabic-font {
+  font-family: 'Amiri', serif;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(6, 39, 30, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-emerald-700);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-emerald-500);
+}
+
+/* Button & Interactive Resets */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  outline: none;
+  transition: all var(--duration-short) var(--ease-soft);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* Top Progress Beam (Active during loading) */
+.top-progress-beam {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #FFE49A 0%, #10B981 50%, #059669 100%);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+  z-index: 99999;
+  transform-origin: left;
+  animation: progressPulse 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes progressPulse {
+  0% { transform: scaleX(0.05); }
+  35% { transform: scaleX(0.45); }
+  70% { transform: scaleX(0.85); }
+  95% { transform: scaleX(0.98); }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+
+/* Islamic Geometric Background Watermark */
+.islamic-pattern-bg {
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(5, 150, 105, 0.08) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L38.4853 8.48528L47 0L47 8.48528L55.4853 8.48528L47 17L55.4853 25.4853L47 25.4853L47 34L38.4853 25.4853L30 34L21.5147 25.4853L13 25.4853L13 17L4.51472 8.48528L13 8.48528L13 0L21.5147 8.48528L30 0Z' fill='%23059669' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* Micro-animations and Stagger Reveals */
+.fade-in-up {
+  animation: fadeInUp 400ms var(--ease-soft) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-1 { animation-delay: 40ms; }
+.stagger-2 { animation-delay: 80ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 160ms; }
+.stagger-5 { animation-delay: 200ms; }
+.stagger-6 { animation-delay: 240ms; }
+
+/* Glowing Islamic Lantern Animation */
+@keyframes lanternGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(232, 182, 90, 0.4)) drop-shadow(0 0 20px rgba(5, 150, 105, 0.3));
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(232, 182, 90, 0.7)) drop-shadow(0 0 35px rgba(16, 185, 129, 0.5));
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+
+.lantern-glow-anim {
+  animation: lanternGlow 3s ease-in-out infinite;
+}
+
+/* Rotating Sacred Mandala */
+@keyframes rotateClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotateCounter {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.rotate-slow {
+  animation: rotateClockwise 20s linear infinite;
+}
+
+.rotate-reverse-slow {
+  animation: rotateCounter 25s linear infinite;
+}
+
+/* Breathing Gate Pass Ring */
+@keyframes ringBreathe {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0), 0 0 32px rgba(16, 185, 129, 0.5);
+  }
+}
+
+.gatepass-breathe {
+  animation: ringBreathe 2.4s infinite ease-in-out;
+}
+
+/* No-Scrollbar utility to eliminate clunky desktop scrollbars on category tabs */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Duplicate Scan Amber Shake */
+@keyframes duplicateShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.shake-amber {
+  animation: duplicateShake 280ms ease-in-out;
+  border-color: #D97706 !important;
+  background-color: #FFFBEB !important;
+}
+
+/* Success Checkmark Draw Animation */
+@keyframes checkmarkPop {
+  0% { transform: scale(0.7); opacity: 0; }
+  70% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.check-pop {
+  animation: checkmarkPop 400ms var(--ease-spring) forwards;
+}
+
+/* High Fidelity Phone Frame Container */
+.phone-mockup-frame {
+  width: 412px;
+  max-width: 95vw;
+  height: 846px;
+  max-height: 92vh;
+  background: #000000;
+  border-radius: 48px;
+  padding: 12px;
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.65),
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 0 35px rgba(5, 150, 105, 0.2);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.phone-inner-screen {
+  flex: 1;
+  background: var(--color-mint);
+  border-radius: 38px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Dynamic Island */
+.phone-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 28px;
+  background: #000000;
+  border-radius: 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.island-camera {
+  width: 10px;
+  height: 10px;
+  background: #06271E;
+  border-radius: 50%;
+  border: 2px solid #1a1a1a;
+}
+
+.island-sensor {
+  width: 7px;
+  height: 7px;
+  background: #111827;
+  border-radius: 50%;
+}
+
+@keyframes shrinkBar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* =====================================================================
+   DEVICE FRAMES: HP (425px) · TABLET (768px) · LAPTOP (1420px)
+   ===================================================================== */
+.device-hp-frame {
+  width: 425px;
+  max-width: 95vw;
+  background: #000000;
+  border-radius: 46px;
+  padding: 12px;
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.75),
+    0 0 0 2px rgba(232, 182, 90, 0.35),
+    0 0 35px rgba(5, 150, 105, 0.25);
+  position: relative;
+  margin: 0 auto;
+}
+
+.device-hp-inner {
+  background: var(--color-mint);
+  border-radius: 36px;
+  overflow: hidden;
+  position: relative;
+  padding: 44px 10px 18px 10px;
+}
+
+.device-tablet-frame {
+  width: 768px;
+  max-width: 96vw;
+  background: #06271E;
+  border-radius: 34px;
+  padding: 16px;
+  box-shadow: 
+    0 25px 65px -15px rgba(0, 0, 0, 0.75),
+    0 0 0 2px rgba(232, 182, 90, 0.35),
+    0 0 40px rgba(5, 150, 105, 0.25);
+  position: relative;
+  margin: 0 auto;
+}
+
+.device-tablet-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 12px;
+  position: relative;
+}
+
+.tablet-camera-dot {
+  width: 9px;
+  height: 9px;
+  background: #03140F;
+  border-radius: 50%;
+  border: 1.5px solid rgba(232, 182, 90, 0.4);
+}
+
+.device-tablet-inner {
+  background: var(--color-mint);
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  padding: 14px;
+}
+
+.device-laptop-frame {
+  width: 100%;
+  max-width: 1420px;
+  margin: 0 auto;
+}
+
+/* Responsive Admin Sidebar: Full overlay on mobile/HP, side-by-side on laptop */
+.device-hp-frame .admin-desktop-sidebar:not(.is-open) {
+  display: none !important;
+}
+
+.device-hp-frame .admin-desktop-sidebar.is-open {
+  display: flex !important;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+  z-index: 999;
+}
+
+@media (max-width: 860px) {
+  .admin-desktop-sidebar:not(.is-open) {
+    display: none !important;
+  }
+  .admin-desktop-sidebar.is-open {
+    display: flex !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    z-index: 999;
+  }
+}
+
+

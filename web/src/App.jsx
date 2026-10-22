@@ -1,0 +1,404 @@
+import React, { useState, useEffect } from "react";
+import ShowcaseHeader from "./components/ShowcaseHeader";
+import SplashScreen from "./components/SplashScreen";
+import IslamicLoadingModal from "./components/IslamicLoadingModal";
+import LoginView from "./components/LoginView";
+
+// 9 Dedicated Role Portals (Including Super Admin Multi-Tenancy)
+import SuperAdminView from "./components/portals/SuperAdminView";
+import PortalWaliView from "./components/portals/PortalWaliView";
+import PortalGuruView from "./components/portals/PortalGuruView";
+import PortalUbudiyyahView from "./components/portals/PortalUbudiyyahView";
+import PortalMusyrifView from "./components/portals/PortalMusyrifView";
+import PortalSatpamView from "./components/portals/PortalSatpamView";
+import PortalBKView from "./components/portals/PortalBKView";
+import PortalPengasuhanView from "./components/portals/PortalPengasuhanView";
+import AdminWebView from "./components/AdminWebView";
+
+import { INITIAL_AUDIT_LOGS, INITIAL_TENANTS } from "./data/mockData";
+import { setAudioMuted, playSoftClick } from "./utils/audio";
+
+export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  // Authentication State (Persistent until logout or account deactivation)
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem("siraj_auth_user");
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  // Multi-Tenancy State (Pondok Pesantren Aktif)
+  const [currentTenant, setCurrentTenant] = useState(() => {
+    try {
+      const saved = localStorage.getItem("siraj_active_tenant");
+      return saved ? JSON.parse(saved) : INITIAL_TENANTS[0];
+    } catch (e) {
+      return INITIAL_TENANTS[0];
+    }
+  });
+
+  const [activeRole, setActiveRole] = useState(currentUser?.role || "wali");
+
+  // Device Mode: 'hp' | 'tablet' | 'laptop'
+  // Rule: Non-admin roles (wali, guru, ubudiyyah, musyrif, satpam, bk, pengasuhan) strictly restricted to HP & Tablet.
+  // Super Admin & Admin Ponpes can access HP, Tablet, and Laptop.
+  const isLaptopRole = activeRole === "admin" || activeRole === "superadmin";
+
+  const [deviceMode, setDeviceMode] = useState(() => {
+    return (currentUser?.role === "admin" || currentUser?.role === "superadmin") ? "laptop" : "hp";
+  });
+
+  // Guard: If switching to a non-admin role, never allow 'laptop'
+  useEffect(() => {
+    if (!isLaptopRole && deviceMode === "laptop") {
+      setDeviceMode("hp");
+    }
+  }, [activeRole, isLaptopRole, deviceMode]);
+
+  const [is2sLoaderEnabled, setIs2sLoaderEnabled] = useState(true);
+  const [isLoaderOpen, setIsLoaderOpen] = useState(false);
+  const [loaderMessage, setLoaderMessage] = useState("");
+  const [loaderCallback, setLoaderCallback] = useState(null);
+  const [auditLogs, setAuditLogs] = useState(INITIAL_AUDIT_LOGS);
+  const [isMuted, setIsMuted] = useState(false);
+
+  useEffect(() => {
+    setAudioMuted(isMuted);
+  }, [isMuted]);
+
+  // Master Action Trigger (2-Second Islamic Loading Animation)
+  const handleTriggerLoader = (message, callback) => {
+    if (is2sLoaderEnabled) {
+      setLoaderMessage(message || "Memproses Permintaan...");
+      setLoaderCallback(() => callback);
+      setIsLoaderOpen(true);
+    } else {
+      if (callback) callback();
+    }
+  };
+
+  const handleLoaderComplete = () => {
+    setIsLoaderOpen(false);
+    if (loaderCallback) {
+      loaderCallback();
+      setLoaderCallback(null);
+    }
+  };
+
+  // Login handler
+  const handleLoginSuccess = (user) => {
+    setCurrentUser(user);
+    setActiveRole(user.role);
+    if (user.role === "admin" || user.role === "superadmin") {
+      setDeviceMode("laptop");
+    } else {
+      setDeviceMode("hp");
+    }
+    if (user.assignedTenantId) {
+      const tenant = INITIAL_TENANTS.find((t) => t.id === user.assignedTenantId);
+      if (tenant) {
+        setCurrentTenant(tenant);
+        localStorage.setItem("siraj_active_tenant", JSON.stringify(tenant));
+      }
+    }
+  };
+
+  // Logout handler
+  const handleLogout = () => {
+    playSoftClick();
+    handleTriggerLoader("Mengakhiri Sesi & Keluar dari Akun...", () => {
+      localStorage.removeItem("siraj_auth_user");
+      setCurrentUser(null);
+      setActiveRole("wali");
+    });
+  };
+
+  // Append-Only Security Audit Log
+  const handleAuditLogAdd = (newLogEntry) => {
+    const now = new Date();
+    const timeString =
+      now.toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }) + " WIB";
+
+    const entry = {
+      id: `aud-${Date.now()}`,
+      timestamp: timeString,
+      ...newLogEntry,
+    };
+
+    setAuditLogs((prev) => [entry, ...prev]);
+  };
+
+  // Render Portal Component based on Active Role
+  const renderActivePortal = () => {
+    switch (activeRole) {
+      case "superadmin":
+        return (
+          <SuperAdminView
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+            currentTenant={currentTenant}
+            onSwitchTenant={(tenant) => {
+              setCurrentTenant(tenant);
+              localStorage.setItem("siraj_active_tenant", JSON.stringify(tenant));
+            }}
+          />
+        );
+      case "wali":
+        return (
+          <PortalWaliView
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+            tenantDormTerm={currentTenant?.dormTerm || "Asrama"}
+          />
+        );
+      case "guru":
+        return (
+          <PortalGuruView
+            currentUser={currentUser}
+            currentTeacher={currentUser}
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+          />
+        );
+      case "ubudiyyah":
+        return (
+          <PortalUbudiyyahView
+            currentTenant={currentTenant}
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+          />
+        );
+      case "musyrif":
+        return (
+          <PortalMusyrifView
+            currentMusyrif={currentUser}
+            currentUser={currentUser}
+            tenantDormTerm={currentTenant?.dormTerm || "Asrama"}
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+          />
+        );
+      case "satpam":
+        return (
+          <PortalSatpamView
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+          />
+        );
+      case "bk":
+        return (
+          <PortalBKView
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+          />
+        );
+      case "pengasuhan":
+        return (
+          <PortalPengasuhanView
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+          />
+        );
+      case "admin":
+        return (
+          <AdminWebView
+            onTriggerLoader={handleTriggerLoader}
+            auditLogs={auditLogs}
+            onAuditLogAdd={handleAuditLogAdd}
+            currentTenant={currentTenant}
+            onUpdateTenant={(updated) => {
+              setCurrentTenant((prev) => {
+                const next = { ...prev, ...updated };
+                localStorage.setItem("siraj_active_tenant", JSON.stringify(next));
+                return next;
+              });
+            }}
+          />
+        );
+      default:
+        return (
+          <PortalWaliView
+            onTriggerLoader={handleTriggerLoader}
+            onAuditLogAdd={handleAuditLogAdd}
+          />
+        );
+    }
+  };
+
+  return (
+    <div
+      className="islamic-pattern-bg"
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        background: "#03140F",
+        color: "#FFFFFF",
+      }}
+    >
+      {/* Cinematic Splash Screen (Bisa diputar ulang) */}
+      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+
+      {/* 2-Second Islamic Loading Overlay */}
+      <IslamicLoadingModal
+        isOpen={isLoaderOpen}
+        message={loaderMessage}
+        onComplete={handleLoaderComplete}
+      />
+
+      {/* Jika Belum Login: Tampilkan LoginView Terpadu (Tanpa Sign Up) */}
+      {!currentUser ? (
+        <main
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "24px 16px",
+          }}
+        >
+          <LoginView
+            onLoginSuccess={handleLoginSuccess}
+            currentTenant={currentTenant}
+            onSwitchTenant={(tenant) => {
+              setCurrentTenant(tenant);
+              localStorage.setItem("siraj_active_tenant", JSON.stringify(tenant));
+            }}
+          />
+        </main>
+      ) : (
+        <>
+          {/* Top Header & 9-Role Direct Navigation Bar */}
+          <ShowcaseHeader
+            currentUser={currentUser}
+            onLogout={handleLogout}
+            currentTenant={currentTenant}
+            activeRole={activeRole}
+            setActiveRole={setActiveRole}
+            deviceMode={deviceMode}
+            setDeviceMode={setDeviceMode}
+            is2sLoaderEnabled={is2sLoaderEnabled}
+            setIs2sLoaderEnabled={setIs2sLoaderEnabled}
+            isMuted={isMuted}
+            setIsMuted={setIsMuted}
+            onReplaySplash={() => setShowSplash(true)}
+            onTriggerLoader={handleTriggerLoader}
+          />
+
+          {/* Main Responsive Workspace Stage */}
+          <main
+            style={{
+              flex: 1,
+              padding: "20px 16px 48px 16px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              width: "100%",
+            }}
+          >
+            {/* 1. HP SMARTPHONE MODE (425px) */}
+            {deviceMode === "hp" && (
+              <div
+                className="fade-in-up"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  width: "100%",
+                  gap: "10px",
+                }}
+              >
+                <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span>📱 Mode Layar HP (Smartphone · 425px):</span>
+                  <span style={{ fontWeight: 800, color: "#FFE49A" }}>
+                    {activeRole.toUpperCase()}
+                  </span>
+                </div>
+
+                <div className="device-hp-frame">
+                  {/* Dynamic Island */}
+                  <div className="phone-island">
+                    <div className="island-camera" />
+                    <div style={{ fontSize: "9px", color: "#34D399", fontWeight: 800, letterSpacing: "1px" }}>
+                      SIRAJ
+                    </div>
+                    <div className="island-sensor" />
+                  </div>
+
+                  {/* Inner Screen */}
+                  <div className="device-hp-inner no-scrollbar">
+                    {renderActivePortal()}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 2. TABLET MODE (768px) */}
+            {deviceMode === "tablet" && (
+              <div
+                className="fade-in-up"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  width: "100%",
+                  gap: "10px",
+                }}
+              >
+                <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span>📟 Mode Layar Tablet (768px Responsive):</span>
+                  <span style={{ fontWeight: 800, color: "#FFE49A" }}>
+                    {activeRole.toUpperCase()}
+                  </span>
+                </div>
+
+                <div className="device-tablet-frame">
+                  {/* Tablet Bezel Camera Dot */}
+                  <div className="device-tablet-header">
+                    <div className="tablet-camera-dot" />
+                  </div>
+
+                  {/* Inner Screen */}
+                  <div className="device-tablet-inner no-scrollbar">
+                    {renderActivePortal()}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 3. LAPTOP / DESKTOP MODE (Full Width up to 1420px - Only for Super Admin & Admin Ponpes) */}
+            {deviceMode === "laptop" && isLaptopRole && (
+              <div
+                className="fade-in-up"
+                style={{
+                  width: "100%",
+                  maxWidth: "1420px",
+                  margin: "0 auto",
+                }}
+              >
+                <div style={{ fontSize: "11px", color: "#A7F3D0", display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
+                  <span>💻 Mode Layar Laptop / Komputer Desktop (1420px):</span>
+                  <span style={{ fontWeight: 800, color: "#FFE49A" }}>
+                    {activeRole === "superadmin" ? "SUPER ADMIN PUSAT" : "ADMIN PONPES"}
+                  </span>
+                </div>
+
+                <div className="device-laptop-frame">
+                  {renderActivePortal()}
+                </div>
+              </div>
+            )}
+          </main>
+        </>
+      )}
+    </div>
+  );
+}
