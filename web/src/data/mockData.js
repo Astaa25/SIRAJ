@@ -1308,4 +1308,104 @@ export const STAFF_TEMPLATE_CELL_SPECS = [
   { cell: "G", name: "No. WhatsApp / HP", key: "phone", req: false, example: "+6281234567820", desc: "Nomor WhatsApp aktif untuk koordinasi darurat." },
 ];
 
+// Template Impor Spesifik untuk Masing-Masing Role
+export const STAFF_ROLE_TEMPLATES = {
+  all: {
+    id: "all",
+    label: "Semua Role (Master All-in-One)",
+    filename: "template_import_semua_role_petugas.csv",
+    description: "Template komprehensif memuat seluruh jenis peran (Kepala Pengasuhan, Guru, Musyrif, Ubudiyyah, BK, Bendahara, Satpam).",
+    sampleRows: [
+      { name: "K.H. Asep Ridwan, Lc.", email: "pengasuhan.pusat@darussalam.ac.id", password: "123", role: "pengasuhan", authorityScope: "Umum", assignment: "Koordinator Utama Pengasuhan Ponpes", phone: "+6281234567801" },
+      { name: "Ustaz Syamsul Arifin, M.Pd.", email: "pengasuhan.putra@darussalam.ac.id", password: "123", role: "pengasuhan", authorityScope: "Putra", assignment: "Kepala Pengasuhan Santriwan (Banin)", phone: "+6281234567802" },
+      { name: "Ustadzah Hj. Maryam Syafi'i, Lc.", email: "pengasuhan.putri@darussalam.ac.id", password: "123", role: "pengasuhan", authorityScope: "Putri", assignment: "Kepala Pengasuhan Santriwati (Banat)", phone: "+6281234567803" },
+      { name: "Ustaz Ahmad Dahlan, M.Pd.", email: "guru.dahlan@darussalam.ac.id", password: "123", role: "guru", authorityScope: "Umum", assignment: "Mapel Bahasa Indonesia (Kelas 7-A)", phone: "+6281234567810" },
+      { name: "Ustaz Farhan Mubarak", email: "musyrif.farhan@darussalam.ac.id", password: "123", role: "musyrif", authorityScope: "Putra", assignment: "Asrama Abu Bakar Ash-Shiddiq", phone: "+6281234567820" },
+      { name: "Ustaz Zaid Abdullah", email: "ubudiyyah@darussalam.ac.id", password: "123", role: "ubudiyyah", authorityScope: "Umum", assignment: "Masjid Jami' Darussalam", phone: "+6281234567830" },
+      { name: "Ustaz Hamdan, S.Psi.", email: "bk@darussalam.ac.id", password: "123", role: "bk", authorityScope: "Umum", assignment: "Biro Konseling & Bimbingan Santri", phone: "+6281234567840" },
+      { name: "Ustadz H. Mansyur, S.E.", email: "bendahara@darussalam.ac.id", password: "123", role: "bendahara", authorityScope: "Umum", assignment: "Syahriyyah, Uang Saku & Kasir", phone: "+6281234567850" },
+      { name: "Pak Slamet Riyadi", email: "satpam@darussalam.ac.id", password: "123", role: "satpam", authorityScope: "Umum", assignment: "Pos Gerbang Utama (Gate Pass)", phone: "+6281234567860" },
+    ],
+  },
+  pengasuhan: {
+    id: "pengasuhan",
+    label: "3 Kepala Pengasuhan (Pusat, Putra, Putri)",
+    filename: "template_import_kepala_pengasuhan.csv",
+    description: "Khusus 3 Otoritas Pengasuhan: Umum/Pusat (Putra & Putri), Pengasuhan Putra (Banin), dan Pengasuhan Putri (Banat).",
+    sampleRows: [
+      { name: "K.H. Asep Ridwan, Lc.", email: "pengasuhan.pusat@darussalam.ac.id", password: "123", role: "pengasuhan", authorityScope: "Umum", assignment: "Koordinator Utama Seluruh Musyrif, BK & Santri Ponpes", phone: "+6281234567801" },
+      { name: "Ustaz Syamsul Arifin, M.Pd.", email: "pengasuhan.putra@darussalam.ac.id", password: "123", role: "pengasuhan", authorityScope: "Putra", assignment: "Biro Pengasuhan Putra & Asrama Abu Bakar, Umar, Ali", phone: "+6281234567802" },
+      { name: "Ustadzah Hj. Maryam Syafi'i, Lc.", email: "pengasuhan.putri@darussalam.ac.id", password: "123", role: "pengasuhan", authorityScope: "Putri", assignment: "Biro Pengasuhan Putri & Asrama Fatimah Az-Zahra", phone: "+6281234567803" },
+    ],
+  },
+  guru: {
+    id: "guru",
+    label: "Guru KBM (Mata Pelajaran & Kelas)",
+    filename: "template_import_guru_kbm.csv",
+    description: "Khusus dewan asatidz/guru pengampu mata pelajaran KBM kelas harian.",
+    sampleRows: [
+      { name: "Ustaz Ahmad Dahlan, M.Pd.", email: "guru.dahlan@darussalam.ac.id", password: "123", role: "guru", authorityScope: "Umum", assignment: "Mapel Bahasa Indonesia (Kelas 7-A & 8-B)", phone: "+6281234567810" },
+      { name: "Ustaz Budi Santoso, S.Si.", email: "guru.budi@darussalam.ac.id", password: "123", role: "guru", authorityScope: "Umum", assignment: "Mapel Matematika (Kelas 7, 8, 9)", phone: "+6281234567811" },
+      { name: "Ustaz Khalid Basalamah, Lc., M.A.", email: "guru.khalid@darussalam.ac.id", password: "123", role: "guru", authorityScope: "Umum", assignment: "Mapel Fiqih & Ushuluddin (Kelas 8-A)", phone: "+6281234567812" },
+      { name: "Ustadzah Siti Aminah, S.Pd.", email: "guru.aminah@darussalam.ac.id", password: "123", role: "guru", authorityScope: "Putri", assignment: "Mapel Bahasa Arab & Nahwu (Kelas 7 Putri)", phone: "+6281234567813" },
+    ],
+  },
+  musyrif: {
+    id: "musyrif",
+    label: "Musyrif / Pembina Asrama & Kamar",
+    filename: "template_import_musyrif_asrama.csv",
+    description: "Khusus pembina kamar/kobong asrama (presensi asrama, kebersihan, ronda malam, izin darurat).",
+    sampleRows: [
+      { name: "Ustaz Farhan Mubarak", email: "musyrif.farhan@darussalam.ac.id", password: "123", role: "musyrif", authorityScope: "Putra", assignment: "Asrama Abu Bakar Ash-Shiddiq", phone: "+6281234567820" },
+      { name: "Ustaz Salman Al-Farisi", email: "musyrif.salman@darussalam.ac.id", password: "123", role: "musyrif", authorityScope: "Putra", assignment: "Asrama Umar bin Khattab", phone: "+6281234567821" },
+      { name: "Ustaz Bilal Bin Rabah", email: "musyrif.bilal@darussalam.ac.id", password: "123", role: "musyrif", authorityScope: "Putra", assignment: "Asrama Ali bin Abi Thalib", phone: "+6281234567823" },
+      { name: "Ustadzah Khadijah An-Nur", email: "musyrifah.khadijah@darussalam.ac.id", password: "123", role: "musyrif", authorityScope: "Putri", assignment: "Asrama Fatimah Az-Zahra (Putri)", phone: "+6281234567822" },
+    ],
+  },
+  ubudiyyah: {
+    id: "ubudiyyah",
+    label: "Tim Ubudiyyah (Pengawas Salat Jamaah)",
+    filename: "template_import_tim_ubudiyyah.csv",
+    description: "Khusus ustadz pembina dan pengawas absensi salat 5 waktu di masjid pondok.",
+    sampleRows: [
+      { name: "Ustaz Zaid Abdullah", email: "ubudiyyah@darussalam.ac.id", password: "123", role: "ubudiyyah", authorityScope: "Umum", assignment: "Masjid Jami' Darussalam (Imam & Absensi)", phone: "+6281234567830" },
+      { name: "Ustaz Mu'adz Bin Jabal", email: "ubudiyyah.putra@darussalam.ac.id", password: "123", role: "ubudiyyah", authorityScope: "Putra", assignment: "Masjid Putra (Piket Subuh & Ashar)", phone: "+6281234567831" },
+      { name: "Ustadzah Aisyah Humaira", email: "ubudiyyah.putri@darussalam.ac.id", password: "123", role: "ubudiyyah", authorityScope: "Putri", assignment: "Mushola Putri (Piket Maghrib & Isya)", phone: "+6281234567832" },
+    ],
+  },
+  bk: {
+    id: "bk",
+    label: "Guru BK / Bimbingan Konseling",
+    filename: "template_import_guru_bk.csv",
+    description: "Khusus konselor pembinaan adab, pencatatan poin pelanggaran/prestasi, dan konseling.",
+    sampleRows: [
+      { name: "Ustaz Hamdan, S.Psi.", email: "bk@darussalam.ac.id", password: "123", role: "bk", authorityScope: "Umum", assignment: "Biro Konseling & Bimbingan Santri", phone: "+6281234567840" },
+      { name: "Ustaz Lukman Hakim, M.Pd.", email: "bk.putra@darussalam.ac.id", password: "123", role: "bk", authorityScope: "Putra", assignment: "Konseling Khusus Santriwan (Putra)", phone: "+6281234567841" },
+      { name: "Ustadzah Fatimah Zahra, S.Psi.", email: "bk.putri@darussalam.ac.id", password: "123", role: "bk", authorityScope: "Putri", assignment: "Konseling Khusus Santriwati (Putri)", phone: "+6281234567842" },
+    ],
+  },
+  bendahara: {
+    id: "bendahara",
+    label: "Bendahara & Keuangan Pesantren",
+    filename: "template_import_bendahara.csv",
+    description: "Khusus staf administrasi syahriyyah/SPP, dompet uang saku santri, dan kasir.",
+    sampleRows: [
+      { name: "Ustadz H. Mansyur, S.E.", email: "bendahara@darussalam.ac.id", password: "123", role: "bendahara", authorityScope: "Umum", assignment: "Kepala Keuangan & Syahriyyah Pesantren", phone: "+6281234567850" },
+      { name: "Ustadz Rahmat Hidayat, Ak.", email: "kasir.kantin@darussalam.ac.id", password: "123", role: "bendahara", authorityScope: "Umum", assignment: "Kasir Kantin & Dompet Digital Santri", phone: "+6281234567851" },
+    ],
+  },
+  satpam: {
+    id: "satpam",
+    label: "Satpam & Keamanan Gerbang",
+    filename: "template_import_satpam_gerbang.csv",
+    description: "Khusus petugas keamanan gerbang verifikator pemindaian QR Gate Pass kepulangan.",
+    sampleRows: [
+      { name: "Pak Slamet Riyadi", email: "satpam@darussalam.ac.id", password: "123", role: "satpam", authorityScope: "Umum", assignment: "Pos Gerbang Utama (Verifikasi Gate Pass)", phone: "+6281234567860" },
+      { name: "Pak Agus Susanto", email: "satpam.timur@darussalam.ac.id", password: "123", role: "satpam", authorityScope: "Umum", assignment: "Pos Gerbang Timur (Piket Shift 1)", phone: "+6281234567861" },
+      { name: "Ibu Sumiati (Satpam Putri)", email: "satpam.putri@darussalam.ac.id", password: "123", role: "satpam", authorityScope: "Putri", assignment: "Pos Gerbang Asrama Putri (Shift Siang)", phone: "+6281234567862" },
+    ],
+  },
+};
+
+
 

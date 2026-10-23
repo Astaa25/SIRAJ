@@ -5,6 +5,7 @@ import {
   INITIAL_SP_THRESHOLDS,
   INITIAL_STAFF_ACCOUNTS,
   STAFF_TEMPLATE_CELL_SPECS,
+  STAFF_ROLE_TEMPLATES,
 } from "../data/mockData";
 import { playSoftClick, playSuccessChime, playWarningTone, triggerHaptic } from "../utils/audio";
 
@@ -261,11 +262,17 @@ export default function AdminWebView({
     );
   };
 
-  // Download template CSV format per sel
-  const handleDownloadStaffCellTemplate = () => {
+  const [selectedTemplateRole, setSelectedTemplateRole] = useState("all");
+
+  // Download template CSV format per sel (spesifik per masing-masing role atau semua role)
+  const handleDownloadStaffCellTemplate = (targetRoleKey) => {
     playSoftClick();
+    const effectiveRoleKey = typeof targetRoleKey === "string" ? targetRoleKey : selectedTemplateRole;
+    const templateDef = STAFF_ROLE_TEMPLATES[effectiveRoleKey] || STAFF_ROLE_TEMPLATES.all;
+    const rowsToExport = templateDef.sampleRows && templateDef.sampleRows.length > 0 ? templateDef.sampleRows : staffGridRows;
+
     let csv = "Nama Lengkap,Email Akun,Password Awal,Kode Role,Lingkup Otoritas,Penugasan Khusus,No WhatsApp\n";
-    staffGridRows.forEach((r) => {
+    rowsToExport.forEach((r) => {
       const cName = `"${(r.name || "").replace(/"/g, '""')}"`;
       const cEmail = `"${(r.email || "").replace(/"/g, '""')}"`;
       const cPass = `"${(r.password || "123").replace(/"/g, '""')}"`;
@@ -280,12 +287,34 @@ export default function AdminWebView({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", "template_import_akun_role_pesantren.csv");
+    link.setAttribute("download", templateDef.filename || "template_import_akun_role_pesantren.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     playSuccessChime();
-    alert("Template Excel/CSV per sel berhasil diunduh: template_import_akun_role_pesantren.csv");
+    alert(`Template Excel/CSV untuk ${templateDef.label} berhasil diunduh: ${templateDef.filename}`);
+  };
+
+  // Muat contoh spesifik ke dalam cell grid di modal
+  const handleApplyRoleTemplateToGrid = (targetRoleKey) => {
+    playSoftClick();
+    setSelectedTemplateRole(targetRoleKey);
+    const templateDef = STAFF_ROLE_TEMPLATES[targetRoleKey] || STAFF_ROLE_TEMPLATES.all;
+    if (templateDef && templateDef.sampleRows) {
+      setStaffGridRows(
+        templateDef.sampleRows.map((r, idx) => ({
+          id: `grid-${targetRoleKey}-${idx}-${Date.now()}`,
+          name: r.name,
+          email: r.email,
+          password: r.password || "123",
+          role: r.role,
+          authorityScope: r.authorityScope,
+          assignment: r.assignment,
+          phone: r.phone,
+        }))
+      );
+      playSuccessChime();
+    }
   };
 
   // Upload and parse CSV file into cell grid
@@ -1403,25 +1432,61 @@ export default function AdminWebView({
 
               {/* Action Buttons */}
               <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-                <button
-                  onClick={handleDownloadStaffCellTemplate}
-                  title="Unduh Template CSV dengan pemisahan per sel individual untuk Excel/Google Sheets"
+                {/* Pemilih Unduh Template Khusus Per Role */}
+                <div
                   style={{
-                    background: "var(--theme-card-bg-subtle)",
-                    border: "1px solid var(--theme-card-border)",
-                    color: "var(--theme-text-title)",
-                    padding: "9px 14px",
-                    borderRadius: "10px",
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
                     gap: "6px",
+                    background: "var(--theme-card-bg-subtle)",
+                    padding: "4px 8px",
+                    borderRadius: "10px",
+                    border: "1px solid var(--theme-card-border)",
                   }}
                 >
-                  <span>Unduh Template (Per Sel)</span>
-                </button>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)" }}>Template:</span>
+                  <select
+                    value={selectedTemplateRole}
+                    onChange={(e) => setSelectedTemplateRole(e.target.value)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "var(--theme-text-title)",
+                      fontSize: "12px",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      outline: "none",
+                    }}
+                  >
+                    <option value="all">Semua Role (Master All-in-One)</option>
+                    <option value="pengasuhan">Khusus: 3 Kepala Pengasuhan</option>
+                    <option value="guru">Khusus: Guru KBM (Mapel)</option>
+                    <option value="musyrif">Khusus: Musyrif Asrama</option>
+                    <option value="ubudiyyah">Khusus: Tim Ubudiyyah</option>
+                    <option value="bk">Khusus: Guru BK</option>
+                    <option value="bendahara">Khusus: Bendahara</option>
+                    <option value="satpam">Khusus: Satpam Gerbang</option>
+                  </select>
+                  <button
+                    onClick={() => handleDownloadStaffCellTemplate(selectedTemplateRole)}
+                    title="Unduh berkas template CSV per sel untuk role yang dipilih"
+                    style={{
+                      background: "#059669",
+                      color: "#FFFFFF",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "6px 12px",
+                      fontSize: "11px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    <span>Unduh Template (.csv)</span>
+                  </button>
+                </div>
 
                 <button
                   onClick={() => setIsAddStaffModalOpen(true)}
@@ -3067,6 +3132,45 @@ export default function AdminWebView({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                {/* Pilih Template Role untuk dimuat ke Grid */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    background: "var(--theme-card-bg-subtle)",
+                    padding: "4px 8px",
+                    borderRadius: "8px",
+                    border: "1px solid var(--theme-card-border)",
+                  }}
+                >
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)" }}>
+                    Muat Template Role:
+                  </span>
+                  <select
+                    value={selectedTemplateRole}
+                    onChange={(e) => handleApplyRoleTemplateToGrid(e.target.value)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "var(--theme-text-title)",
+                      fontSize: "11.5px",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      outline: "none",
+                    }}
+                  >
+                    <option value="all">Semua Role (Master All-in-One)</option>
+                    <option value="pengasuhan">3 Kepala Pengasuhan (Pusat, Putra, Putri)</option>
+                    <option value="guru">Guru KBM (Mata Pelajaran)</option>
+                    <option value="musyrif">Musyrif Asrama (Per Kamar/Komplek)</option>
+                    <option value="ubudiyyah">Tim Ubudiyyah (Pengawas Salat)</option>
+                    <option value="bk">Guru BK (Konseling Santri)</option>
+                    <option value="bendahara">Bendahara (Keuangan & Syahriyyah)</option>
+                    <option value="satpam">Satpam (Keamanan Gerbang)</option>
+                  </select>
+                </div>
+
                 {/* Upload File CSV */}
                 <label
                   style={{
@@ -3092,25 +3196,26 @@ export default function AdminWebView({
                   />
                 </label>
 
-                {/* Download Template CSV Per Sel */}
+                {/* Download Template CSV Per Sel Sesuai Role Terpilih */}
                 <button
                   type="button"
-                  onClick={handleDownloadStaffCellTemplate}
+                  onClick={() => handleDownloadStaffCellTemplate(selectedTemplateRole)}
+                  title={`Unduh file template CSV per sel khusus untuk role ${selectedTemplateRole}`}
                   style={{
-                    background: "var(--theme-card-bg-subtle)",
-                    border: "1px solid var(--theme-card-border)",
-                    color: "var(--theme-text-title)",
+                    background: "#059669",
+                    color: "#FFFFFF",
+                    border: "none",
                     padding: "7px 12px",
                     borderRadius: "8px",
                     fontSize: "11.5px",
-                    fontWeight: 700,
+                    fontWeight: 800,
                     cursor: "pointer",
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "6px",
                   }}
                 >
-                  <span>Unduh Format CSV Per Sel</span>
+                  <span>Unduh Template Role Terpilih (.csv)</span>
                 </button>
 
                 {/* Reset ke Template Lengkap */}
