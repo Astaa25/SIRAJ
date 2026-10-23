@@ -3,8 +3,10 @@ import {
   INITIAL_STUDENTS,
   INITIAL_EWS_ALERTS,
   INITIAL_SP_THRESHOLDS,
+  INITIAL_STAFF_ACCOUNTS,
+  STAFF_TEMPLATE_CELL_SPECS,
 } from "../data/mockData";
-import { playSoftClick, playSuccessChime, triggerHaptic } from "../utils/audio";
+import { playSoftClick, playSuccessChime, playWarningTone, triggerHaptic } from "../utils/audio";
 
 export default function AdminWebView({
   onTriggerLoader,
@@ -107,6 +109,426 @@ export default function AdminWebView({
     `2026070189,Hamzah Al-Farabi,Kelas 7-A,Asrama Abu Bakar Ash-Shiddiq,Kamar 04,Dr. H. Lukman,+6281398765432\n` +
     `2026070190,Aisyah Maharani,Kelas 9-B,Asrama Fatimah Az-Zahra,Kamar 03,Hj. Siti Rahmah,+6281567890123`
   );
+
+  // =====================================================================
+  // MANAJEMEN STRUKTUR SDM & AKUN PETUGAS / ROLE (TERMASUK 3 KEPALA PENGASUHAN)
+  // =====================================================================
+  const [staffList, setStaffList] = useState(() => {
+    try {
+      const saved = localStorage.getItem("siraj_staff_accounts");
+      if (saved) return JSON.parse(saved);
+      return INITIAL_STAFF_ACCOUNTS;
+    } catch {
+      return INITIAL_STAFF_ACCOUNTS;
+    }
+  });
+
+  const [staffRoleFilter, setStaffRoleFilter] = useState("ALL");
+  const [staffAuthorityFilter, setStaffAuthorityFilter] = useState("ALL");
+  const [staffSearchQuery, setStaffSearchQuery] = useState("");
+  const [isStaffImportModalOpen, setIsStaffImportModalOpen] = useState(false);
+  const [isAddStaffModalOpen, setIsAddStaffModalOpen] = useState(false);
+
+  // Form Tambah Akun Manual
+  const [manualStaffName, setManualStaffName] = useState("");
+  const [manualStaffEmail, setManualStaffEmail] = useState("");
+  const [manualStaffPassword, setManualStaffPassword] = useState("123");
+  const [manualStaffRole, setManualStaffRole] = useState("guru");
+  const [manualStaffAuthority, setManualStaffAuthority] = useState("Umum");
+  const [manualStaffAssignment, setManualStaffAssignment] = useState("");
+  const [manualStaffPhone, setManualStaffPhone] = useState("");
+
+  // Spreadsheet Cell Grid Editor State (Data Per Sel, Bukan Per Kolom Teks)
+  const [staffGridRows, setStaffGridRows] = useState(() => [
+    {
+      id: "grid-1",
+      name: "K.H. Asep Ridwan, Lc.",
+      email: "pengasuhan.pusat@darussalam.ac.id",
+      password: "123",
+      role: "pengasuhan",
+      authorityScope: "Umum",
+      assignment: "Koordinator Utama Musyrif & Santri Ponpes",
+      phone: "+6281234567801",
+    },
+    {
+      id: "grid-2",
+      name: "Ustaz Syamsul Arifin, M.Pd.",
+      email: "pengasuhan.putra@darussalam.ac.id",
+      password: "123",
+      role: "pengasuhan",
+      authorityScope: "Putra",
+      assignment: "Kepala Pengasuhan Santriwan (Banin)",
+      phone: "+6281234567802",
+    },
+    {
+      id: "grid-3",
+      name: "Ustadzah Hj. Maryam Syafi'i, Lc.",
+      email: "pengasuhan.putri@darussalam.ac.id",
+      password: "123",
+      role: "pengasuhan",
+      authorityScope: "Putri",
+      assignment: "Kepala Pengasuhan Santriwati (Banat)",
+      phone: "+6281234567803",
+    },
+    {
+      id: "grid-4",
+      name: "Ustaz Ahmad Dahlan, M.Pd.",
+      email: "guru.dahlan@darussalam.ac.id",
+      password: "123",
+      role: "guru",
+      authorityScope: "Umum",
+      assignment: "Mapel Bahasa Indonesia (Kelas 7-A & 8-B)",
+      phone: "+6281234567810",
+    },
+    {
+      id: "grid-5",
+      name: "Ustaz Farhan Mubarak",
+      email: "musyrif.farhan@darussalam.ac.id",
+      password: "123",
+      role: "musyrif",
+      authorityScope: "Putra",
+      assignment: "Asrama Abu Bakar Ash-Shiddiq",
+      phone: "+6281234567820",
+    },
+    {
+      id: "grid-6",
+      name: "Ustadzah Khadijah An-Nur",
+      email: "musyrifah.khadijah@darussalam.ac.id",
+      password: "123",
+      role: "musyrif",
+      authorityScope: "Putri",
+      assignment: "Asrama Fatimah Az-Zahra (Putri)",
+      phone: "+6281234567822",
+    },
+    {
+      id: "grid-7",
+      name: "Pak Slamet Riyadi",
+      email: "satpam@darussalam.ac.id",
+      password: "123",
+      role: "satpam",
+      authorityScope: "Umum",
+      assignment: "Pos Gerbang Utama (Verifikasi Gate Pass)",
+      phone: "+6281234567860",
+    },
+  ]);
+
+  // Update a single cell in the grid
+  const handleUpdateGridCell = (rowId, fieldKey, val) => {
+    setStaffGridRows((prev) =>
+      prev.map((r) => (r.id === rowId ? { ...r, [fieldKey]: val } : r))
+    );
+  };
+
+  // Add a new row of cells to the spreadsheet grid
+  const handleAddGridRow = () => {
+    playSoftClick();
+    const newId = "grid-row-" + Date.now();
+    setStaffGridRows((prev) => [
+      ...prev,
+      {
+        id: newId,
+        name: "",
+        email: "",
+        password: "123",
+        role: "guru",
+        authorityScope: "Umum",
+        assignment: "",
+        phone: "",
+      },
+    ]);
+  };
+
+  // Delete a row of cells from the spreadsheet grid
+  const handleDeleteGridRow = (rowId) => {
+    playSoftClick();
+    setStaffGridRows((prev) => prev.filter((r) => r.id !== rowId));
+  };
+
+  // Reset grid to default authentic template rows
+  const handleResetGridToTemplate = () => {
+    playSoftClick();
+    setStaffGridRows(
+      INITIAL_STAFF_ACCOUNTS.map((st, idx) => ({
+        id: "grid-init-" + idx,
+        name: st.name,
+        email: st.email,
+        password: st.password || "123",
+        role: st.role,
+        authorityScope: st.authorityScope,
+        assignment: st.assignment,
+        phone: st.phone,
+      }))
+    );
+  };
+
+  // Download template CSV format per sel
+  const handleDownloadStaffCellTemplate = () => {
+    playSoftClick();
+    let csv = "Nama Lengkap,Email Akun,Password Awal,Kode Role,Lingkup Otoritas,Penugasan Khusus,No WhatsApp\n";
+    staffGridRows.forEach((r) => {
+      const cName = `"${(r.name || "").replace(/"/g, '""')}"`;
+      const cEmail = `"${(r.email || "").replace(/"/g, '""')}"`;
+      const cPass = `"${(r.password || "123").replace(/"/g, '""')}"`;
+      const cRole = `"${(r.role || "guru").replace(/"/g, '""')}"`;
+      const cAuth = `"${(r.authorityScope || "Umum").replace(/"/g, '""')}"`;
+      const cAssign = `"${(r.assignment || "").replace(/"/g, '""')}"`;
+      const cPhone = `"${(r.phone || "").replace(/"/g, '""')}"`;
+      csv += `${cName},${cEmail},${cPass},${cRole},${cAuth},${cAssign},${cPhone}\n`;
+    });
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "template_import_akun_role_pesantren.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    playSuccessChime();
+    alert("Template Excel/CSV per sel berhasil diunduh: template_import_akun_role_pesantren.csv");
+  };
+
+  // Upload and parse CSV file into cell grid
+  const handleUploadStaffCsv = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    playSoftClick();
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target.result;
+        const lines = text.split(/\r\n|\n/).filter((l) => l.trim().length > 0);
+        if (lines.length <= 1) {
+          alert("Berkas CSV kosong atau hanya berisi baris judul header.");
+          return;
+        }
+
+        const parsedRows = [];
+        for (let i = 1; i < lines.length; i++) {
+          const rowText = lines[i];
+          const cells = rowText
+            .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+            .map((c) => c.trim().replace(/^"|"$/g, "").replace(/""/g, '"'));
+          if (cells.length >= 2 && cells[0]) {
+            parsedRows.push({
+              id: "grid-csv-" + i + "-" + Date.now(),
+              name: cells[0] || "",
+              email: cells[1] || "",
+              password: cells[2] || "123",
+              role: cells[3] || "guru",
+              authorityScope: cells[4] || "Umum",
+              assignment: cells[5] || "",
+              phone: cells[6] || "",
+            });
+          }
+        }
+
+        if (parsedRows.length > 0) {
+          setStaffGridRows(parsedRows);
+          playSuccessChime();
+          alert(`Berhasil membaca ${parsedRows.length} baris sel dari berkas CSV.`);
+        } else {
+          alert("Format baris sel CSV tidak terbaca. Pastikan delimiter koma.");
+        }
+      } catch (err) {
+        alert("Gagal membaca berkas CSV: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
+  // Process and commit imported staff accounts
+  const handleProcessStaffImport = () => {
+    playSoftClick();
+    triggerHaptic([60]);
+
+    const validRows = staffGridRows.filter((r) => r.name.trim() && r.email.trim());
+    if (validRows.length === 0) {
+      playWarningTone();
+      alert("Tidak ada baris sel yang valid untuk diimpor. Pastikan Nama Lengkap dan Email Akun terisi.");
+      return;
+    }
+
+    setIsStaffImportModalOpen(false);
+    onTriggerLoader(
+      `Memvalidasi Sel Spreadsheet & Mendaftarkan ${validRows.length} Akun Petugas Pesantren...`,
+      () => {
+        playSuccessChime();
+        const roleLabels = {
+          pengasuhan: "Kepala Pengasuhan",
+          guru: "Guru KBM",
+          musyrif: "Musyrif Asrama",
+          ubudiyyah: "Ustadz Ubudiyyah",
+          bk: "Guru BK Konseling",
+          bendahara: "Bendahara Pesantren",
+          satpam: "Satpam Keamanan Gerbang",
+        };
+
+        const newStaffList = validRows.map((r, idx) => ({
+          id: "staff-imp-" + Date.now() + "-" + idx,
+          name: r.name.trim(),
+          email: r.email.trim().toLowerCase(),
+          password: r.password || "123",
+          role: r.role || "guru",
+          roleLabel:
+            r.role === "pengasuhan"
+              ? `Kepala Pengasuhan (${r.authorityScope})`
+              : roleLabels[r.role] || r.role,
+          authorityScope: r.authorityScope || "Umum",
+          assignment: r.assignment || "-",
+          phone: r.phone || "-",
+          status: "Aktif",
+          avatar: `https://images.unsplash.com/photo-${1500000000000 + idx * 11111111}?w=240&auto=format&fit=crop&q=80`,
+          createdAt: new Date().toISOString().split("T")[0],
+        }));
+
+        setStaffList((prev) => {
+          const existingEmails = new Set(prev.map((s) => s.email.toLowerCase()));
+          const filteredNew = newStaffList.filter((s) => !existingEmails.has(s.email));
+          const updated = [...prev, ...filteredNew];
+          try {
+            localStorage.setItem("siraj_staff_accounts", JSON.stringify(updated));
+          } catch {}
+          return updated;
+        });
+
+        onAuditLogAdd({
+          user: "Admin Ponpes",
+          role: "Admin",
+          action: "IMPOR STRUKTUR PETUGAS (SPREADSHEET)",
+          object: `Batch: ${validRows.length} Akun Struktural`,
+          status: "SUKSES",
+          details: `Mengimpor akun Kepala Pengasuhan (${validRows.filter((r) => r.role === "pengasuhan").length}), Guru, Musyrif, BK, Ubudiyyah, Bendahara, dan Satpam melalui template per sel.`,
+        });
+      }
+    );
+  };
+
+  // Toggle staff status Aktif / Nonaktif
+  const handleToggleStaffStatus = (staffId) => {
+    playSoftClick();
+    triggerHaptic([40]);
+    setStaffList((prev) => {
+      const updated = prev.map((s) => {
+        if (s.id === staffId) {
+          const nextStatus = s.status === "Aktif" ? "Nonaktif" : "Aktif";
+          onAuditLogAdd({
+            user: "Admin Ponpes",
+            role: "Admin",
+            action: nextStatus === "Nonaktif" ? "NONAKTIFKAN PETUGAS" : "AKTIFKAN PETUGAS",
+            object: `${s.name} (${s.roleLabel})`,
+            status: "BERHASIL",
+            details: `Status akun diubah menjadi ${nextStatus}.`,
+          });
+          return { ...s, status: nextStatus };
+        }
+        return s;
+      });
+      try {
+        localStorage.setItem("siraj_staff_accounts", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  // Delete staff account
+  const handleDeleteStaffAccount = (staffId, staffName) => {
+    if (!window.confirm(`Hapus akun petugas "${staffName}" dari sistem pesantren?`)) return;
+    playSoftClick();
+    triggerHaptic([50]);
+    setStaffList((prev) => {
+      const updated = prev.filter((s) => s.id !== staffId);
+      try {
+        localStorage.setItem("siraj_staff_accounts", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+    onAuditLogAdd({
+      user: "Admin Ponpes",
+      role: "Admin",
+      action: "HAPUS AKUN PETUGAS",
+      object: staffName,
+      status: "BERHASIL",
+      details: "Akun petugas dihapus dari daftar operasional pesantren.",
+    });
+  };
+
+  // Submit Single Manual Staff
+  const handleSaveManualStaff = (e) => {
+    e.preventDefault();
+    if (!manualStaffName.trim() || !manualStaffEmail.trim()) {
+      alert("Nama Lengkap dan Email Akun wajib diisi.");
+      return;
+    }
+
+    playSoftClick();
+    triggerHaptic([50]);
+    setIsAddStaffModalOpen(false);
+
+    const roleLabels = {
+      pengasuhan: "Kepala Pengasuhan",
+      guru: "Guru KBM",
+      musyrif: "Musyrif Asrama",
+      ubudiyyah: "Ustadz Ubudiyyah",
+      bk: "Guru BK Konseling",
+      bendahara: "Bendahara Pesantren",
+      satpam: "Satpam Keamanan Gerbang",
+    };
+
+    const newStaff = {
+      id: "staff-man-" + Date.now(),
+      name: manualStaffName.trim(),
+      email: manualStaffEmail.trim().toLowerCase(),
+      password: manualStaffPassword || "123",
+      role: manualStaffRole,
+      roleLabel:
+        manualStaffRole === "pengasuhan"
+          ? `Kepala Pengasuhan (${manualStaffAuthority})`
+          : roleLabels[manualStaffRole] || manualStaffRole,
+      authorityScope: manualStaffAuthority,
+      assignment: manualStaffAssignment.trim() || "-",
+      phone: manualStaffPhone.trim() || "-",
+      status: "Aktif",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=80",
+      createdAt: new Date().toISOString().split("T")[0],
+    };
+
+    setStaffList((prev) => {
+      const updated = [newStaff, ...prev];
+      try {
+        localStorage.setItem("siraj_staff_accounts", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    onAuditLogAdd({
+      user: "Admin Ponpes",
+      role: "Admin",
+      action: "TAMBAH AKUN PETUGAS",
+      object: `${newStaff.name} (${newStaff.roleLabel})`,
+      status: "SUKSES",
+      details: `Penugasan: ${newStaff.assignment}, Lingkup: ${newStaff.authorityScope}.`,
+    });
+
+    playSuccessChime();
+    setManualStaffName("");
+    setManualStaffEmail("");
+    setManualStaffAssignment("");
+    setManualStaffPhone("");
+  };
+
+  // Filter staff list
+  const filteredStaffList = staffList.filter((st) => {
+    const matchesSearch =
+      st.name.toLowerCase().includes(staffSearchQuery.toLowerCase()) ||
+      st.email.toLowerCase().includes(staffSearchQuery.toLowerCase()) ||
+      (st.assignment && st.assignment.toLowerCase().includes(staffSearchQuery.toLowerCase()));
+    const matchesRole = staffRoleFilter === "ALL" || st.role === staffRoleFilter;
+    const matchesAuth = staffAuthorityFilter === "ALL" || st.authorityScope === staffAuthorityFilter;
+    return matchesSearch && matchesRole && matchesAuth;
+  });
 
   // Tab switch with 2-second loader
   const handleTabSwitch = (tab) => {
@@ -448,6 +870,7 @@ export default function AdminWebView({
             {[
               { id: "dashboard", label: "Dashboard & KPI" },
               { id: "santri", label: "Master Santri & CSV" },
+              { id: "petugas", label: "Struktur & Akun Role", badge: String(staffList.length) },
               { id: "ews", label: "EWS Asrama Sakit", badge: String(ewsAlerts.length) },
               { id: "sp", label: "Setelan Ambang SP" },
               { id: "settings", label: "Pengaturan Ponpes" },
@@ -919,8 +1342,454 @@ export default function AdminWebView({
         )}
 
         {/* -------------------------------------------------------------
-            TAB 3: EARLY WARNING SYSTEM (EWS ASRAMA SAKIT & IZIN DARI MUSYRIF)
+            TAB: STRUKTUR SDM & AKUN ROLE PETUGAS (DENGAN IMPORT PER SEL)
            ------------------------------------------------------------- */}
+        {adminTab === "petugas" && (
+          <div style={{ padding: "24px 28px" }}>
+            {/* Header Struktur & Akun Petugas */}
+            <div
+              style={{
+                background: "var(--theme-card-bg)",
+                borderRadius: "18px",
+                padding: "20px 24px",
+                border: "1px solid var(--theme-card-border)",
+                boxShadow: "var(--theme-card-shadow)",
+                marginBottom: "20px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "16px",
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <span
+                    style={{
+                      background: "#D1FAE5",
+                      color: "#065F46",
+                      padding: "4px 10px",
+                      borderRadius: "8px",
+                      fontSize: "11px",
+                      fontWeight: 800,
+                    }}
+                  >
+                    Multi-Role SDM
+                  </span>
+                  <h3
+                    style={{
+                      fontSize: "17px",
+                      fontWeight: 800,
+                      color: "var(--theme-text-title)",
+                      margin: 0,
+                    }}
+                  >
+                    Struktur Organisasi & Akun Role Petugas
+                  </h3>
+                </div>
+                <p
+                  style={{
+                    fontSize: "12px",
+                    color: "var(--theme-text-muted)",
+                    marginTop: "6px",
+                    marginBottom: 0,
+                    maxWidth: "650px",
+                    lineHeight: "1.5",
+                  }}
+                >
+                  Kelola akun seluruh hierarki pesantren: <strong>3 Kepala Pengasuhan</strong> (Pusat/Umum, Putra/Banin, Putri/Banat), Guru KBM per mapel, Musyrif per asrama, Tim Ubudiyyah, Guru BK, Bendahara, dan Satpam.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                <button
+                  onClick={handleDownloadStaffCellTemplate}
+                  title="Unduh Template CSV dengan pemisahan per sel individual untuk Excel/Google Sheets"
+                  style={{
+                    background: "var(--theme-card-bg-subtle)",
+                    border: "1px solid var(--theme-card-border)",
+                    color: "var(--theme-text-title)",
+                    padding: "9px 14px",
+                    borderRadius: "10px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <span>Unduh Template (Per Sel)</span>
+                </button>
+
+                <button
+                  onClick={() => setIsAddStaffModalOpen(true)}
+                  style={{
+                    background: "var(--theme-card-bg-subtle)",
+                    border: "1px solid var(--theme-card-border)",
+                    color: "var(--theme-text-title)",
+                    padding: "9px 14px",
+                    borderRadius: "10px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <span>+ Tambah Akun Manual</span>
+                </button>
+
+                <button
+                  onClick={() => setIsStaffImportModalOpen(true)}
+                  style={{
+                    background: "var(--gradient-emerald)",
+                    color: "#FFFFFF",
+                    padding: "9px 18px",
+                    borderRadius: "10px",
+                    fontSize: "12px",
+                    fontWeight: 800,
+                    border: "none",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 14px rgba(5, 150, 105, 0.35)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <span>Import Spreadsheet (Grid Per Sel)</span>
+                </button>
+              </div>
+            </div>
+
+            {/* 3 Summary Cards */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: "14px",
+                marginBottom: "20px",
+              }}
+            >
+              {/* Card 1: 3 Kepala Pengasuhan */}
+              <div
+                style={{
+                  background: "var(--theme-card-bg)",
+                  borderRadius: "16px",
+                  padding: "16px",
+                  border: "1px solid var(--theme-card-border)",
+                  boxShadow: "var(--theme-card-shadow)",
+                }}
+              >
+                <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)" }}>
+                  OTORITAS TINGGI PENGASUHAN
+                </div>
+                <div style={{ fontSize: "16px", fontWeight: 800, color: "var(--theme-text-title)", marginTop: "4px" }}>
+                  3 Kepala Pengasuhan
+                </div>
+                <div style={{ fontSize: "11px", color: "var(--theme-text-muted)", marginTop: "6px", lineHeight: "1.5" }}>
+                  • <strong>Umum / Pusat:</strong> Otoritas seluruh santri & SP III<br />
+                  • <strong>Putra (Banin):</strong> Gate pass & asrama putra<br />
+                  • <strong>Putri (Banat):</strong> Gate pass & asrama putri
+                </div>
+              </div>
+
+              {/* Card 2: Petugas Operasional */}
+              <div
+                style={{
+                  background: "var(--theme-card-bg)",
+                  borderRadius: "16px",
+                  padding: "16px",
+                  border: "1px solid var(--theme-card-border)",
+                  boxShadow: "var(--theme-card-shadow)",
+                }}
+              >
+                <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)" }}>
+                  STAF OPERASIONAL AKTIF
+                </div>
+                <div style={{ fontSize: "16px", fontWeight: 800, color: "#059669", marginTop: "4px" }}>
+                  {staffList.filter((s) => s.status === "Aktif").length} Akun Aktif / {staffList.length} Total
+                </div>
+                <div style={{ fontSize: "11px", color: "var(--theme-text-muted)", marginTop: "6px", lineHeight: "1.5" }}>
+                  Mencakup banyak Guru KBM per mapel, Musyrif per asrama, Ubudiyyah per shift, Guru BK, Bendahara, dan Satpam per gerbang.
+                </div>
+              </div>
+
+              {/* Card 3: Standar Import Per Sel */}
+              <div
+                style={{
+                  background: "var(--theme-card-bg)",
+                  borderRadius: "16px",
+                  padding: "16px",
+                  border: "1px solid var(--theme-card-border)",
+                  boxShadow: "var(--theme-card-shadow)",
+                }}
+              >
+                <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)" }}>
+                  FORMAT IMPOR DATA
+                </div>
+                <div style={{ fontSize: "16px", fontWeight: 800, color: "#2563EB", marginTop: "4px" }}>
+                  Grid Per Sel (A s/d G)
+                </div>
+                <div style={{ fontSize: "11px", color: "var(--theme-text-muted)", marginTop: "6px", lineHeight: "1.5" }}>
+                  Masing-masing data diinput di sel terpisah (Nama, Email, Pass, Role, Otoritas, Penugasan, WhatsApp). Bebas error kolom gabungan.
+                </div>
+              </div>
+            </div>
+
+            {/* Filter & Search Bar */}
+            <div
+              style={{
+                background: "var(--theme-card-bg)",
+                borderRadius: "16px",
+                padding: "14px 18px",
+                border: "1px solid var(--theme-card-border)",
+                marginBottom: "16px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "12px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", flex: 1 }}>
+                <input
+                  type="text"
+                  placeholder="Cari nama, email, penugasan asrama/mapel..."
+                  value={staffSearchQuery}
+                  onChange={(e) => setStaffSearchQuery(e.target.value)}
+                  style={{
+                    padding: "8px 14px",
+                    borderRadius: "10px",
+                    border: "1px solid var(--theme-card-border)",
+                    background: "var(--theme-card-bg-subtle)",
+                    color: "var(--theme-text-title)",
+                    fontSize: "12px",
+                    minWidth: "260px",
+                    outline: "none",
+                  }}
+                />
+
+                {/* Filter Role */}
+                <select
+                  value={staffRoleFilter}
+                  onChange={(e) => setStaffRoleFilter(e.target.value)}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: "10px",
+                    border: "1px solid var(--theme-card-border)",
+                    background: "var(--theme-card-bg-subtle)",
+                    color: "var(--theme-text-title)",
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    outline: "none",
+                  }}
+                >
+                  <option value="ALL">Semua Peran / Role</option>
+                  <option value="pengasuhan">Kepala Pengasuhan (3 Otoritas)</option>
+                  <option value="guru">Guru KBM (Per Mapel)</option>
+                  <option value="musyrif">Musyrif Asrama (Per Kamar/Komplek)</option>
+                  <option value="ubudiyyah">Tim Ubudiyyah (Salat Jamaah)</option>
+                  <option value="bk">Guru BK (Konseling)</option>
+                  <option value="bendahara">Bendahara (Keuangan & Syahriyyah)</option>
+                  <option value="satpam">Satpam (Keamanan & Gate Pass)</option>
+                </select>
+
+                {/* Filter Otoritas */}
+                <select
+                  value={staffAuthorityFilter}
+                  onChange={(e) => setStaffAuthorityFilter(e.target.value)}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: "10px",
+                    border: "1px solid var(--theme-card-border)",
+                    background: "var(--theme-card-bg-subtle)",
+                    color: "var(--theme-text-title)",
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    outline: "none",
+                  }}
+                >
+                  <option value="ALL">Semua Wilayah Otoritas</option>
+                  <option value="Umum">Umum (Santriwan & Santriwati)</option>
+                  <option value="Putra">Putra (Santriwan / Banin)</option>
+                  <option value="Putri">Putri (Santriwati / Banat)</option>
+                </select>
+              </div>
+
+              <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--theme-text-muted)" }}>
+                Menampilkan {filteredStaffList.length} dari {staffList.length} akun
+              </div>
+            </div>
+
+            {/* Tabel Daftar Akun Petugas */}
+            <div
+              style={{
+                background: "var(--theme-card-bg)",
+                borderRadius: "18px",
+                overflow: "hidden",
+                border: "1px solid var(--theme-card-border)",
+                boxShadow: "var(--theme-card-shadow)",
+              }}
+            >
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px", textAlign: "left" }}>
+                  <thead>
+                    <tr
+                      style={{
+                        background: "var(--theme-card-bg-subtle)",
+                        borderBottom: "1px solid var(--theme-card-border)",
+                        color: "var(--theme-text-muted)",
+                        fontWeight: 700,
+                      }}
+                    >
+                      <th style={{ padding: "12px 16px" }}>Petugas & Nama Lengkap</th>
+                      <th style={{ padding: "12px 14px" }}>Akun Login & Kontak</th>
+                      <th style={{ padding: "12px 14px" }}>Role / Jabatan</th>
+                      <th style={{ padding: "12px 14px" }}>Lingkup Otoritas</th>
+                      <th style={{ padding: "12px 14px" }}>Penugasan Khusus</th>
+                      <th style={{ padding: "12px 14px" }}>Status</th>
+                      <th style={{ padding: "12px 16px", textAlign: "center" }}>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredStaffList.map((st) => {
+                      const isPengasuhan = st.role === "pengasuhan";
+                      const isPutra = st.authorityScope === "Putra";
+                      const isPutri = st.authorityScope === "Putri";
+
+                      const authBadgeBg = isPutra ? "#DBEAFE" : isPutri ? "#FCE7F3" : "#D1FAE5";
+                      const authBadgeColor = isPutra ? "#1E40AF" : isPutri ? "#9D174D" : "#065F46";
+
+                      return (
+                        <tr
+                          key={st.id}
+                          style={{
+                            borderBottom: "1px solid var(--theme-card-border)",
+                            transition: "background 0.2s ease",
+                          }}
+                        >
+                          {/* Nama & Avatar */}
+                          <td style={{ padding: "12px 16px" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                              <img
+                                src={st.avatar}
+                                alt={st.name}
+                                style={{
+                                  width: "36px",
+                                  height: "36px",
+                                  borderRadius: "50%",
+                                  objectFit: "cover",
+                                  border: isPengasuhan ? "2px solid #059669" : "1px solid #D1D5DB",
+                                }}
+                              />
+                              <div>
+                                <div style={{ fontWeight: 800, color: "var(--theme-text-title)" }}>
+                                  {st.name}
+                                </div>
+                                <div style={{ fontSize: "10px", color: "var(--theme-text-muted)" }}>
+                                  Didaftarkan: {st.createdAt || "2026-07-01"}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Email & Kontak */}
+                          <td style={{ padding: "12px 14px" }}>
+                            <div style={{ fontWeight: 600, color: "var(--theme-text-title)" }}>{st.email}</div>
+                            <div style={{ fontSize: "11px", color: "var(--theme-text-muted)" }}>
+                              WA: {st.phone || "-"}
+                            </div>
+                          </td>
+
+                          {/* Role */}
+                          <td style={{ padding: "12px 14px" }}>
+                            <span
+                              style={{
+                                background: isPengasuhan ? "#ECFDF5" : "#F3F4F6",
+                                color: isPengasuhan ? "#065F46" : "#374151",
+                                border: isPengasuhan ? "1px solid #A7F3D0" : "1px solid #E5E7EB",
+                                padding: "3px 8px",
+                                borderRadius: "6px",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                              }}
+                            >
+                              {st.roleLabel || st.role}
+                            </span>
+                          </td>
+
+                          {/* Otoritas Wilayah / Gender */}
+                          <td style={{ padding: "12px 14px" }}>
+                            <span
+                              style={{
+                                background: authBadgeBg,
+                                color: authBadgeColor,
+                                padding: "3px 8px",
+                                borderRadius: "6px",
+                                fontSize: "11px",
+                                fontWeight: 800,
+                              }}
+                            >
+                              {st.authorityScope}
+                            </span>
+                          </td>
+
+                          {/* Penugasan Khusus */}
+                          <td style={{ padding: "12px 14px", color: "var(--theme-text-title)" }}>
+                            <div style={{ fontWeight: 600 }}>{st.assignment || "-"}</div>
+                          </td>
+
+                          {/* Status */}
+                          <td style={{ padding: "12px 14px" }}>
+                            <button
+                              onClick={() => handleToggleStaffStatus(st.id)}
+                              style={{
+                                background: st.status === "Aktif" ? "#D1FAE5" : "#FEE2E2",
+                                color: st.status === "Aktif" ? "#065F46" : "#B42318",
+                                border: "none",
+                                padding: "4px 10px",
+                                borderRadius: "8px",
+                                fontSize: "11px",
+                                fontWeight: 800,
+                                cursor: "pointer",
+                              }}
+                            >
+                              {st.status}
+                            </button>
+                          </td>
+
+                          {/* Aksi */}
+                          <td style={{ padding: "12px 16px", textAlign: "center" }}>
+                            <button
+                              onClick={() => handleDeleteStaffAccount(st.id, st.name)}
+                              title="Hapus Akun Petugas"
+                              style={{
+                                background: "#FEE2E2",
+                                border: "1px solid #FECACA",
+                                color: "#B42318",
+                                borderRadius: "6px",
+                                padding: "4px 8px",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                                cursor: "pointer",
+                              }}
+                            >
+                              Hapus
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
         {adminTab === "ews" && (
           <div style={{ padding: "24px 28px" }}>
             <div
@@ -2065,6 +2934,779 @@ export default function AdminWebView({
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------------------------------------------------
+          MODAL: IMPOR STRUKTUR PETUGAS VIA SPREADSHEET (GRID PER SEL)
+         ------------------------------------------------------------- */}
+      {isStaffImportModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(6px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            padding: "20px",
+          }}
+        >
+          <div
+            className="fade-in-up"
+            style={{
+              background: "var(--theme-card-bg)",
+              color: "var(--theme-text-title)",
+              borderRadius: "24px",
+              padding: "28px",
+              width: "100%",
+              maxWidth: "1120px",
+              maxHeight: "90vh",
+              overflowY: "auto",
+              boxShadow: "0 25px 60px rgba(0,0,0,0.4)",
+              border: "1px solid var(--theme-card-border)",
+            }}
+          >
+            {/* Header Modal */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <span
+                    style={{
+                      background: "#D1FAE5",
+                      color: "#065F46",
+                      padding: "4px 10px",
+                      borderRadius: "8px",
+                      fontSize: "11px",
+                      fontWeight: 800,
+                    }}
+                  >
+                    Format Spreadsheet Sel Per Sel
+                  </span>
+                  <h3 style={{ fontSize: "18px", fontWeight: 800, margin: 0, color: "var(--theme-text-title)" }}>
+                    Import Akun Petugas Pesantren (Grid Per Sel)
+                  </h3>
+                </div>
+                <p style={{ fontSize: "12px", color: "var(--theme-text-muted)", marginTop: "6px", marginBottom: 0, lineHeight: "1.5" }}>
+                  Setiap elemen data berada di dalam <strong>sel masing-masing (A, B, C, D, E, F, G)</strong> terpisah, bukan dalam satu kolom teks gabungan. Anda dapat mengedit sel langsung di tabel di bawah, mengunggah file CSV, atau mengunduh template Excel.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setIsStaffImportModalOpen(false)}
+                style={{
+                  background: "var(--theme-card-bg-subtle)",
+                  border: "1px solid var(--theme-card-border)",
+                  color: "var(--theme-text-muted)",
+                  borderRadius: "50%",
+                  width: "32px",
+                  height: "32px",
+                  cursor: "pointer",
+                  fontWeight: 800,
+                  fontSize: "14px",
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Panduan Spesifikasi Sel per Sel (Cell Definition Guide) */}
+            <div
+              style={{
+                background: "var(--theme-card-bg-subtle)",
+                borderRadius: "16px",
+                padding: "14px 18px",
+                border: "1px solid var(--theme-card-border)",
+                marginBottom: "16px",
+              }}
+            >
+              <div style={{ fontSize: "11px", fontWeight: 800, color: "var(--theme-text-title)", marginBottom: "8px" }}>
+                PANDUAN PEMETAAN SEL DALAM SPREADSHEET (EXCEL / CSV):
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+                  gap: "8px",
+                  fontSize: "10.5px",
+                }}
+              >
+                {STAFF_TEMPLATE_CELL_SPECS.map((spec) => (
+                  <div
+                    key={spec.cell}
+                    style={{
+                      background: "var(--theme-card-bg)",
+                      padding: "8px 10px",
+                      borderRadius: "8px",
+                      border: "1px solid var(--theme-card-border)",
+                    }}
+                  >
+                    <div style={{ fontWeight: 800, color: "#059669" }}>
+                      Sel [{spec.cell}]: {spec.name}
+                    </div>
+                    <div style={{ color: "var(--theme-text-muted)", fontSize: "10px", marginTop: "2px" }}>
+                      {spec.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Toolbar Tombol Aksi Grid */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "10px",
+                marginBottom: "14px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                {/* Upload File CSV */}
+                <label
+                  style={{
+                    background: "var(--theme-card-bg-subtle)",
+                    border: "1px solid var(--theme-card-border)",
+                    color: "var(--theme-text-title)",
+                    padding: "7px 12px",
+                    borderRadius: "8px",
+                    fontSize: "11.5px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <span>Unggah File CSV (.csv)</span>
+                  <input
+                    type="file"
+                    accept=".csv,text/csv"
+                    onChange={handleUploadStaffCsv}
+                    style={{ display: "none" }}
+                  />
+                </label>
+
+                {/* Download Template CSV Per Sel */}
+                <button
+                  type="button"
+                  onClick={handleDownloadStaffCellTemplate}
+                  style={{
+                    background: "var(--theme-card-bg-subtle)",
+                    border: "1px solid var(--theme-card-border)",
+                    color: "var(--theme-text-title)",
+                    padding: "7px 12px",
+                    borderRadius: "8px",
+                    fontSize: "11.5px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <span>Unduh Format CSV Per Sel</span>
+                </button>
+
+                {/* Reset ke Template Lengkap */}
+                <button
+                  type="button"
+                  onClick={handleResetGridToTemplate}
+                  title="Muat contoh lengkap: 3 Kepala Pengasuhan, Guru Mapel, Musyrif, Ubudiyyah, BK, Bendahara, Satpam"
+                  style={{
+                    background: "var(--theme-card-bg-subtle)",
+                    border: "1px solid var(--theme-card-border)",
+                    color: "var(--theme-text-title)",
+                    padding: "7px 12px",
+                    borderRadius: "8px",
+                    fontSize: "11.5px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  Isi Contoh Lengkap
+                </button>
+              </div>
+
+              {/* Tambah Baris Sel Baru */}
+              <button
+                type="button"
+                onClick={handleAddGridRow}
+                style={{
+                  background: "#ECFDF5",
+                  border: "1px solid #A7F3D0",
+                  color: "#065F46",
+                  padding: "7px 14px",
+                  borderRadius: "8px",
+                  fontSize: "11.5px",
+                  fontWeight: 800,
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <span>+ Tambah Baris Sel Baru</span>
+              </button>
+            </div>
+
+            {/* Tabel Spreadsheet Interaktif Per Sel */}
+            <div
+              style={{
+                border: "1px solid #D1D5DB",
+                borderRadius: "14px",
+                overflow: "hidden",
+                background: "#FFFFFF",
+                marginBottom: "20px",
+              }}
+            >
+              <div style={{ overflowX: "auto", maxHeight: "380px" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "11.5px" }}>
+                  <thead>
+                    <tr style={{ background: "#F3F4F6", borderBottom: "1px solid #D1D5DB", color: "#374151", fontWeight: 800 }}>
+                      <th style={{ padding: "8px 10px", width: "40px", textAlign: "center", borderRight: "1px solid #E5E7EB" }}>
+                        #
+                      </th>
+                      <th style={{ padding: "8px 10px", minWidth: "160px", borderRight: "1px solid #E5E7EB" }}>
+                        [Sel A] Nama Lengkap *
+                      </th>
+                      <th style={{ padding: "8px 10px", minWidth: "180px", borderRight: "1px solid #E5E7EB" }}>
+                        [Sel B] Email Akun (Login) *
+                      </th>
+                      <th style={{ padding: "8px 10px", minWidth: "100px", borderRight: "1px solid #E5E7EB" }}>
+                        [Sel C] Password
+                      </th>
+                      <th style={{ padding: "8px 10px", minWidth: "130px", borderRight: "1px solid #E5E7EB" }}>
+                        [Sel D] Kode Role *
+                      </th>
+                      <th style={{ padding: "8px 10px", minWidth: "120px", borderRight: "1px solid #E5E7EB" }}>
+                        [Sel E] Otoritas *
+                      </th>
+                      <th style={{ padding: "8px 10px", minWidth: "170px", borderRight: "1px solid #E5E7EB" }}>
+                        [Sel F] Penugasan Khusus
+                      </th>
+                      <th style={{ padding: "8px 10px", minWidth: "120px", borderRight: "1px solid #E5E7EB" }}>
+                        [Sel G] No. WhatsApp
+                      </th>
+                      <th style={{ padding: "8px 8px", width: "50px", textAlign: "center" }}>
+                        Hapus
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {staffGridRows.map((row, idx) => (
+                      <tr
+                        key={row.id}
+                        style={{
+                          borderBottom: "1px solid #E5E7EB",
+                          background: idx % 2 === 0 ? "#FFFFFF" : "#F9FAFB",
+                        }}
+                      >
+                        {/* Baris Index */}
+                        <td
+                          style={{
+                            padding: "6px 8px",
+                            textAlign: "center",
+                            fontWeight: 700,
+                            color: "#6B7280",
+                            background: "#F3F4F6",
+                            borderRight: "1px solid #E5E7EB",
+                          }}
+                        >
+                          {idx + 1}
+                        </td>
+
+                        {/* Sel A: Nama Lengkap */}
+                        <td style={{ padding: "4px 6px", borderRight: "1px solid #E5E7EB" }}>
+                          <input
+                            type="text"
+                            value={row.name}
+                            onChange={(e) => handleUpdateGridCell(row.id, "name", e.target.value)}
+                            placeholder="Contoh: Ustaz Farhan Mubarak"
+                            style={{
+                              width: "100%",
+                              padding: "6px 8px",
+                              border: "1px solid #D1D5DB",
+                              borderRadius: "6px",
+                              fontSize: "11.5px",
+                              color: "#111827",
+                              background: "#FFFFFF",
+                              outline: "none",
+                              boxSizing: "border-box",
+                            }}
+                          />
+                        </td>
+
+                        {/* Sel B: Email Akun */}
+                        <td style={{ padding: "4px 6px", borderRight: "1px solid #E5E7EB" }}>
+                          <input
+                            type="email"
+                            value={row.email}
+                            onChange={(e) => handleUpdateGridCell(row.id, "email", e.target.value)}
+                            placeholder="nama@ponpes.ac.id"
+                            style={{
+                              width: "100%",
+                              padding: "6px 8px",
+                              border: "1px solid #D1D5DB",
+                              borderRadius: "6px",
+                              fontSize: "11.5px",
+                              color: "#111827",
+                              background: "#FFFFFF",
+                              outline: "none",
+                              boxSizing: "border-box",
+                            }}
+                          />
+                        </td>
+
+                        {/* Sel C: Password Awal */}
+                        <td style={{ padding: "4px 6px", borderRight: "1px solid #E5E7EB" }}>
+                          <input
+                            type="text"
+                            value={row.password}
+                            onChange={(e) => handleUpdateGridCell(row.id, "password", e.target.value)}
+                            placeholder="123"
+                            style={{
+                              width: "100%",
+                              padding: "6px 8px",
+                              border: "1px solid #D1D5DB",
+                              borderRadius: "6px",
+                              fontSize: "11.5px",
+                              color: "#111827",
+                              background: "#FFFFFF",
+                              outline: "none",
+                              boxSizing: "border-box",
+                            }}
+                          />
+                        </td>
+
+                        {/* Sel D: Kode Role */}
+                        <td style={{ padding: "4px 6px", borderRight: "1px solid #E5E7EB" }}>
+                          <select
+                            value={row.role}
+                            onChange={(e) => handleUpdateGridCell(row.id, "role", e.target.value)}
+                            style={{
+                              width: "100%",
+                              padding: "6px 6px",
+                              border: "1px solid #D1D5DB",
+                              borderRadius: "6px",
+                              fontSize: "11px",
+                              color: "#111827",
+                              background: "#FFFFFF",
+                              cursor: "pointer",
+                              outline: "none",
+                              boxSizing: "border-box",
+                            }}
+                          >
+                            <option value="pengasuhan">pengasuhan (Kepala Pengasuhan)</option>
+                            <option value="guru">guru (Guru KBM)</option>
+                            <option value="musyrif">musyrif (Musyrif Asrama)</option>
+                            <option value="ubudiyyah">ubudiyyah (Tim Ubudiyyah)</option>
+                            <option value="bk">bk (Guru BK Konseling)</option>
+                            <option value="bendahara">bendahara (Bendahara)</option>
+                            <option value="satpam">satpam (Satpam Gerbang)</option>
+                          </select>
+                        </td>
+
+                        {/* Sel E: Lingkup Otoritas */}
+                        <td style={{ padding: "4px 6px", borderRight: "1px solid #E5E7EB" }}>
+                          <select
+                            value={row.authorityScope}
+                            onChange={(e) => handleUpdateGridCell(row.id, "authorityScope", e.target.value)}
+                            style={{
+                              width: "100%",
+                              padding: "6px 6px",
+                              border: "1px solid #D1D5DB",
+                              borderRadius: "6px",
+                              fontSize: "11px",
+                              color: "#111827",
+                              background: "#FFFFFF",
+                              cursor: "pointer",
+                              outline: "none",
+                              boxSizing: "border-box",
+                            }}
+                          >
+                            <option value="Umum">Umum (Putra & Putri)</option>
+                            <option value="Putra">Putra (Santriwan / Banin)</option>
+                            <option value="Putri">Putri (Santriwati / Banat)</option>
+                          </select>
+                        </td>
+
+                        {/* Sel F: Penugasan Khusus */}
+                        <td style={{ padding: "4px 6px", borderRight: "1px solid #E5E7EB" }}>
+                          <input
+                            type="text"
+                            value={row.assignment}
+                            onChange={(e) => handleUpdateGridCell(row.id, "assignment", e.target.value)}
+                            placeholder="Asrama Abu Bakar / Mapel Fiqih / Pos Utama"
+                            style={{
+                              width: "100%",
+                              padding: "6px 8px",
+                              border: "1px solid #D1D5DB",
+                              borderRadius: "6px",
+                              fontSize: "11.5px",
+                              color: "#111827",
+                              background: "#FFFFFF",
+                              outline: "none",
+                              boxSizing: "border-box",
+                            }}
+                          />
+                        </td>
+
+                        {/* Sel G: No. WhatsApp */}
+                        <td style={{ padding: "4px 6px", borderRight: "1px solid #E5E7EB" }}>
+                          <input
+                            type="text"
+                            value={row.phone}
+                            onChange={(e) => handleUpdateGridCell(row.id, "phone", e.target.value)}
+                            placeholder="+628..."
+                            style={{
+                              width: "100%",
+                              padding: "6px 8px",
+                              border: "1px solid #D1D5DB",
+                              borderRadius: "6px",
+                              fontSize: "11.5px",
+                              color: "#111827",
+                              background: "#FFFFFF",
+                              outline: "none",
+                              boxSizing: "border-box",
+                            }}
+                          />
+                        </td>
+
+                        {/* Aksi Hapus Baris */}
+                        <td style={{ padding: "4px 6px", textAlign: "center" }}>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteGridRow(row.id)}
+                            title="Hapus baris sel ini"
+                            style={{
+                              background: "#FEE2E2",
+                              border: "none",
+                              color: "#B42318",
+                              borderRadius: "6px",
+                              width: "24px",
+                              height: "24px",
+                              cursor: "pointer",
+                              fontSize: "12px",
+                              fontWeight: 800,
+                            }}
+                          >
+                            ✕
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Footer Modal */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+              <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
+                Total: <strong>{staffGridRows.length} baris sel</strong> siap divalidasi & diimpor ke sistem.
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <button
+                  type="button"
+                  onClick={() => setIsStaffImportModalOpen(false)}
+                  style={{
+                    background: "var(--theme-card-bg-subtle)",
+                    border: "1px solid var(--theme-card-border)",
+                    color: "var(--theme-text-title)",
+                    padding: "10px 18px",
+                    borderRadius: "10px",
+                    fontSize: "12.5px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  Batal
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleProcessStaffImport}
+                  style={{
+                    background: "var(--gradient-emerald)",
+                    color: "#FFFFFF",
+                    padding: "10px 24px",
+                    borderRadius: "10px",
+                    fontSize: "12.5px",
+                    fontWeight: 800,
+                    border: "none",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 14px rgba(5, 150, 105, 0.35)",
+                  }}
+                >
+                  Proses Impor ({staffGridRows.filter((r) => r.name.trim() && r.email.trim()).length} Akun Valid)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------------------------------------------------
+          MODAL: TAMBAH 1 AKUN PETUGAS MANUAL
+         ------------------------------------------------------------- */}
+      {isAddStaffModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(6px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            padding: "20px",
+          }}
+        >
+          <div
+            className="fade-in-up"
+            style={{
+              background: "var(--theme-card-bg)",
+              color: "var(--theme-text-title)",
+              borderRadius: "20px",
+              padding: "24px",
+              width: "100%",
+              maxWidth: "520px",
+              boxShadow: "0 25px 60px rgba(0,0,0,0.4)",
+              border: "1px solid var(--theme-card-border)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+              <h3 style={{ fontSize: "16px", fontWeight: 800, margin: 0, color: "var(--theme-text-title)" }}>
+                Tambah Akun Petugas Manual
+              </h3>
+              <button
+                onClick={() => setIsAddStaffModalOpen(false)}
+                style={{
+                  background: "var(--theme-card-bg-subtle)",
+                  border: "1px solid var(--theme-card-border)",
+                  color: "var(--theme-text-muted)",
+                  borderRadius: "50%",
+                  width: "28px",
+                  height: "28px",
+                  cursor: "pointer",
+                  fontWeight: 800,
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveManualStaff} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div>
+                <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)", display: "block", marginBottom: "4px" }}>
+                  Nama Lengkap & Gelar *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Contoh: Ustaz Farhan Mubarak, Lc."
+                  value={manualStaffName}
+                  onChange={(e) => setManualStaffName(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "8px 12px",
+                    borderRadius: "8px",
+                    border: "1px solid var(--theme-card-border)",
+                    background: "var(--theme-card-bg-subtle)",
+                    color: "var(--theme-text-title)",
+                    fontSize: "12px",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)", display: "block", marginBottom: "4px" }}>
+                  Alamat Email (Login) *
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="Contoh: musyrif.farhan@darussalam.ac.id"
+                  value={manualStaffEmail}
+                  onChange={(e) => setManualStaffEmail(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "8px 12px",
+                    borderRadius: "8px",
+                    border: "1px solid var(--theme-card-border)",
+                    background: "var(--theme-card-bg-subtle)",
+                    color: "var(--theme-text-title)",
+                    fontSize: "12px",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                <div>
+                  <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)", display: "block", marginBottom: "4px" }}>
+                    Role / Jabatan *
+                  </label>
+                  <select
+                    value={manualStaffRole}
+                    onChange={(e) => setManualStaffRole(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid var(--theme-card-border)",
+                      background: "var(--theme-card-bg-subtle)",
+                      color: "var(--theme-text-title)",
+                      fontSize: "12px",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <option value="pengasuhan">Kepala Pengasuhan</option>
+                    <option value="guru">Guru KBM</option>
+                    <option value="musyrif">Musyrif Asrama</option>
+                    <option value="ubudiyyah">Tim Ubudiyyah</option>
+                    <option value="bk">Guru BK Konseling</option>
+                    <option value="bendahara">Bendahara Pesantren</option>
+                    <option value="satpam">Satpam Gerbang</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)", display: "block", marginBottom: "4px" }}>
+                    Lingkup Otoritas *
+                  </label>
+                  <select
+                    value={manualStaffAuthority}
+                    onChange={(e) => setManualStaffAuthority(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid var(--theme-card-border)",
+                      background: "var(--theme-card-bg-subtle)",
+                      color: "var(--theme-text-title)",
+                      fontSize: "12px",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <option value="Umum">Umum (Putra & Putri)</option>
+                    <option value="Putra">Putra (Santriwan / Banin)</option>
+                    <option value="Putri">Putri (Santriwati / Banat)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)", display: "block", marginBottom: "4px" }}>
+                  Penugasan Khusus (Asrama / Mapel / Pos)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Asrama Abu Bakar / Mapel Bahasa Indonesia / Pos Gerbang 1"
+                  value={manualStaffAssignment}
+                  onChange={(e) => setManualStaffAssignment(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "8px 12px",
+                    borderRadius: "8px",
+                    border: "1px solid var(--theme-card-border)",
+                    background: "var(--theme-card-bg-subtle)",
+                    color: "var(--theme-text-title)",
+                    fontSize: "12px",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                <div>
+                  <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)", display: "block", marginBottom: "4px" }}>
+                    Password Awal
+                  </label>
+                  <input
+                    type="text"
+                    value={manualStaffPassword}
+                    onChange={(e) => setManualStaffPassword(e.target.value)}
+                    placeholder="123"
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid var(--theme-card-border)",
+                      background: "var(--theme-card-bg-subtle)",
+                      color: "var(--theme-text-title)",
+                      fontSize: "12px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)", display: "block", marginBottom: "4px" }}>
+                    Nomor WhatsApp / HP
+                  </label>
+                  <input
+                    type="text"
+                    value={manualStaffPhone}
+                    onChange={(e) => setManualStaffPhone(e.target.value)}
+                    placeholder="+62812345678..."
+                    style={{
+                      width: "100%",
+                      padding: "8px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid var(--theme-card-border)",
+                      background: "var(--theme-card-bg-subtle)",
+                      color: "var(--theme-text-title)",
+                      fontSize: "12px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px" }}>
+                <button
+                  type="button"
+                  onClick={() => setIsAddStaffModalOpen(false)}
+                  style={{
+                    background: "var(--theme-card-bg-subtle)",
+                    border: "1px solid var(--theme-card-border)",
+                    color: "var(--theme-text-title)",
+                    padding: "9px 16px",
+                    borderRadius: "8px",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  style={{
+                    background: "var(--gradient-emerald)",
+                    color: "#FFFFFF",
+                    padding: "9px 20px",
+                    borderRadius: "8px",
+                    fontSize: "12px",
+                    fontWeight: 800,
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Simpan Akun Petugas
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
