@@ -50,7 +50,7 @@ export default function PortalMusyrifView({
   const [manualFormNotes, setManualFormNotes] = useState(
     "Febris / demam 37.8°C ba'da dzuhur, istirahat di kamar asrama"
   );
-  const [isOfflineMode, setIsOfflineMode] = useState(false);
+  const [isOfflineMode] = useState(false);
   const [offlineQueueCount, setOfflineQueueCount] = useState(2);
   const [dormRecords, setDormRecords] = useState(INITIAL_EWS_ALERTS);
 

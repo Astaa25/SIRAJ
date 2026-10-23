@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { INITIAL_EWS_ALERTS, INITIAL_GATE_PASS, INITIAL_SP_THRESHOLDS, INITIAL_STUDENTS } from "../../data/mockData";
+import { INITIAL_EWS_ALERTS, INITIAL_SP_THRESHOLDS, INITIAL_STUDENTS } from "../../data/mockData";
 import { playSoftClick, playSuccessChime, triggerHaptic } from "../../utils/audio";
 
 export default function PortalPengasuhanView({ onTriggerLoader, onAuditLogAdd }) {
   const [selectedKomplek, setSelectedKomplek] = useState("ALL"); // ALL, Abu Bakar, Umar, Ali, Fatimah
   const [ewsList, setEWSList] = useState(INITIAL_EWS_ALERTS);
-  const [pendingGatePass, setPendingGatePass] = useState(INITIAL_GATE_PASS);
   const [gatePassApprovalStatus, setGatePassApprovalStatus] = useState("approved"); // approved, pending, rejected
 
   // Filter EWS per Komplek / Asrama

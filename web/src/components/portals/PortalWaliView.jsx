@@ -9,7 +9,7 @@ import {
 } from "../../data/mockData";
 import { playSoftClick, playSuccessChime } from "../../utils/audio";
 
-export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd, tenantDormTerm = "Asrama", currentTenant }) {
+export default function PortalWaliView({ onTriggerLoader, onAuditLogAdd: _onAuditLogAdd, tenantDormTerm = "Asrama", currentTenant }) {
   const [students] = useState(INITIAL_STUDENTS);
   const [selectedStudentIndex, setSelectedStudentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("jurnal"); // jurnal, gatepass, adab, tahfidz

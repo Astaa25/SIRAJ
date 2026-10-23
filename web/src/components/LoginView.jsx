@@ -126,10 +126,10 @@ export default function LoginView({ onLoginSuccess, currentTenant = INITIAL_TENA
               fontSize: "11px",
               color: "#5B7A70",
               marginTop: "4px",
-              fontWeight: 500,
+              fontWeight: 600,
             }}
           >
-            Ekosistem Presensi & Mutaba'ah Santri Terpadu
+            {currentTenant?.name || "Pondok Pesantren Darussalam Rajapolah"}
           </div>
         </div>
 

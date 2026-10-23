@@ -28,7 +28,7 @@ export default function App() {
       const saved = localStorage.getItem("siraj_auth_user");
       if (saved) return JSON.parse(saved);
       return SYSTEM_USERS.find((u) => u.role === "admin") || null;
-    } catch (e) {
+    } catch {
       return SYSTEM_USERS.find((u) => u.role === "admin") || null;
     }
   });
@@ -38,7 +38,7 @@ export default function App() {
     try {
       const saved = localStorage.getItem("siraj_active_tenant");
       return saved ? JSON.parse(saved) : INITIAL_TENANTS[0];
-    } catch (e) {
+    } catch {
       return INITIAL_TENANTS[0];
     }
   });
@@ -50,7 +50,7 @@ export default function App() {
       if (savedRole) return savedRole;
       const savedUser = localStorage.getItem("siraj_auth_user");
       return savedUser ? JSON.parse(savedUser).role : "admin";
-    } catch (e) {
+    } catch {
       return "admin";
     }
   });
@@ -58,7 +58,7 @@ export default function App() {
   useEffect(() => {
     try {
       localStorage.setItem("siraj_active_role", activeRole);
-    } catch (e) {}
+    } catch {}
   }, [activeRole]);
 
   // Device Mode: 'hp' | 'tablet' | 'laptop'
@@ -66,23 +66,19 @@ export default function App() {
   // Super Admin & Admin Ponpes can access HP, Tablet, and Laptop.
   const isLaptopRole = activeRole === "admin" || activeRole === "superadmin" || activeRole === "bendahara";
 
-  const [deviceMode, setDeviceMode] = useState(() => {
+  const [rawDeviceMode, setDeviceMode] = useState(() => {
     return (activeRole === "admin" || activeRole === "superadmin" || activeRole === "bendahara") ? "laptop" : "hp";
   });
 
-  // Guard: If switching to a non-admin role, never allow 'laptop'
-  useEffect(() => {
-    if (!isLaptopRole && deviceMode === "laptop") {
-      setDeviceMode("hp");
-    }
-  }, [activeRole, isLaptopRole, deviceMode]);
+  // Derived effective device mode: if not a laptop-allowed role, automatically falls back to 'hp'
+  const deviceMode = !isLaptopRole && rawDeviceMode === "laptop" ? "hp" : rawDeviceMode;
 
   // Forensic Append-Only Security Audit Logs
   const [auditLogs, setAuditLogs] = useState(() => {
     try {
       const saved = localStorage.getItem("siraj_audit_logs");
       return saved ? JSON.parse(saved) : INITIAL_AUDIT_LOGS;
-    } catch (e) {
+    } catch {
       return INITIAL_AUDIT_LOGS;
     }
   });
@@ -90,7 +86,7 @@ export default function App() {
   useEffect(() => {
     try {
       localStorage.setItem("siraj_audit_logs", JSON.stringify(auditLogs));
-    } catch (e) {}
+    } catch {}
   }, [auditLogs]);
 
   const [is2sLoaderEnabled, setIs2sLoaderEnabled] = useState(true);
@@ -103,7 +99,7 @@ export default function App() {
   const [theme, setTheme] = useState(() => {
     try {
       return localStorage.getItem("siraj_theme") || "dark";
-    } catch (e) {
+    } catch {
       return "dark";
     }
   });
@@ -112,7 +108,7 @@ export default function App() {
     document.documentElement.setAttribute("data-theme", theme);
     try {
       localStorage.setItem("siraj_theme", theme);
-    } catch (e) {}
+    } catch {}
   }, [theme]);
 
   const handleToggleTheme = () => {
@@ -150,7 +146,7 @@ export default function App() {
     try {
       localStorage.setItem("siraj_auth_user", JSON.stringify(user));
       localStorage.setItem("siraj_active_role", user.role);
-    } catch (e) {}
+    } catch {}
     if (user.role === "admin" || user.role === "superadmin" || user.role === "bendahara") {
       setDeviceMode("laptop");
     } else {

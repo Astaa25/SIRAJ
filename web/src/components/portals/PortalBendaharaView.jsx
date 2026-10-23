@@ -8,7 +8,7 @@ import { playSoftClick, playSuccessChime, triggerHaptic } from "../../utils/audi
 export default function PortalBendaharaView({
   currentUser,
   currentTenant,
-  theme = "dark",
+  theme: _theme = "dark",
   onTriggerLoader,
   onAuditLogAdd,
   onUpdateTenant,
@@ -22,7 +22,6 @@ export default function PortalBendaharaView({
   // State Data Santri & Tagihan
   const [studentsList, setStudentsList] = useState(INITIAL_STUDENTS);
   const [statusFilter, setStatusFilter] = useState("ALL"); // ALL, Lunas, Belum Lunas
-  const [dormFilter, setDormFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
 
   // State Riwayat Transaksi Kas
@@ -56,12 +55,7 @@ export default function PortalBendaharaView({
         ? st.syahriyyahStatus === "Lunas"
         : st.syahriyyahStatus !== "Lunas";
 
-    const matchDorm =
-      dormFilter === "ALL"
-        ? true
-        : st.dormBuilding.toLowerCase().includes(dormFilter.toLowerCase());
-
-    return matchSearch && matchStatus && matchDorm;
+    return matchSearch && matchStatus;
   });
 
   // KPI Hitungan Finansial Real-Time

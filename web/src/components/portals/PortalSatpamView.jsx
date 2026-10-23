@@ -5,7 +5,6 @@ import { playSoftClick, playSuccessChime, playWarningTone, triggerHaptic } from 
 export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
   const [scanResult, setScanResult] = useState(null); // null, { status: "approved" | "rejected", data: ... }
   const [popupSeconds, setPopupSeconds] = useState(5);
-  const [isScanning, setIsScanning] = useState(false);
   const [clearanceHistory, setClearanceHistory] = useState([
     {
       id: "cl-1",
@@ -20,13 +19,12 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
   // Timer auto close 5 detik untuk notif / pop-up izin
   useEffect(() => {
     if (!scanResult) return;
-    setPopupSeconds(5);
     const interval = setInterval(() => {
       setPopupSeconds((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
           setScanResult(null);
-          return 0;
+          return 5;
         }
         return prev - 1;
       });
@@ -39,7 +37,6 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
   const handlePerformDirectScan = (isApproved = true) => {
     playSoftClick();
     triggerHaptic([50]);
-    setIsScanning(true);
     setScanResult(null);
 
     onTriggerLoader(
@@ -47,7 +44,6 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
         ? "Membaca Kode QR Gate Pass Santri & Memverifikasi Izin Resmi..."
         : "Memverifikasi Kode QR Gate Pass...",
       () => {
-        setIsScanning(false);
 
         if (isApproved) {
           playSuccessChime();
@@ -59,6 +55,7 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
             pass: INITIAL_GATE_PASS,
             verifiedAt: "16:45 WIB (Hari Ini)",
           };
+          setPopupSeconds(5);
           setScanResult(resultData);
 
           setClearanceHistory((prev) => [
@@ -96,6 +93,7 @@ export default function PortalSatpamView({ onTriggerLoader, onAuditLogAdd }) {
             reason: "Token QR Tidak Terdaftar di Server atau Belum Disetujui Kepala Pengasuhan",
             verifiedAt: "16:46 WIB",
           };
+          setPopupSeconds(5);
           setScanResult(resultData);
 
           onAuditLogAdd({

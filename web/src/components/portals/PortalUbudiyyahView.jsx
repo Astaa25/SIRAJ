@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { getActivePrayerSessionByTime, INITIAL_STUDENTS } from "../../data/mockData";
+import { getActivePrayerSessionByTime } from "../../data/mockData";
 import { playSoftClick, playSuccessChime, playWarningTone, triggerHaptic } from "../../utils/audio";
 
-export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, currentTenant }) {
+export default function PortalUbudiyyahView({ onTriggerLoader, onAuditLogAdd, currentTenant: _currentTenant }) {
   const [activePrayer, setActivePrayer] = useState(getActivePrayerSessionByTime());
   const [currentTimeStr, setCurrentTimeStr] = useState("15:30 WIB");
   const [scannerStatus, setScannerStatus] = useState("idle");
   const [scannerMsg, setScannerMsg] = useState("");
-  const [scannedPrayerCount, setScannedPrayerCount] = useState(1240);
 
   // Auto-detect prayer session by time every second
   useEffect(() => {

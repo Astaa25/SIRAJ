@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../features/attendance/presentation/attendance_screen.dart';
+import '../features/finance/presentation/wallet_screen.dart';
 import '../features/gatepass/presentation/gatepass_screen.dart';
 import '../features/health/presentation/health_screen.dart';
 import '../features/map/presentation/map_screen.dart';
@@ -55,6 +56,15 @@ final sirajRouter = GoRouter(
             GoRoute(
               path: '/tahfidz',
               builder: (context, state) => const TahfidzScreen(),
+            ),
+          ],
+        ),
+        // Tab 5: Dompet Santri
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/wallet',
+              builder: (context, state) => const WalletScreen(),
             ),
           ],
         ),

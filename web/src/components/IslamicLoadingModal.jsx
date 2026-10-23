@@ -18,11 +18,7 @@ export default function IslamicLoadingModal({ isOpen, message, onComplete }) {
   ];
 
   useEffect(() => {
-    if (!isOpen) {
-      setProgress(0);
-      setPhaseIndex(0);
-      return;
-    }
+    if (!isOpen) return;
 
     // Smooth progress counter from 0 to 100 over 2000ms
     const startTime = performance.now();
@@ -60,6 +56,8 @@ export default function IslamicLoadingModal({ isOpen, message, onComplete }) {
 
     return () => {
       if (animFrame) cancelAnimationFrame(animFrame);
+      setProgress(0);
+      setPhaseIndex(0);
     };
   }, [isOpen, onComplete]);
 

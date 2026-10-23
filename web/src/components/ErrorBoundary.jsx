@@ -21,7 +21,7 @@ export default class ErrorBoundary extends React.Component {
       localStorage.removeItem("siraj_auth_user");
       localStorage.removeItem("siraj_audit_logs");
       sessionStorage.clear();
-    } catch (e) {}
+    } catch {}
     window.location.reload();
   };
 

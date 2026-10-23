@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import {
   INITIAL_STUDENTS,
-  INITIAL_AUDIT_LOGS,
   INITIAL_EWS_ALERTS,
   INITIAL_SP_THRESHOLDS,
-  BK_POINT_CATALOGUE,
 } from "../data/mockData";
 import { playSoftClick, playSuccessChime, triggerHaptic } from "../utils/audio";
 
@@ -19,8 +17,7 @@ export default function AdminWebView({
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [studentsList, setStudentsList] = useState(INITIAL_STUDENTS);
-  const [selectedStudentForQr, setSelectedStudentForQr] = useState(null);
-  const [ewsAlerts, setEwsAlerts] = useState(INITIAL_EWS_ALERTS);
+  const [ewsAlerts] = useState(INITIAL_EWS_ALERTS);
 
   // Modal Koreksi Absensi Beralasan Resmi (Admin)
   const [isCorrectionModalOpen, setIsCorrectionModalOpen] = useState(false);
@@ -43,23 +40,6 @@ export default function AdminWebView({
   const [prayerLocationInput, setPrayerLocationInput] = useState(
     currentTenant?.prayerLocation || "Kabupaten Tasikmalaya (WIB)"
   );
-  const [prayerTimes, setPrayerTimes] = useState({
-    subuhStart: "04:15",
-    subuhEnd: "05:45",
-    subuhMasbuk: "04:45",
-    dzuhurStart: "11:52",
-    dzuhurEnd: "15:14",
-    dzuhurMasbuk: "12:15",
-    asharStart: "15:15",
-    asharEnd: "17:54",
-    asharMasbuk: "15:35",
-    maghribStart: "17:55",
-    maghribEnd: "19:07",
-    maghribMasbuk: "18:15",
-    isyaStart: "19:08",
-    isyaEnd: "23:59",
-    isyaMasbuk: "19:35",
-  });
 
   // Dynamic SP Thresholds Configurable by Admin
   const [spThresholds, setSpThresholds] = useState(INITIAL_SP_THRESHOLDS);

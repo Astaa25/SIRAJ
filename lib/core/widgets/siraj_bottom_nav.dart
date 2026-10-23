@@ -56,6 +56,12 @@ class SirajBottomNav extends StatelessWidget {
       label: 'Tahfidz',
       routePath: '/tahfidz',
     ),
+    SirajNavItem(
+      icon: Icons.account_balance_wallet_outlined,
+      activeIcon: Icons.account_balance_wallet,
+      label: 'Dompet',
+      routePath: '/wallet',
+    ),
   ];
 
   @override

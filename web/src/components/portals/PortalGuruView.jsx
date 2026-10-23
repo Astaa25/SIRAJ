@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { TEACHER_ASSIGNMENTS, INITIAL_STUDENTS } from "../../data/mockData";
 import { playSoftClick, playSuccessChime, playWarningTone, triggerHaptic } from "../../utils/audio";
 
@@ -12,15 +12,9 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
   const teacherClasses = teacherData.classes;
 
   // Auto-detect kelas aktif berdasarkan jam sekarang
-  const [selectedClassIndex, setSelectedClassIndex] = useState(0);
-  const [scannerStatus, setScannerStatus] = useState("idle");
-  const [scannerMessage, setScannerMessage] = useState("");
-
-  // Deteksi otomatis kelas yang sedang berlangsung
-  useEffect(() => {
+  const [selectedClassIndex, setSelectedClassIndex] = useState(() => {
     const now = new Date();
     const currentMins = now.getHours() * 60 + now.getMinutes();
-
     const activeIdx = teacherClasses.findIndex((cls) => {
       const [startH, startM] = cls.timeStart.split(":").map(Number);
       const [endH, endM] = cls.timeEnd.split(":").map(Number);
@@ -28,11 +22,10 @@ export default function PortalGuruView({ onTriggerLoader, onAuditLogAdd, current
       const endMins = endH * 60 + endM;
       return currentMins >= startMins && currentMins <= endMins;
     });
-
-    if (activeIdx !== -1) {
-      setSelectedClassIndex(activeIdx);
-    }
-  }, [teacherClasses]);
+    return activeIdx !== -1 ? activeIdx : 0;
+  });
+  const [scannerStatus, setScannerStatus] = useState("idle");
+  const [scannerMessage, setScannerMessage] = useState("");
 
   const activeClass = teacherClasses[selectedClassIndex] || teacherClasses[0];
 

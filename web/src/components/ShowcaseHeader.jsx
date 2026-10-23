@@ -41,7 +41,7 @@ export default function ShowcaseHeader({
       try {
         localStorage.setItem("siraj_active_role", roleId);
         localStorage.setItem("siraj_auth_user", JSON.stringify(matchingUser));
-      } catch (e) {}
+      } catch {}
 
       if (willBeLaptopAllowed) {
         setDeviceMode("laptop");
